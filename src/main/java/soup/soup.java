@@ -1,44 +1,61 @@
 package soup;
 
-import soup.block.BlockGrid;
 import soup.block.Food;
 import soup.block.iBlock;
 import soup.block.iBlockGrid;
+import soup.idvm.Idvm;
+import soup.idvm.iIdvm;
 import datatypes.Constants;
-import datatypes.Position;
+import datatypes.Pos;
 import mvc.Model;
 import mvc.present.iPresentSoup;
 
 public class soup extends Model implements iPresentSoup{
-	private iIdvm idvm;
-	private iBlockGrid blockGrid;
+	private iIdvm mIdvm;
+	private iBlockGrid mBlockGrid;
+	private int mStepCount;
 	
-	public soup(){
-		initIdvm();
+	public soup(Genome pGenome){
+		initIdvm(pGenome);
 		initFoodBlocks();
+		finishSoup();
 	}
 
-	private void initIdvm() {
-		// TODO Auto-generated method stub
+	private void finishSoup() {
+		// TODO delete surrounding blocks of idvm
+		
+	}
+
+	private void initIdvm(Genome pGenome) {
+		mIdvm = new Idvm(pGenome);
+		mBlockGrid.addInitialIdvm(mIdvm);
 	}
 
 	private void initFoodBlocks() {
 		Food[] food = new Food[Constants.foodSupply];
 		for(iBlock foodBlock: food){
-			blockGrid.setRandomBlock(foodBlock);			
+			mBlockGrid.setRandomBlock(foodBlock);			
 		}
 	}
 
-	public Position getIdvmPosition() {
-		return idvm.getPosition();
+	public Pos getIdvmPosition() {
+		return mIdvm.getPosition();
 	}
 
-	public iBlock getBlock(Position pos) {
-		return blockGrid.getBlock(pos);
+	public iBlock getBlock(Pos pos) {
+		return mBlockGrid.getBlock(pos);
 	}
 
 	public boolean isIdvmAlive() {
-		return idvm.isAlive();
+		return mIdvm.isAlive();
+	}
+
+	public int getStepCount() {
+		return mStepCount;
+	}
+
+	public Boolean isHungry() {
+		return mIdvm.isHungry();
 	}
 
 }

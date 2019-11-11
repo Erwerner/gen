@@ -1,13 +1,16 @@
 package soup.block;
 
-import datatypes.Position;
+import soup.idvm.iIdvm;
+import datatypes.Pos;
 
 public interface iBlockGrid {
 
-	iBlock getBlock(Position pos);
+	iBlock getBlock(Pos pos);
 
-	void setBlock(Position pos, iBlock block);
+	void setBlock(Pos pos, iBlock block);
 
 	void setRandomBlock(iBlock foodBlock);
+
+	void addInitialIdvm(iIdvm pIdvm);
 
 }

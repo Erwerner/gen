@@ -1,10 +1,12 @@
 package mvc.present;
 
 import soup.block.iBlock;
-import datatypes.Position;
+import datatypes.Pos;
 
 public interface iPresentSoup {
-	public Position getIdvmPosition();
-	public iBlock getBlock(Position pos);
+	Pos getIdvmPosition();
+	iBlock getBlock(Pos pos);
 	boolean isIdvmAlive();
+	int getStepCount();
+	Boolean isHungry();
 }

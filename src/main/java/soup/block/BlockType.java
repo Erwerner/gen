@@ -1,5 +1,6 @@
 package soup.block;
 
 public enum BlockType {
-	FOOD
+	FOOD, IDVM, CELL,
+	LIFE, DEFENCE, MOVE, SENSOR, NOTHING
 }

@@ -1,30 +1,44 @@
 package soup.block;
 
+import soup.idvm.iIdvm;
 import datatypes.Constants;
-import datatypes.Position;
+import datatypes.Pos;
 
 public class BlockGrid implements iBlockGrid {
-	private iBlock[][] grid;
+	private iBlock[][] mGrid;
 
 	public BlockGrid() {
-		grid = new iBlock[Constants.soupSize][Constants.soupSize];
+		mGrid = new iBlock[Constants.soupSize][Constants.soupSize];
 	}
 
-	public iBlock getBlock(Position pos) {
-		return grid[pos.x][pos.y];
+	public iBlock getBlock(Pos pos) {
+		return mGrid[pos.x][pos.y];
 	}
 
-	public void setBlock(Position pos, iBlock block) {
-		grid[pos.x][pos.y] = block;
+	public void setBlock(Pos pos, iBlock block) {
+		mGrid[pos.x][pos.y] = block;
 	}
 
 	public void setRandomBlock(iBlock foodBlock) {
 		while (true) {
-			Position pos = Position.getRandomSoupPosition();
+			Pos pos = Pos.getRandomSoupPosition();
 			if (getBlock(pos) == null) {
 				setBlock(pos, foodBlock);
 				return;
 			}
 		}
+	}
+
+	public void addInitialIdvm(iIdvm pIdvm) {
+		Pos lPos = new Pos(Constants.soupSize/2, Constants.soupSize/2);
+		pIdvm.setPosition(lPos);
+		for(iBlock iBlock : pIdvm.getUsedBlocks()) {
+			refreshBlock(iBlock);
+		}
+	}
+
+	private void refreshBlock(iBlock pBlock) {
+		Pos lPos = pBlock.getPosition();
+		mGrid[lPos.x][lPos.y] = pBlock;
 	}
 }
