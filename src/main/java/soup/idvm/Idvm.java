@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import soup.Genome;
 import soup.block.BlockType;
+import soup.block.EmptyBlock;
+import soup.block.Enemy;
 import soup.block.Food;
 import soup.block.iBlock;
 
@@ -14,7 +16,6 @@ public class Idvm implements iIdvm {
 
 	private Genome mGenomeOrigin;
 	private Genome mGenome;
-	private int mHunger;
 	private int mLastFood;
 	private Pos mMidPosition = new Pos(0, 0);
 	private IdvmCell[][] mCellGrid = new IdvmCell[4][4];
@@ -22,7 +23,6 @@ public class Idvm implements iIdvm {
 	public Idvm(Genome pGenome) {
 		mGenomeOrigin = pGenome;
 		mGenome = pGenome;
-		mHunger = mGenome.hunger;
 		mLastFood = 0;
 		grow();
 		grow();
@@ -47,11 +47,7 @@ public class Idvm implements iIdvm {
 	}
 
 	public Boolean isHungry() {
-		return mLastFood > mHunger;
-	}
-
-	public Boolean isBarrier() {
-		return false;
+		return mLastFood > mGenome.hunger;
 	}
 
 	public BlockType getBlockType() {
@@ -93,20 +89,21 @@ public class Idvm implements iIdvm {
 	}
 
 	public void killCell(Pos pPos) {
-		mCellGrid[pPos.x - mMidPosition.x + 2][pPos.y - mMidPosition.y + 2]
+		mCellGrid[pPos.x - mMidPosition.x + 1][pPos.y - mMidPosition.y + 1]
 				.kill();
 	}
 
 	public void step() {
 		mLastFood++;
+		move(mGenome.getIdleDirection());
 	}
 
-	public void eat(Food pFood) {
+	private void eat(Food pFood) {
 		mLastFood = 0;
 		grow();
 	}
 
-	public void move(Directions pDirection) {
+	private void move(Directions pDirection) {
 		switch (pDirection) {
 		case UP:
 		case DOWN:
@@ -120,5 +117,16 @@ public class Idvm implements iIdvm {
 		
 		Pos lNewPos = mMidPosition.getPosFromDirection(pDirection);
 		setPosition(lNewPos);
+	}
+	
+	public iBlock interactWithFood(Food pFood){
+		eat(pFood);
+		iBlock lEmptyBlock= new EmptyBlock();
+		lEmptyBlock.setPosition(pFood.getPosition());
+		return lEmptyBlock;
+	}
+	public iBlock interactWithEnemy(Enemy pEnemy){
+		killCell(pEnemy.getPosition());
+		return pEnemy;
 	}
 }

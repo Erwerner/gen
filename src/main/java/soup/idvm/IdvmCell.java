@@ -37,6 +37,15 @@ public class IdvmCell implements iBlock {
 	}
 
     @Override
+    public String toString(){
+    	
+    	String lString;
+    	lString = mBlockType.toString() + "," + 
+    				mPosOnIdvm.x + "," + mPosOnIdvm.y +"," +
+    				mPos.x + "," + mPos.y;
+		return lString;
+    }
+    @Override
 	public boolean equals(Object o){
 		IdvmCell other = (IdvmCell) o;
 		return this.mBlockType == other.mBlockType &&
