@@ -3,26 +3,35 @@ package soup.idvm;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
+
+import mvc.present.iPresentIdvm;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import datatypes.Directions;
+import datatypes.Direction;
 import datatypes.Pos;
+import exceptions.ExWrongState;
+import genes.Genome;
+import genes.MoveProbability;
 
-import soup.Genome;
+import soup.block.BlockGrid;
 import soup.block.BlockType;
 import soup.block.Enemy;
 import soup.block.Food;
 import soup.block.iBlock;
+import soup.block.iBlockGrid;
 
 public class IdvmTest {
 	private static final int cStartPosX = 50;
 	private static final int cStartPosY = 60;
-	Idvm cut;
+	iIdvm cut;
 	Genome mGenome;
 	private IdvmCell[] mCellGrow;
+	private iBlockGrid mBlockGrid;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -30,6 +39,7 @@ public class IdvmTest {
 
 	@Before
 	public void setUp() throws Exception {
+		mBlockGrid = new BlockGrid();
 		mCellGrow = new IdvmCell[6];
 		mCellGrow[0] = new IdvmCell(BlockType.LIFE, new Pos(0, 0));
 		mCellGrow[1] = new IdvmCell(BlockType.SENSOR, new Pos(1, 0));
@@ -41,13 +51,17 @@ public class IdvmTest {
 		mGenome = new Genome();
 		for (IdvmCell iCell : mCellGrow) {
 			mGenome.cell.add(new IdvmCell(iCell.getBlockType(), iCell
-					.getPosition()));
+					.getPosOnIdvm()));
 		}
-		mGenome.idleMovement.add(new Movement(0, 0, 1, 0));
+		ArrayList<MoveProbability> lIdlelMoveProbability = new ArrayList<MoveProbability>();
+		lIdlelMoveProbability.add(new MoveProbability(0, 0, 1, 0));
+		lIdlelMoveProbability.add(new MoveProbability(0, 1, 0, 0));
+		mGenome.movementSequences.put(IdvmState.IDLE, lIdlelMoveProbability);
 
 		mGenome.hunger = 50;
 
 		cut = new Idvm(mGenome);
+		cut.setBlockGrid(mBlockGrid);
 		cut.setPosition(new Pos(cStartPosX, cStartPosY));
 	}
 
@@ -200,7 +214,7 @@ public class IdvmTest {
 		cut.step();
 
 		Pos lActPos = cut.getPosition();
-		assertPosition(cStartPosX-1, cStartPosY, lActPos);
+		assertPosition(cStartPosX - 1, cStartPosY, lActPos);
 		assertHasGrowCellOnPosDiff(false, 3, 0, 0);
 		assertHasGrowCellOnPosDiff(true, 3, -1, 0);
 	}
@@ -242,17 +256,16 @@ public class IdvmTest {
 	private Pos getSoupPosFromGrowCell(int pIdx) {
 		IdvmCell lCell = mCellGrow[pIdx];
 
-		Pos lPos = new Pos(lCell.getPosition().x + cStartPosX,
-				lCell.getPosition().y + cStartPosY);
+		Pos lPos = new Pos(lCell.getPosOnIdvm().x + cStartPosX,
+				lCell.getPosOnIdvm().y + cStartPosY);
 		return lPos;
 	}
 
 	@Test
 	public void stepMovesCorrect() {
 		assertPosition(cStartPosX, cStartPosY, cut.getPosition());
-		assertEquals(Directions.LEFT, mGenome.getIdleDirection());
 		cut.step();
-		assertPosition(cStartPosX-1, cStartPosY, cut.getPosition());
+		assertPosition(cStartPosX - 1, cStartPosY, cut.getPosition());
 	}
 
 	private void assertPosition(int pExpX, int pExpY, Pos pPos) {
@@ -279,5 +292,66 @@ public class IdvmTest {
 			System.out.println(lUsedBlocks);
 			fail();
 		}
+	}
+
+	@Test
+	public void eatChangesDirection() {
+		assertPosition(cStartPosX, cStartPosY, cut.getPosition());
+		cut.step();
+		assertPosition(cStartPosX - 1, cStartPosY, cut.getPosition());
+		cut.interactWithFood(new Food());
+		cut.step();
+		assertPosition(cStartPosX - 1, cStartPosY + 1, cut.getPosition());
+	}
+
+	@Test
+	public void poppingNeverChangesGenome() {
+		assertPosition(cStartPosX, cStartPosY, cut.getPosition());
+		cut.step();
+		assertPosition(cStartPosX - 1, cStartPosY, cut.getPosition());
+		cut.interactWithFood(new Food());
+		cut.step();
+		assertPosition(cStartPosX - 1, cStartPosY + 1, cut.getPosition());
+		assertEquals(2, mGenome.movementSequences.get(IdvmState.IDLE).size());
+	}
+
+	@Test
+	public void returnsDetectedBlocksForSensor() {
+		assertHasCell(true, BlockType.SENSOR, 1, 0, cStartPosX + 1, cStartPosY);
+		HashMap<Pos, Sensor> lActDetectPos = cut.getDetectedPos();
+		assertNotEquals(0, lActDetectPos.size());
+		ArrayList<Pos> lActPos = new ArrayList<Pos>();
+		for (Entry<Pos, Sensor> iPos : lActDetectPos.entrySet()) {
+			lActPos.add(iPos.getKey());
+		}
+		assertTrue(lActPos.contains(new Pos(cStartPosX + 1 - 1, cStartPosY)));
+		assertTrue(lActPos.contains(new Pos(cStartPosX + 1 + 0, cStartPosY)));
+		assertTrue(lActPos.contains(new Pos(cStartPosX + 1 + 1, cStartPosY)));
+		assertTrue(lActPos.contains(new Pos(cStartPosX + 1, cStartPosY - 1)));
+		assertTrue(lActPos.contains(new Pos(cStartPosX + 1, cStartPosY + 0)));
+		assertTrue(lActPos.contains(new Pos(cStartPosX + 1, cStartPosY + 1)));
+	}
+
+	@Test
+	public void stateIsIDLE(){
+		assertEquals(IdvmState.IDLE,cut.getState());
+	}
+	@Test
+	public void stateIsFOODWhenFoodIsDetected(){
+		assertHasCell(true, BlockType.SENSOR, 1, 0, cStartPosX + 1, cStartPosY);
+		mBlockGrid.setBlock(new Pos(cStartPosX + 2, cStartPosY - 1), new Food());
+		assertEquals(IdvmState.FOOD,cut.getState());
+	}
+
+	@Test(expected = ExWrongState.class)
+	public void targetIsNull(){
+		assertNull(cut.getTargetDirection());
+	}
+	@Test
+	public void targetIsRight(){
+		assertHasCell(true, BlockType.SENSOR, 1, 0, cStartPosX + 1, cStartPosY);
+		mBlockGrid.setBlock(new Pos(cStartPosX + 2, cStartPosY), new Food());
+		assertEquals(IdvmState.FOOD,cut.getState());
+		assertEquals(Direction.RIGHT, cut.getTargetDirection());
 	}
 }

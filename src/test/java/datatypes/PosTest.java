@@ -21,53 +21,53 @@ public class PosTest {
 
 	@Test
 	public void returnsUpPos() {
-		Pos lActPos = cut.getPosFromDirection(Directions.UP);
+		Pos lActPos = cut.getPosFromDirection(Direction.UP);
 		assertEquals(cStartX, lActPos.x);
 		assertEquals(cStartY-1, lActPos.y);
 	}
 	@Test
 	public void returnsDownPos() {
-		Pos lActPos = cut.getPosFromDirection(Directions.DOWN);
+		Pos lActPos = cut.getPosFromDirection(Direction.DOWN);
 		assertEquals(cStartX, lActPos.x);
 		assertEquals(cStartY+1, lActPos.y);
 	}
 	@Test
 	public void returnsLeftPos() {
-		Pos lActPos = cut.getPosFromDirection(Directions.LEFT);
+		Pos lActPos = cut.getPosFromDirection(Direction.LEFT);
 		assertEquals(cStartX-1, lActPos.x);
 		assertEquals(cStartY, lActPos.y);
 	}
 	@Test
 	public void returnsRightPos() {
-		Pos lActPos = cut.getPosFromDirection(Directions.RIGHT);
+		Pos lActPos = cut.getPosFromDirection(Direction.RIGHT);
 		assertEquals(cStartX+1, lActPos.x);
 		assertEquals(cStartY, lActPos.y);
 	}
 	@Test
 	public void stopsAtBorderLeft(){
 		cut = new Pos(0,cStartY);
-		Pos lActPos = cut.getPosFromDirection(Directions.LEFT);
+		Pos lActPos = cut.getPosFromDirection(Direction.LEFT);
 		assertEquals(cut.x, lActPos.x);
 		assertEquals(cut.y, lActPos.y);
 	}
 	@Test
 	public void stopsAtBorderRight(){
 		cut = new Pos(Constants.soupSize-1,cStartY);
-		Pos lActPos = cut.getPosFromDirection(Directions.RIGHT);
+		Pos lActPos = cut.getPosFromDirection(Direction.RIGHT);
 		assertEquals(cut.x, lActPos.x);
 		assertEquals(cut.y, lActPos.y);
 	}
 	@Test
 	public void stopsAtBorderUp(){
 		cut = new Pos(cStartX,0);
-		Pos lActPos = cut.getPosFromDirection(Directions.UP);
+		Pos lActPos = cut.getPosFromDirection(Direction.UP);
 		assertEquals(cut.x, lActPos.x);
 		assertEquals(cut.y, lActPos.y);
 	}
 	@Test
 	public void stopsAtBorderDown(){
 		cut = new Pos(cStartX,Constants.soupSize-1);
-		Pos lActPos = cut.getPosFromDirection(Directions.DOWN);
+		Pos lActPos = cut.getPosFromDirection(Direction.DOWN);
 		assertEquals(cut.x, lActPos.x);
 		assertEquals(cut.y, lActPos.y);
 	}

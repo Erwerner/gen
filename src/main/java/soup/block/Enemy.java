@@ -1,21 +1,12 @@
 package soup.block;
+public class Enemy extends Block {
 
-import datatypes.Pos;
-
-public class Enemy implements iBlock {
-
-	private Pos mPos;
-
-	public BlockType getBlockType() {
-		return BlockType.ENEMY;
+	public Enemy() {
+		super(BlockType.ENEMY);
 	}
-
-	public void setPosition(Pos pPos) {
-		mPos = pPos;
-	}
-
-	public Pos getPosition() {
-		return mPos;
+	public void step() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -5,6 +5,7 @@ import datatypes.Pos;
 
 public interface iBlock {
 	BlockType getBlockType();
-	void setPosition(Pos pPos);
+	iBlock setPosition(Pos pPos);
 	Pos getPosition();
+	void step();
 }

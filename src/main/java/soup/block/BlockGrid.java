@@ -19,11 +19,11 @@ public class BlockGrid implements iBlockGrid {
 		mGrid[pos.x][pos.y] = block;
 	}
 
-	public void setRandomBlock(iBlock foodBlock) {
+	public void setRandomBlock(iBlock pBlock) {
 		while (true) {
 			Pos pos = Pos.getRandomSoupPosition();
 			if (getBlock(pos) == null) {
-				setBlock(pos, foodBlock);
+				setBlock(pos, pBlock);
 				return;
 			}
 		}

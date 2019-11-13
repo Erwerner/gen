@@ -2,35 +2,24 @@ package soup.idvm;
 
 import lombok.Data;
 import datatypes.Pos;
+import soup.block.Block;
 import soup.block.BlockType;
 import soup.block.iBlock;
 
 @Data
-public class IdvmCell implements iBlock {
+public class IdvmCell extends Block {
 
-	private Pos mPos;
 	private Pos mPosOnIdvm;
 	private BlockType mBlockType;
     
 	public IdvmCell(BlockType pCellType, Pos pPos){
+		super(BlockType.CELL);
 		mBlockType = pCellType;
 		mPosOnIdvm = pPos;
-		mPos = pPos;
-	}
-	public Boolean isBarrier() {
-		return false;
 	}
 
 	public BlockType getBlockType() {
 		return mBlockType;
-	}
-
-	public void setPosition(Pos pPos) {
-		mPos = pPos;
-	}
-
-	public Pos getPosition() {
-		return mPos;
 	}
 	public Pos getPosOnIdvm() {
 		return mPosOnIdvm;
@@ -55,5 +44,6 @@ public class IdvmCell implements iBlock {
 	public void kill() {
 		mBlockType = BlockType.NOTHING;
 	}
+	public void step() { }
 
 }

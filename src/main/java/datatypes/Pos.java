@@ -1,6 +1,7 @@
 package datatypes;
 
-import soup.idvm.ExWrongDirection;
+import exceptions.ExWrongDirection;
+import soup.block.iBlock;
 
 public class Pos {
 	public int x;
@@ -22,7 +23,7 @@ public class Pos {
 		return this.x == other.x && this.y == other.y;
 	}
 
-	public Pos getPosFromDirection(Directions pDirection) {
+	public Pos getPosFromDirection(Direction pDirection) {
 		Pos lNewPos;
 		switch (pDirection) {
 		case UP:
@@ -47,5 +48,13 @@ public class Pos {
 		if(lNewPos.y<0)lNewPos.y=0;
 		if(lNewPos.y>Constants.soupSize-1)lNewPos.y=Constants.soupSize-1;
 		return lNewPos;
+	}
+
+	public Direction getDircetionTo(Pos pTargetPos) {
+		if(pTargetPos.y < this.y)return Direction.UP;
+		if(pTargetPos.y > this.y)return Direction.DOWN;
+		if(pTargetPos.x < this.x)return Direction.LEFT;
+		if(pTargetPos.x > this.x)return Direction.RIGHT;
+		return Direction.SAME;
 	}
 }
