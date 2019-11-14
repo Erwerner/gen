@@ -10,7 +10,7 @@ public class Enemy extends Block {
 
 	public Enemy() {
 		super(BlockType.ENEMY);
-		setDirection();
+		setRandomDirection();
 	}
 
 	public void step() {
@@ -24,13 +24,12 @@ public class Enemy extends Block {
 	}
 
 	private void setDirection() {
-		if (new Random().nextInt(15) == 0)
+		if (new Random().nextInt(15) == 1)
 			setRandomDirection();
-		mCurrentDirection = Direction.LEFT;
 	}
 
 	private void setRandomDirection() {
-		Direction[] lDirections = Direction.values();
+		Direction[] lDirections = {Direction.UP,Direction.DOWN,Direction.LEFT,Direction.RIGHT,};
 		int rnd = new Random().nextInt(lDirections.length);
 		mCurrentDirection = lDirections[rnd];
 	}

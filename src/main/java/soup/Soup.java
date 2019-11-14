@@ -29,6 +29,8 @@ public class Soup implements iSoup {
 
 	private void initEnemyBlocks() {
 		Enemy[] lEnemyList = new Enemy[Constants.enemySupply];
+		for (int i = 0; i < Constants.enemySupply; i++)
+			lEnemyList[i] = new Enemy();
 		for (iBlock iEnemyBlock : lEnemyList) {
 			mBlockGrid.setRandomBlock(iEnemyBlock);
 			mAllBlocks.add(iEnemyBlock);
@@ -77,6 +79,8 @@ public class Soup implements iSoup {
 	public void step() {
 		try {
 			mIdvm.step();
+			for (iBlock iBlock : mAllBlocks)
+				iBlock.step();
 			refreshBlocks();
 			detectCollisions();
 			Thread.sleep(250);
@@ -87,6 +91,7 @@ public class Soup implements iSoup {
 	}
 
 	private void detectCollisions() {
+		iBlock lInteractedBlock;
 		ArrayList<Pos> lIdvmPos = new ArrayList<Pos>();
 		for (iBlock iBlock : mIdvm.getUsedBlocks()) {
 			lIdvmPos.add(iBlock.getPos());
@@ -96,14 +101,17 @@ public class Soup implements iSoup {
 				if (iBlock.getPos() == iPos) {
 					switch (iBlock.getBlockType()) {
 					case FOOD:
-						mIdvm.interactWithFood((Food) iBlock);
+						lInteractedBlock = mIdvm
+								.interactWithFood((Food) iBlock);
 						break;
 					case ENEMY:
-						mIdvm.interactWithEnemy((Enemy) iBlock);
+						lInteractedBlock = mIdvm
+								.interactWithEnemy((Enemy) iBlock);
 						break;
 					default:
 						throw new ExWrongBlockType();
 					}
+					mBlockGrid.setBlock(iPos, lInteractedBlock);
 				}
 			}
 		}

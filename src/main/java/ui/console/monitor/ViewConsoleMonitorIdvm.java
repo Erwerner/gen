@@ -11,6 +11,7 @@ import datatypes.Pos;
 
 public class ViewConsoleMonitorIdvm extends View {
 
+	private static final int cViewSize = 15;
 	private iPresentIdvm mIdvm;
 	private iPresentSoup mSoup;
 
@@ -28,14 +29,14 @@ public class ViewConsoleMonitorIdvm extends View {
 
 	private void printGrid() {
 		Pos lIdvMidPos = mIdvm.getPos();
-		for (int y = lIdvMidPos.y - 8; y < lIdvMidPos.y + 8; y++) {
+		for (int y = lIdvMidPos.y - cViewSize; y < lIdvMidPos.y + cViewSize; y++) {
 			String lGridLine = "";
-			for (int x = lIdvMidPos.x - 8; x < lIdvMidPos.x + 10; x++) {
+			for (int x = lIdvMidPos.x - cViewSize; x < lIdvMidPos.x + cViewSize; x++) {
 				iBlock lBlock = mSoup.getBlock(new Pos(x, y));
 				if (lBlock != null) {
 					lGridLine = lGridLine + getPixel(lBlock);
 				} else {
-					if (x % 5 == 0 && y % 5 == 0) {
+					if (x % cViewSize == 0 && y % cViewSize == 0) {
 						lGridLine = lGridLine + ".";
 					} else {
 						lGridLine = lGridLine + " ";
@@ -55,7 +56,9 @@ public class ViewConsoleMonitorIdvm extends View {
 	private String getPixel(iBlock pBlock) {
 		switch (pBlock.getBlockType()) {
 		case FOOD:
-			return "F";
+			return "*";
+		case ENEMY:
+			return "#";
 		case LIFE:
 			return "L";
 		case SENSOR:

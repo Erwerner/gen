@@ -42,6 +42,7 @@ public class Idvm implements iIdvm {
 		grow();
 
 		addaptMovementSequence(IdvmState.IDLE, pGenome);
+		addaptMovementSequence(IdvmState.FOOD, pGenome);
 	}
 
 	private void addaptMovementSequence(IdvmState pState, Genome pGenome) {
@@ -122,7 +123,8 @@ public class Idvm implements iIdvm {
 		IdvmState lState = getState();
 		if (lState != IdvmState.IDLE)
 			lTargetDirection = getTargetDirection();
-		Direction lDirection = mMovementSequences.get(lState).getDirection();
+		MovementSequence lSequence = mMovementSequences.get(lState);
+		Direction lDirection = lSequence.getDirection();
 		move(lDirection, lTargetDirection);
 	}
 
