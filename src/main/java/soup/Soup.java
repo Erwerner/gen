@@ -4,13 +4,21 @@ import soup.block.BlockGrid;
 import soup.block.Food;
 import soup.block.iBlock;
 import soup.block.iBlockGrid;
+import soup.idvm.IdvmState;
+import soup.idvm.Sensor;
 import soup.idvm.iIdvm;
+
+import java.util.HashMap;
+
 import datatypes.Constants;
+import datatypes.Direction;
 import datatypes.Pos;
 import mvc.Model;
+import mvc.controller.iControllRunSoup;
+import mvc.present.iPresentIdvm;
 import mvc.present.iPresentSoup;
 
-public class Soup extends Model implements iPresentSoup{
+public class Soup extends Model implements iPresentSoup, iPresentIdvm, iControllRunSoup{
 	private iIdvm mIdvm;
 	private iBlockGrid mBlockGrid;
 	
@@ -41,5 +49,46 @@ public class Soup extends Model implements iPresentSoup{
 		//#TODO abc;
 		//all Nothing
 		//loop rest via block array
+	}
+
+	public HashMap<Pos, Sensor> getDetectedPos() {
+		iPresentIdvm lPresentIdvm = (iPresentIdvm)mIdvm;
+		return lPresentIdvm.getDetectedPos();
+	}
+
+	public Direction getTargetDirection() {
+		iPresentIdvm lPresentIdvm = (iPresentIdvm)mIdvm;
+		return lPresentIdvm.getTargetDirection();
+	}
+
+	public int getStepCount() {
+		iPresentIdvm lPresentIdvm = (iPresentIdvm)mIdvm;
+		return lPresentIdvm.getStepCount();
+	}
+
+	public boolean isAlive() {
+		iPresentIdvm lPresentIdvm = (iPresentIdvm)mIdvm;
+		return lPresentIdvm.isAlive();
+	}
+
+	public Boolean isHungry() {
+		iPresentIdvm lPresentIdvm = (iPresentIdvm)mIdvm;
+		return lPresentIdvm.isHungry();
+	}
+
+	public IdvmState getState() {
+		iPresentIdvm lPresentIdvm = (iPresentIdvm)mIdvm;
+		return lPresentIdvm.getState();
+	}
+
+	public Pos getPosition() {
+		iPresentIdvm lPresentIdvm = (iPresentIdvm)mIdvm;
+		return lPresentIdvm.getPosition();
+	}
+
+	public void run() {
+		while(mIdvm.isAlive()) {
+			mIdvm.step();
+		}
 	}
 }
