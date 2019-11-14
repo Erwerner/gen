@@ -13,4 +13,6 @@ public interface iBlockGrid {
 
 	void addInitialIdvm(iIdvm pIdvm);
 
+	void clearBlocks();
+
 }

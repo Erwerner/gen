@@ -21,9 +21,10 @@ public class BlockGrid implements iBlockGrid {
 
 	public void setRandomBlock(iBlock pBlock) {
 		while (true) {
-			Pos pos = Pos.getRandomSoupPosition();
-			if (getBlock(pos) == null) {
-				setBlock(pos, pBlock);
+			Pos lPos = Pos.getRandomSoupPosition();
+			if (getBlock(lPos) == null) {
+				setBlock(lPos, pBlock);
+				pBlock.setPosition(lPos);
 				return;
 			}
 		}

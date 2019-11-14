@@ -333,25 +333,28 @@ public class IdvmTest {
 	}
 
 	@Test
-	public void stateIsIDLE(){
-		assertEquals(IdvmState.IDLE,cut.getState());
+	public void stateIsIDLE() {
+		assertEquals(IdvmState.IDLE, cut.getState());
 	}
+
 	@Test
-	public void stateIsFOODWhenFoodIsDetected(){
+	public void stateIsFOODWhenFoodIsDetected() {
 		assertHasCell(true, BlockType.SENSOR, 1, 0, cStartPosX + 1, cStartPosY);
-		mBlockGrid.setBlock(new Pos(cStartPosX + 2, cStartPosY - 1), new Food());
-		assertEquals(IdvmState.FOOD,cut.getState());
+		mBlockGrid
+				.setBlock(new Pos(cStartPosX + 2, cStartPosY - 1), new Food());
+		assertEquals(IdvmState.FOOD, cut.getState());
 	}
 
 	@Test(expected = ExWrongState.class)
-	public void targetIsNull(){
+	public void targetIsNull() {
 		assertNull(cut.getTargetDirection());
 	}
+
 	@Test
-	public void targetIsRight(){
+	public void targetIsRight() {
 		assertHasCell(true, BlockType.SENSOR, 1, 0, cStartPosX + 1, cStartPosY);
 		mBlockGrid.setBlock(new Pos(cStartPosX + 2, cStartPosY), new Food());
-		assertEquals(IdvmState.FOOD,cut.getState());
+		assertEquals(IdvmState.FOOD, cut.getState());
 		assertEquals(Direction.RIGHT, cut.getTargetDirection());
 	}
 }

@@ -1,5 +1,7 @@
 package soup;
 
+import java.util.ArrayList;
+
 import soup.block.BlockGrid;
 import soup.block.Food;
 import soup.block.iBlock;
@@ -10,11 +12,12 @@ import datatypes.Pos;
 import mvc.Model;
 import mvc.present.iPresentSoup;
 
-public class Soup extends Model implements iPresentSoup{
+public class Soup extends Model implements iPresentSoup {
 	private iIdvm mIdvm;
 	private iBlockGrid mBlockGrid;
-	
-	public Soup(iIdvm pIdvm){
+	private ArrayList<iBlock> mAllBlocks = new ArrayList<iBlock>();
+
+	public Soup(iIdvm pIdvm) {
 		mBlockGrid = new BlockGrid();
 		mIdvm = pIdvm;
 		mIdvm.setBlockGrid(mBlockGrid);
@@ -29,17 +32,24 @@ public class Soup extends Model implements iPresentSoup{
 
 	private void initFoodBlocks() {
 		Food[] food = new Food[Constants.foodSupply];
-		for(iBlock foodBlock: food){
-			mBlockGrid.setRandomBlock(foodBlock);			
+		// loop rest via block array
+		for (iBlock iFoodBlock : food) {
+			mBlockGrid.setRandomBlock(iFoodBlock);
+			mAllBlocks.add(iFoodBlock);
 		}
 	}
 
 	public iBlock getBlock(Pos pos) {
 		return mBlockGrid.getBlock(pos);
 	}
-	public void refreshBlocks(){
-		//#TODO abc;
-		//all Nothing
-		//loop rest via block array
+
+	public void refreshBlocks() {
+		mBlockGrid.clearBlocks();
+		for (iBlock iBlock : mAllBlocks) {
+			mBlockGrid.setBlock(iBlock.getPosition(), iBlock);
+		}
+		for (iBlock iBlock : mIdvm.getUsedBlocks()) {
+			mBlockGrid.setBlock(iBlock.getPosition(), iBlock);
+		}
 	}
 }

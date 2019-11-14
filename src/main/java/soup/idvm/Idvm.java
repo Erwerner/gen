@@ -145,14 +145,14 @@ public class Idvm implements iIdvm, iPresentIdvm {
 
 		for (Entry<Pos, Sensor> iPos : lDetectedPos.entrySet()) {
 			iBlock lGridBlock = mBlockGrid.getBlock(iPos.getKey());
-			if(lGridBlock != null && lGridBlock.getBlockType() == lSearchBlock){
+			if (lGridBlock != null && lGridBlock.getBlockType() == lSearchBlock) {
 				Direction lDircetion;
 				Pos lSensorPos = iPos.getValue().getPosition();
 				lDircetion = lSensorPos.getDircetionTo(iPos.getKey());
 				return lDircetion;
 			}
 		}
-			throw new ExWrongDirection();
+		throw new ExWrongDirection();
 	}
 
 	private void eat(Food pFood) {
@@ -216,7 +216,8 @@ public class Idvm implements iIdvm, iPresentIdvm {
 						int lCellX = iCell.getPosition().x;
 						int lCellY = iCell.getPosition().y;
 						lDetectedPos.put(new Pos(lCellX + x, lCellY + y),
-								(Sensor)new Sensor().setPosition(iCell.getPosition()));
+								(Sensor) new Sensor().setPosition(iCell
+										.getPosition()));
 					}
 				}
 			}
@@ -227,6 +228,7 @@ public class Idvm implements iIdvm, iPresentIdvm {
 	public void setBlockGrid(iBlockGrid pBlockGrid) {
 		mBlockGrid = pBlockGrid;
 	}
+
 	public int getStepCount() {
 		return mStepCount;
 	}
