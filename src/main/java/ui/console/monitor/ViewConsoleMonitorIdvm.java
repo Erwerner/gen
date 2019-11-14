@@ -36,11 +36,7 @@ public class ViewConsoleMonitorIdvm extends View {
 				if (lBlock != null) {
 					lGridLine = lGridLine + getPixel(lBlock);
 				} else {
-					if (x % cViewSize == 0 && y % cViewSize == 0) {
-						lGridLine = lGridLine + ".";
-					} else {
-						lGridLine = lGridLine + " ";
-					}
+					lGridLine = lGridLine + " ";
 				}
 			}
 			System.out.println(lGridLine);
@@ -56,7 +52,7 @@ public class ViewConsoleMonitorIdvm extends View {
 	private String getPixel(iBlock pBlock) {
 		switch (pBlock.getBlockType()) {
 		case FOOD:
-			return "*";
+			return "O";
 		case ENEMY:
 			return "#";
 		case LIFE:
