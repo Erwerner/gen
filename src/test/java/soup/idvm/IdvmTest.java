@@ -205,7 +205,7 @@ public class IdvmTest {
 
 	@Test
 	public void movesCorrect() {
-		Pos lStartPos = cut.getPosition();
+		Pos lStartPos = cut.getPos();
 
 		assertEquals(cStartPosX, lStartPos.x);
 		assertEquals(cStartPosY, lStartPos.y);
@@ -213,7 +213,7 @@ public class IdvmTest {
 
 		cut.step();
 
-		Pos lActPos = cut.getPosition();
+		Pos lActPos = cut.getPos();
 		assertPosition(cStartPosX - 1, cStartPosY, lActPos);
 		assertHasGrowCellOnPosDiff(false, 3, 0, 0);
 		assertHasGrowCellOnPosDiff(true, 3, -1, 0);
@@ -222,7 +222,7 @@ public class IdvmTest {
 	@Test
 	public void movesNotAtBorder() {
 		cut.setPosition(new Pos(0, cStartPosY));
-		Pos lStartPos = cut.getPosition();
+		Pos lStartPos = cut.getPos();
 
 		assertEquals(0, lStartPos.x);
 		assertEquals(cStartPosY, lStartPos.y);
@@ -230,7 +230,7 @@ public class IdvmTest {
 
 		cut.step();
 
-		Pos lActPos = cut.getPosition();
+		Pos lActPos = cut.getPos();
 		assertEquals(0, lActPos.x);
 		assertEquals(cStartPosY, lActPos.y);
 		assertHasCell(true, BlockType.LIFE, 0, 0, 0, cStartPosY);
@@ -263,9 +263,9 @@ public class IdvmTest {
 
 	@Test
 	public void stepMovesCorrect() {
-		assertPosition(cStartPosX, cStartPosY, cut.getPosition());
+		assertPosition(cStartPosX, cStartPosY, cut.getPos());
 		cut.step();
-		assertPosition(cStartPosX - 1, cStartPosY, cut.getPosition());
+		assertPosition(cStartPosX - 1, cStartPosY, cut.getPos());
 	}
 
 	private void assertPosition(int pExpX, int pExpY, Pos pPos) {
@@ -296,22 +296,22 @@ public class IdvmTest {
 
 	@Test
 	public void eatChangesDirection() {
-		assertPosition(cStartPosX, cStartPosY, cut.getPosition());
+		assertPosition(cStartPosX, cStartPosY, cut.getPos());
 		cut.step();
-		assertPosition(cStartPosX - 1, cStartPosY, cut.getPosition());
+		assertPosition(cStartPosX - 1, cStartPosY, cut.getPos());
 		cut.interactWithFood(new Food());
 		cut.step();
-		assertPosition(cStartPosX - 1, cStartPosY + 1, cut.getPosition());
+		assertPosition(cStartPosX - 1, cStartPosY + 1, cut.getPos());
 	}
 
 	@Test
 	public void poppingNeverChangesGenome() {
-		assertPosition(cStartPosX, cStartPosY, cut.getPosition());
+		assertPosition(cStartPosX, cStartPosY, cut.getPos());
 		cut.step();
-		assertPosition(cStartPosX - 1, cStartPosY, cut.getPosition());
+		assertPosition(cStartPosX - 1, cStartPosY, cut.getPos());
 		cut.interactWithFood(new Food());
 		cut.step();
-		assertPosition(cStartPosX - 1, cStartPosY + 1, cut.getPosition());
+		assertPosition(cStartPosX - 1, cStartPosY + 1, cut.getPos());
 		assertEquals(2, mGenome.movementSequences.get(IdvmState.IDLE).size());
 	}
 

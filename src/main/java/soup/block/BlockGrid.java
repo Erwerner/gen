@@ -31,15 +31,23 @@ public class BlockGrid implements iBlockGrid {
 	}
 
 	public void addInitialIdvm(iIdvm pIdvm) {
-		Pos lPos = new Pos(Constants.soupSize/2, Constants.soupSize/2);
+		Pos lPos = new Pos(Constants.soupSize / 2, Constants.soupSize / 2);
 		pIdvm.setPosition(lPos);
-		for(iBlock iBlock : pIdvm.getUsedBlocks()) {
+		for (iBlock iBlock : pIdvm.getUsedBlocks()) {
 			refreshBlock(iBlock);
 		}
 	}
 
 	private void refreshBlock(iBlock pBlock) {
-		Pos lPos = pBlock.getPosition();
+		Pos lPos = pBlock.getPos();
 		mGrid[lPos.x][lPos.y] = pBlock;
+	}
+
+	public void clearBlocks() {
+		for (int x = 0; x < Constants.soupSize; x++) {
+			for (int y = 0; y < Constants.soupSize; y++) {
+				mGrid[x][y] = null;
+			}
+		}
 	}
 }

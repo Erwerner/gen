@@ -27,7 +27,12 @@ public class Soup extends Model implements iPresentSoup {
 	}
 
 	private void finishSoup() {
-		// TODO delete surrounding blocks of idvm
+		Pos lIdvmPos = mIdvm.getPos();
+		for (int x = lIdvmPos.x - 1; x <= lIdvmPos.x + 1; x++) {
+			for (int y = lIdvmPos.y - 1; y <= lIdvmPos.y + 1; y++) {
+				mBlockGrid.setBlock(new Pos(x, y), null);
+			}
+		}
 	}
 
 	private void initFoodBlocks() {
@@ -46,10 +51,10 @@ public class Soup extends Model implements iPresentSoup {
 	public void refreshBlocks() {
 		mBlockGrid.clearBlocks();
 		for (iBlock iBlock : mAllBlocks) {
-			mBlockGrid.setBlock(iBlock.getPosition(), iBlock);
+			mBlockGrid.setBlock(iBlock.getPos(), iBlock);
 		}
 		for (iBlock iBlock : mIdvm.getUsedBlocks()) {
-			mBlockGrid.setBlock(iBlock.getPosition(), iBlock);
+			mBlockGrid.setBlock(iBlock.getPos(), iBlock);
 		}
 	}
 }

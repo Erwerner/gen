@@ -22,5 +22,5 @@ public interface iPresentIdvm {
 
 	IdvmState getState();
 
-	Pos getPosition();
+	Pos getPos();
 }

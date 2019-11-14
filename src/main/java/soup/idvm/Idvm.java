@@ -96,7 +96,7 @@ public class Idvm implements iIdvm, iPresentIdvm {
 		}
 	}
 
-	public Pos getPosition() {
+	public Pos getPos() {
 		return mMidPosition;
 	}
 
@@ -147,7 +147,7 @@ public class Idvm implements iIdvm, iPresentIdvm {
 			iBlock lGridBlock = mBlockGrid.getBlock(iPos.getKey());
 			if (lGridBlock != null && lGridBlock.getBlockType() == lSearchBlock) {
 				Direction lDircetion;
-				Pos lSensorPos = iPos.getValue().getPosition();
+				Pos lSensorPos = iPos.getValue().getPos();
 				lDircetion = lSensorPos.getDircetionTo(iPos.getKey());
 				return lDircetion;
 			}
@@ -185,7 +185,7 @@ public class Idvm implements iIdvm, iPresentIdvm {
 	}
 
 	public iBlock interactWithEnemy(Enemy pEnemy) {
-		killCell(pEnemy.getPosition());
+		killCell(pEnemy.getPos());
 		return pEnemy;
 	}
 
@@ -213,11 +213,11 @@ public class Idvm implements iIdvm, iPresentIdvm {
 			if (iCell.getBlockType() == BlockType.SENSOR) {
 				for (int x = -1; x <= 1; x++) {
 					for (int y = -1; y <= 1; y++) {
-						int lCellX = iCell.getPosition().x;
-						int lCellY = iCell.getPosition().y;
+						int lCellX = iCell.getPos().x;
+						int lCellY = iCell.getPos().y;
 						lDetectedPos.put(new Pos(lCellX + x, lCellY + y),
 								(Sensor) new Sensor().setPosition(iCell
-										.getPosition()));
+										.getPos()));
 					}
 				}
 			}
