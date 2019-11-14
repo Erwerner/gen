@@ -2,15 +2,16 @@ package soup;
 
 import java.util.ArrayList;
 
+import mvc.Model;
+import mvc.present.iPresentSoup;
 import soup.block.BlockGrid;
+import soup.block.Enemy;
 import soup.block.Food;
 import soup.block.iBlock;
 import soup.block.iBlockGrid;
 import soup.idvm.iIdvm;
 import datatypes.Constants;
 import datatypes.Pos;
-import mvc.Model;
-import mvc.present.iPresentSoup;
 
 public class Soup extends Model implements iPresentSoup {
 	private iIdvm mIdvm;
@@ -23,7 +24,16 @@ public class Soup extends Model implements iPresentSoup {
 		mIdvm.setBlockGrid(mBlockGrid);
 		mBlockGrid.addInitialIdvm(mIdvm);
 		initFoodBlocks();
+		initEnemyBlocks();
 		finishSoup();
+	}
+
+	private void initEnemyBlocks() {
+		Enemy[] lEnemyList = new Enemy[Constants.enemySupply];
+		for (iBlock iEnemyBlock : lEnemyList) {
+			mBlockGrid.setRandomBlock(iEnemyBlock);
+			mAllBlocks.add(iEnemyBlock);
+		}
 	}
 
 	private void finishSoup() {
@@ -37,7 +47,6 @@ public class Soup extends Model implements iPresentSoup {
 
 	private void initFoodBlocks() {
 		Food[] food = new Food[Constants.foodSupply];
-		// loop rest via block array
 		for (iBlock iFoodBlock : food) {
 			mBlockGrid.setRandomBlock(iFoodBlock);
 			mAllBlocks.add(iFoodBlock);

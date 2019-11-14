@@ -1,25 +1,24 @@
 package soup.idvm;
 
+import genes.Genome;
+import genes.MoveProbability;
+import genes.MovementSequence;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
 import mvc.present.iPresentIdvm;
-
 import soup.block.BlockType;
 import soup.block.Enemy;
 import soup.block.Food;
 import soup.block.iBlock;
 import soup.block.iBlockGrid;
-
 import datatypes.Direction;
 import datatypes.Pos;
 import exceptions.ExFailedDetection;
 import exceptions.ExWrongDirection;
 import exceptions.ExWrongState;
-import genes.Genome;
-import genes.MoveProbability;
-import genes.MovementSequence;
 
 public class Idvm implements iIdvm, iPresentIdvm {
 
