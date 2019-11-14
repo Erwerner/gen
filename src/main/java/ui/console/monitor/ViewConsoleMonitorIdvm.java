@@ -16,11 +16,16 @@ public class ViewConsoleMonitorIdvm extends View{
 	}
 
 	public void update() {
-		System.out.println(mPresentIdvm.getState());
+		clearScreen();
 		System.out.println(mPresentIdvm.getStepCount());
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
+		System.out.println(mPresentIdvm.isAlive());
+		System.out.println(mPresentIdvm.getState());
+	}
+
+	private void clearScreen() {
+        try {
+			Runtime.getRuntime().exec("clear");
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
