@@ -30,12 +30,12 @@ public class ViewConsoleMonitorIdvm extends View {
 		Pos lIdvMidPos = mIdvm.getPos();
 		for (int y = lIdvMidPos.y - 8; y < lIdvMidPos.y + 8; y++) {
 			String lGridLine = "";
-			for (int x = lIdvMidPos.x - 8; x < lIdvMidPos.x + 8; x++) {
+			for (int x = lIdvMidPos.x - 8; x < lIdvMidPos.x + 10; x++) {
 				iBlock lBlock = mSoup.getBlock(new Pos(x, y));
 				if (lBlock != null) {
 					lGridLine = lGridLine + getPixel(lBlock);
 				} else {
-					if (x % 5 == 0 || y % 5 == 0) {
+					if (x % 5 == 0 && y % 5 == 0) {
 						lGridLine = lGridLine + ".";
 					} else {
 						lGridLine = lGridLine + " ";

@@ -76,7 +76,7 @@ public class ModelMonitorIdvm extends Model implements iPresentSoup,
 					.getPosOnIdvm()));
 		}
 		ArrayList<MoveProbability> lIdlelMoveProbability = new ArrayList<MoveProbability>();
-		lIdlelMoveProbability.add(new MoveProbability(0, 0, 1, 0));
+		lIdlelMoveProbability.add(new MoveProbability(1, 0, 1, 0));
 		lIdlelMoveProbability.add(new MoveProbability(0, 1, 0, 0));
 		mGenome.movementSequences.put(IdvmState.IDLE, lIdlelMoveProbability);
 
@@ -88,7 +88,7 @@ public class ModelMonitorIdvm extends Model implements iPresentSoup,
 
 		System.out.println("start");
 		notifyViews();
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 25; i++) {
 			mSoup.step();
 			notifyViews();
 		}

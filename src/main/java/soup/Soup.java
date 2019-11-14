@@ -10,6 +10,7 @@ import soup.block.iBlockGrid;
 import soup.idvm.iIdvm;
 import datatypes.Constants;
 import datatypes.Pos;
+import exceptions.ExWrongBlockType;
 
 public class Soup implements iSoup {
 	private iIdvm mIdvm;
@@ -77,10 +78,34 @@ public class Soup implements iSoup {
 		try {
 			mIdvm.step();
 			refreshBlocks();
+			detectCollisions();
 			Thread.sleep(250);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+
+	private void detectCollisions() {
+		ArrayList<Pos> lIdvmPos = new ArrayList<Pos>();
+		for (iBlock iBlock : mIdvm.getUsedBlocks()) {
+			lIdvmPos.add(iBlock.getPos());
+		}
+		for (Pos iPos : lIdvmPos) {
+			for (iBlock iBlock : mAllBlocks) {
+				if (iBlock.getPos() == iPos) {
+					switch (iBlock.getBlockType()) {
+					case FOOD:
+						mIdvm.interactWithFood((Food) iBlock);
+						break;
+					case ENEMY:
+						mIdvm.interactWithEnemy((Enemy) iBlock);
+						break;
+					default:
+						throw new ExWrongBlockType();
+					}
+				}
+			}
 		}
 	}
 }
