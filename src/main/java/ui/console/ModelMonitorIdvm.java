@@ -68,7 +68,8 @@ public class ModelMonitorIdvm extends Model implements iPresentSoup,
 		mCellGrow[2] = new IdvmCell(BlockType.MOVE, new Pos(0, 1));
 		mCellGrow[3] = new IdvmCell(BlockType.DEFENCE, new Pos(1, 1));
 		mCellGrow[4] = new IdvmCell(BlockType.MOVE, new Pos(0, 2));
-		mCellGrow[5] = new IdvmCell(BlockType.SENSOR, new Pos(1, 1));
+		mCellGrow[5] = new IdvmCell(BlockType.SENSOR, new Pos(-1, -1));
+		mCellGrow[5] = new IdvmCell(BlockType.SENSOR, new Pos(2, 2));
 
 		Genome mGenome = new Genome();
 		for (IdvmCell iCell : mCellGrow) {
@@ -77,7 +78,9 @@ public class ModelMonitorIdvm extends Model implements iPresentSoup,
 		}
 		ArrayList<MoveProbability> lIdlelMoveProbability = new ArrayList<MoveProbability>();
 		lIdlelMoveProbability.add(new MoveProbability(4, 0, 2, 1));
-		lIdlelMoveProbability.add(new MoveProbability(0, 1, 0, 0));
+		lIdlelMoveProbability.add(new MoveProbability(0, 1, 0, 1));
+		lIdlelMoveProbability.add(new MoveProbability(1, 0, 0, 1));
+		lIdlelMoveProbability.add(new MoveProbability(0, 2, 1, 0));
 		mGenome.movementSequences.put(IdvmState.IDLE, lIdlelMoveProbability);
 		mGenome.movementSequences.put(IdvmState.FOOD, lIdlelMoveProbability);
 
@@ -89,7 +92,7 @@ public class ModelMonitorIdvm extends Model implements iPresentSoup,
 
 		System.out.println("start");
 		notifyViews();
-		for (int i = 0; i < 200; i++) {
+		while(mIdvm.isAlive()){
 			mSoup.step();
 			notifyViews();
 		}

@@ -8,6 +8,7 @@ import mvc.present.iPresentIdvm;
 import mvc.present.iPresentSoup;
 import soup.block.iBlock;
 import datatypes.Pos;
+import exceptions.ExOutOfGrid;
 
 public class ViewConsoleMonitorIdvm extends View {
 
@@ -32,11 +33,11 @@ public class ViewConsoleMonitorIdvm extends View {
 		for (int y = lIdvMidPos.y - cViewSize; y < lIdvMidPos.y + cViewSize; y++) {
 			String lGridLine = "";
 			for (int x = lIdvMidPos.x - cViewSize; x < lIdvMidPos.x + cViewSize; x++) {
-				iBlock lBlock = mSoup.getBlock(new Pos(x, y));
-				if (lBlock != null) {
-					lGridLine = lGridLine + getPixel(lBlock);
-				} else {
-					lGridLine = lGridLine + " ";
+				try {
+					new Pos(x, y).isInGrid();
+					String lBlockChar = getCharForBlock(y, x);
+					lGridLine = lGridLine + lBlockChar;
+				} catch (ExOutOfGrid e) {
 				}
 			}
 			System.out.println(lGridLine);
@@ -47,6 +48,17 @@ public class ViewConsoleMonitorIdvm extends View {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	private String getCharForBlock(int y, int x) {
+		String lBlockChar;
+		iBlock lBlock = mSoup.getBlock(new Pos(x, y));
+		if (lBlock != null) {
+			lBlockChar = getPixel(lBlock);
+		} else {
+			lBlockChar = " ";
+		}
+		return lBlockChar;
 	}
 
 	private String getPixel(iBlock pBlock) {

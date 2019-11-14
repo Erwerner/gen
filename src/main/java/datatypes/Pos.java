@@ -2,6 +2,7 @@ package datatypes;
 
 import java.util.ArrayList;
 
+import exceptions.ExOutOfGrid;
 import exceptions.ExWrongDirection;
 
 public class Pos {
@@ -68,10 +69,10 @@ public class Pos {
 	}
 
 	public static ArrayList<Pos> getAllGridPos() {
-		ArrayList<Pos>  lAllPos = new ArrayList<Pos>();
+		ArrayList<Pos> lAllPos = new ArrayList<Pos>();
 		for (int x = 0; x < Constants.soupSize; x++) {
 			for (int y = 0; y < Constants.soupSize; y++) {
-				lAllPos.add(new Pos(x,y));
+				lAllPos.add(new Pos(x, y));
 			}
 		}
 		return lAllPos;
@@ -82,4 +83,8 @@ public class Pos {
 		return x + ", " + y;
 	}
 
+	public void isInGrid() throws ExOutOfGrid {
+		if (!(x >= 0 && y >= 0 && x < Constants.soupSize && y < Constants.soupSize))
+			throw new ExOutOfGrid();
+	}
 }

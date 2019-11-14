@@ -16,7 +16,7 @@ import soup.block.iBlockGrid;
 import datatypes.Direction;
 import datatypes.Pos;
 import exceptions.ExFailedDetection;
-import exceptions.ExWrongBlockType;
+import exceptions.ExOutOfGrid;
 import exceptions.ExWrongDirection;
 import exceptions.ExWrongState;
 
@@ -61,6 +61,8 @@ public class Idvm implements iIdvm {
 	}
 
 	public boolean isAlive() {
+		if (mLastFood == 100)
+			return false;
 		for (iBlock iCell : getUsedBlocks()) {
 			if (iCell.getBlockType() == BlockType.LIFE) {
 				return true;
@@ -113,8 +115,7 @@ public class Idvm implements iIdvm {
 	}
 
 	public void killCell(Pos pPos) {
-		mCellGrid[pPos.x - mMidPosition.x + 1][pPos.y - mMidPosition.y + 1]
-				.kill();
+		mCellGrid[pPos.x - mMidPosition.x + 1][pPos.y - mMidPosition.y + 1] = null;
 	}
 
 	public void step() {
@@ -200,10 +201,14 @@ public class Idvm implements iIdvm {
 	private boolean detectFood() {
 		for (Entry<Pos, Sensor> iPos : getDetectedPos().entrySet()) {
 			Pos lPos = iPos.getKey();
-			iBlock lGridBlock = mBlockGrid.getBlock(lPos);
-			if (lGridBlock != null
-					&& lGridBlock.getBlockType() == BlockType.FOOD)
-				return true;
+			try {
+				lPos.isInGrid();
+				iBlock lGridBlock = mBlockGrid.getBlock(lPos);
+				if (lGridBlock != null
+						&& lGridBlock.getBlockType() == BlockType.FOOD)
+					return true;
+			} catch (ExOutOfGrid e) {
+			}
 		}
 		return false;
 	}
@@ -242,7 +247,7 @@ public class Idvm implements iIdvm {
 		}
 		for (Pos iPos : lIdvmPos) {
 			iBlock lGridBlock = mBlockGrid.getBlock(iPos);
-			if (lGridBlock!=null) {
+			if (lGridBlock != null) {
 				switch (lGridBlock.getBlockType()) {
 				case FOOD:
 					lInteractedBlock = interactWithFood((Food) lGridBlock);
