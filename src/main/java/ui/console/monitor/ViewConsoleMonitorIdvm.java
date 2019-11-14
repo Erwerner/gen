@@ -1,5 +1,7 @@
 package ui.console.monitor;
 
+import java.io.IOException;
+
 import mvc.Model;
 import mvc.View;
 import mvc.present.iPresentIdvm;
@@ -14,8 +16,13 @@ public class ViewConsoleMonitorIdvm extends View{
 	}
 
 	public void update() {
-		System.out.flush();
-		System.out.println(mPresentIdvm.getState().toString());
+		System.out.println(mPresentIdvm.getState());
+		System.out.println(mPresentIdvm.getStepCount());
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

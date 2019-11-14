@@ -18,11 +18,11 @@ import mvc.controller.iControllRunSoup;
 import mvc.present.iPresentIdvm;
 import mvc.present.iPresentSoup;
 
-public class Soup extends Model implements iPresentSoup, iPresentIdvm, iControllRunSoup{
+public class Soup extends Model implements iPresentSoup, iPresentIdvm, iControllRunSoup {
 	private iIdvm mIdvm;
 	private iBlockGrid mBlockGrid;
-	
-	public Soup(iIdvm pIdvm){
+
+	public Soup(iIdvm pIdvm) {
 		mBlockGrid = new BlockGrid();
 		mIdvm = pIdvm;
 		mIdvm.setBlockGrid(mBlockGrid);
@@ -37,59 +37,60 @@ public class Soup extends Model implements iPresentSoup, iPresentIdvm, iControll
 
 	private void initFoodBlocks() {
 		Food[] food = new Food[Constants.foodSupply];
-		for(iBlock foodBlock: food){
-			mBlockGrid.setRandomBlock(foodBlock);			
+		for (iBlock foodBlock : food) {
+			mBlockGrid.setRandomBlock(foodBlock);
 		}
 	}
 
 	public iBlock getBlock(Pos pos) {
 		return mBlockGrid.getBlock(pos);
 	}
-	public void refreshBlocks(){
-		//#TODO abc;
-		//all Nothing
-		//loop rest via block array
+
+	public void refreshBlocks() {
+		// #TODO abc;
+		// all Nothing
+		// loop rest via block array
 	}
 
 	public HashMap<Pos, Sensor> getDetectedPos() {
-		iPresentIdvm lPresentIdvm = (iPresentIdvm)mIdvm;
+		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
 		return lPresentIdvm.getDetectedPos();
 	}
 
 	public Direction getTargetDirection() {
-		iPresentIdvm lPresentIdvm = (iPresentIdvm)mIdvm;
+		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
 		return lPresentIdvm.getTargetDirection();
 	}
 
 	public int getStepCount() {
-		iPresentIdvm lPresentIdvm = (iPresentIdvm)mIdvm;
+		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
 		return lPresentIdvm.getStepCount();
 	}
 
 	public boolean isAlive() {
-		iPresentIdvm lPresentIdvm = (iPresentIdvm)mIdvm;
+		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
 		return lPresentIdvm.isAlive();
 	}
 
 	public Boolean isHungry() {
-		iPresentIdvm lPresentIdvm = (iPresentIdvm)mIdvm;
+		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
 		return lPresentIdvm.isHungry();
 	}
 
 	public IdvmState getState() {
-		iPresentIdvm lPresentIdvm = (iPresentIdvm)mIdvm;
+		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
 		return lPresentIdvm.getState();
 	}
 
 	public Pos getPosition() {
-		iPresentIdvm lPresentIdvm = (iPresentIdvm)mIdvm;
+		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
 		return lPresentIdvm.getPosition();
 	}
 
 	public void run() {
-		while(mIdvm.isAlive()) {
-			mIdvm.step();
-		}
+		mIdvm.step();
+		notifyViews();
+		mIdvm.step();
 		notifyViews();
 	}
 }

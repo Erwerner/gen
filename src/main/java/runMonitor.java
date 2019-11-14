@@ -10,6 +10,7 @@ import soup.idvm.IdvmCell;
 import soup.idvm.IdvmState;
 import soup.idvm.iIdvm;
 import ui.console.ViewConsoleGrid;
+import ui.console.monitor.ViewConsoleMonitorIdvm;
 
 public class runMonitor {
 
@@ -40,8 +41,10 @@ public class runMonitor {
 		
 		iIdvm lIdvm = new Idvm(mGenome );
 		Soup lSoup = new Soup(lIdvm);
-		new ViewConsoleGrid(lSoup);
+		new ViewConsoleMonitorIdvm(lSoup);
 		
+		System.out.println("start");
 		lSoup.run();
+		System.out.println("stop");
 	}
 }
