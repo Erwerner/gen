@@ -72,48 +72,15 @@ public class Soup implements iSoup {
 		for (iBlock iBlock : mAllBlocks) {
 			mBlockGrid.setBlock(iBlock.getPos(), iBlock);
 		}
+		mIdvm.detectCollisions();		
 		for (iBlock iBlock : mIdvm.getUsedBlocks())
 			mBlockGrid.setBlock(iBlock.getPos(), iBlock);
 	}
 
 	public void step() {
-		try {
-			mIdvm.step();
-			for (iBlock iBlock : mAllBlocks)
-				iBlock.step();
-			refreshBlocks();
-			detectCollisions();
-			Thread.sleep(250);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	private void detectCollisions() {
-		iBlock lInteractedBlock;
-		ArrayList<Pos> lIdvmPos = new ArrayList<Pos>();
-		for (iBlock iBlock : mIdvm.getUsedBlocks()) {
-			lIdvmPos.add(iBlock.getPos());
-		}
-		for (Pos iPos : lIdvmPos) {
-			for (iBlock iBlock : mAllBlocks) {
-				if (iBlock.getPos() == iPos) {
-					switch (iBlock.getBlockType()) {
-					case FOOD:
-						lInteractedBlock = mIdvm
-								.interactWithFood((Food) iBlock);
-						break;
-					case ENEMY:
-						lInteractedBlock = mIdvm
-								.interactWithEnemy((Enemy) iBlock);
-						break;
-					default:
-						throw new ExWrongBlockType();
-					}
-					mBlockGrid.setBlock(iPos, lInteractedBlock);
-				}
-			}
-		}
+		mIdvm.step();
+		for (iBlock iBlock : mAllBlocks)
+			iBlock.step();
+		refreshBlocks();
 	}
 }

@@ -16,6 +16,7 @@ import soup.block.iBlockGrid;
 import datatypes.Direction;
 import datatypes.Pos;
 import exceptions.ExFailedDetection;
+import exceptions.ExWrongBlockType;
 import exceptions.ExWrongDirection;
 import exceptions.ExWrongState;
 
@@ -231,6 +232,30 @@ public class Idvm implements iIdvm {
 
 	public int getStepCount() {
 		return mStepCount;
+	}
+
+	public void detectCollisions() {
+		iBlock lInteractedBlock = null;
+		ArrayList<Pos> lIdvmPos = new ArrayList<Pos>();
+		for (iBlock iBlock : getUsedBlocks()) {
+			lIdvmPos.add(iBlock.getPos());
+		}
+		for (Pos iPos : lIdvmPos) {
+			iBlock lGridBlock = mBlockGrid.getBlock(iPos);
+			if (lGridBlock!=null) {
+				switch (lGridBlock.getBlockType()) {
+				case FOOD:
+					lInteractedBlock = interactWithFood((Food) lGridBlock);
+					mBlockGrid.setBlock(iPos, lInteractedBlock);
+					break;
+				case ENEMY:
+					lInteractedBlock = interactWithEnemy((Enemy) lGridBlock);
+					mBlockGrid.setBlock(iPos, lInteractedBlock);
+					break;
+				}
+			}
+		}
+
 	}
 
 }

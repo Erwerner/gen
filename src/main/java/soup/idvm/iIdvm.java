@@ -32,4 +32,6 @@ public interface iIdvm extends iBlock, iPresentIdvm {
 	boolean isAlive();
 
 	Boolean isHungry();
+
+	void detectCollisions();
 }

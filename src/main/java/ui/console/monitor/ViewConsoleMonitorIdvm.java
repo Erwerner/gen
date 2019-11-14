@@ -11,7 +11,7 @@ import datatypes.Pos;
 
 public class ViewConsoleMonitorIdvm extends View {
 
-	private static final int cViewSize = 15;
+	private static final int cViewSize = 8;
 	private iPresentIdvm mIdvm;
 	private iPresentSoup mSoup;
 
