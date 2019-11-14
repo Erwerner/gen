@@ -22,8 +22,9 @@ public class MoveProbability {
 		for(int i=0;i<mUp;i++)lPossibleDirection.add(Direction.UP);
 		for(int i=0;i<mDown;i++)lPossibleDirection.add(Direction.DOWN);
 		for(int i=0;i<mLeft;i++)lPossibleDirection.add(Direction.LEFT);
-		for(int i=0;i<mRight;i++)lPossibleDirection.add(Direction.RIGHT);
-	    int rnd = new Random().nextInt(lPossibleDirection.size());
-	    return lPossibleDirection.get(rnd);
+		for (int i = 0; i < mRight; i++)
+			lPossibleDirection.add(Direction.RIGHT);
+		int rnd = new Random().nextInt(lPossibleDirection.size());
+		return lPossibleDirection.get(rnd);
 	}
 }

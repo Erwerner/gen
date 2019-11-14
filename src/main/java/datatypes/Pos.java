@@ -43,18 +43,26 @@ public class Pos {
 			throw new ExWrongDirection();
 		}
 
-		if(lNewPos.x<0)lNewPos.x=0;
-		if(lNewPos.x>Constants.soupSize-1)lNewPos.x=Constants.soupSize-1;
-		if(lNewPos.y<0)lNewPos.y=0;
-		if(lNewPos.y>Constants.soupSize-1)lNewPos.y=Constants.soupSize-1;
+		if (lNewPos.x < 0)
+			lNewPos.x = 0;
+		if (lNewPos.x > Constants.soupSize - 1)
+			lNewPos.x = Constants.soupSize - 1;
+		if (lNewPos.y < 0)
+			lNewPos.y = 0;
+		if (lNewPos.y > Constants.soupSize - 1)
+			lNewPos.y = Constants.soupSize - 1;
 		return lNewPos;
 	}
 
 	public Direction getDircetionTo(Pos pTargetPos) {
-		if(pTargetPos.y < this.y)return Direction.UP;
-		if(pTargetPos.y > this.y)return Direction.DOWN;
-		if(pTargetPos.x < this.x)return Direction.LEFT;
-		if(pTargetPos.x > this.x)return Direction.RIGHT;
+		if (pTargetPos.y < this.y)
+			return Direction.UP;
+		if (pTargetPos.y > this.y)
+			return Direction.DOWN;
+		if (pTargetPos.x < this.x)
+			return Direction.LEFT;
+		if (pTargetPos.x > this.x)
+			return Direction.RIGHT;
 		return Direction.SAME;
 	}
 }
