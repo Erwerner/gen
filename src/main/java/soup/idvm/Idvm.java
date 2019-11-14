@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import mvc.present.iPresentIdvm;
 import soup.block.BlockType;
 import soup.block.Enemy;
 import soup.block.Food;
@@ -20,7 +19,7 @@ import exceptions.ExFailedDetection;
 import exceptions.ExWrongDirection;
 import exceptions.ExWrongState;
 
-public class Idvm implements iIdvm, iPresentIdvm {
+public class Idvm implements iIdvm {
 
 	private Genome mGenomeOrigin;
 	private int mLastFood;

@@ -1,19 +1,22 @@
 package soup;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-import mvc.Model;
-import mvc.present.iPresentSoup;
+import mvc.present.iPresentIdvm;
 import soup.block.BlockGrid;
 import soup.block.Enemy;
 import soup.block.Food;
 import soup.block.iBlock;
 import soup.block.iBlockGrid;
+import soup.idvm.IdvmState;
+import soup.idvm.Sensor;
 import soup.idvm.iIdvm;
 import datatypes.Constants;
+import datatypes.Direction;
 import datatypes.Pos;
 
-public class Soup extends Model implements iPresentSoup {
+public class Soup implements iSoup {
 	private iIdvm mIdvm;
 	private iBlockGrid mBlockGrid;
 	private ArrayList<iBlock> mAllBlocks = new ArrayList<iBlock>();
@@ -46,8 +49,10 @@ public class Soup extends Model implements iPresentSoup {
 	}
 
 	private void initFoodBlocks() {
-		Food[] food = new Food[Constants.foodSupply];
-		for (iBlock iFoodBlock : food) {
+		Food[] lFoodBlocks = new Food[Constants.foodSupply];
+		for (int i = 0; i < Constants.foodSupply; i++)
+			lFoodBlocks[i] = new Food();
+		for (iBlock iFoodBlock : lFoodBlocks) {
 			mBlockGrid.setRandomBlock(iFoodBlock);
 			mAllBlocks.add(iFoodBlock);
 		}
@@ -62,8 +67,52 @@ public class Soup extends Model implements iPresentSoup {
 		for (iBlock iBlock : mAllBlocks) {
 			mBlockGrid.setBlock(iBlock.getPos(), iBlock);
 		}
-		for (iBlock iBlock : mIdvm.getUsedBlocks()) {
+		for (iBlock iBlock : mIdvm.getUsedBlocks())
 			mBlockGrid.setBlock(iBlock.getPos(), iBlock);
+	}
+
+	public HashMap<Pos, Sensor> getDetectedPos() {
+		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
+		return lPresentIdvm.getDetectedPos();
+	}
+
+	public Direction getTargetDirection() {
+		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
+		return lPresentIdvm.getTargetDirection();
+	}
+
+	public int getStepCount() {
+		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
+		return lPresentIdvm.getStepCount();
+	}
+
+	public boolean isAlive() {
+		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
+		return lPresentIdvm.isAlive();
+	}
+
+	public Boolean isHungry() {
+		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
+		return lPresentIdvm.isHungry();
+	}
+
+	public IdvmState getState() {
+		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
+		return lPresentIdvm.getState();
+	}
+
+	public Pos getPosition() {
+		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
+		return lPresentIdvm.getPos();
+	}
+
+	public void step() {
+		try {
+			mIdvm.step();
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }
