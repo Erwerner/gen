@@ -90,5 +90,6 @@ public class Soup extends Model implements iPresentSoup, iPresentIdvm, iControll
 		while(mIdvm.isAlive()) {
 			mIdvm.step();
 		}
+		notifyViews();
 	}
 }
