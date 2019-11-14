@@ -87,7 +87,8 @@ public class ModelMonitorIdvm extends Model implements iPresentSoup,
 		new ViewConsoleMonitorIdvm(this);
 
 		System.out.println("start");
-		for (int i = 0; i < 10; i++) {
+		notifyViews();
+		for (int i = 0; i < 20; i++) {
 			mSoup.step();
 			notifyViews();
 		}

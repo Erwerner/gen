@@ -1,19 +1,14 @@
 package soup;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import mvc.present.iPresentIdvm;
 import soup.block.BlockGrid;
 import soup.block.Enemy;
 import soup.block.Food;
 import soup.block.iBlock;
 import soup.block.iBlockGrid;
-import soup.idvm.IdvmState;
-import soup.idvm.Sensor;
 import soup.idvm.iIdvm;
 import datatypes.Constants;
-import datatypes.Direction;
 import datatypes.Pos;
 
 public class Soup implements iSoup {
@@ -25,10 +20,10 @@ public class Soup implements iSoup {
 		mBlockGrid = new BlockGrid();
 		mIdvm = pIdvm;
 		mIdvm.setBlockGrid(mBlockGrid);
-		mBlockGrid.addInitialIdvm(mIdvm);
 		initFoodBlocks();
 		initEnemyBlocks();
-		finishSoup();
+		mBlockGrid.addInitialIdvm(mIdvm);
+		clearSurroundingsOfIdvm();
 	}
 
 	private void initEnemyBlocks() {
@@ -39,11 +34,18 @@ public class Soup implements iSoup {
 		}
 	}
 
-	private void finishSoup() {
-		Pos lIdvmPos = mIdvm.getPos();
-		for (int x = lIdvmPos.x - 1; x <= lIdvmPos.x + 1; x++) {
-			for (int y = lIdvmPos.y - 1; y <= lIdvmPos.y + 1; y++) {
-				mBlockGrid.setBlock(new Pos(x, y), null);
+	private void clearSurroundingsOfIdvm() {
+		Pos lIdvmMidPos = mIdvm.getPos();
+		ArrayList<Pos> lIdvmPosList = new ArrayList<Pos>();
+
+		for (iBlock iBlock : mIdvm.getUsedBlocks()) {
+			lIdvmPosList.add(iBlock.getPos());
+		}
+
+		for (int x = lIdvmMidPos.x - 1; x <= lIdvmMidPos.x + 2; x++) {
+			for (int y = lIdvmMidPos.y - 1; y <= lIdvmMidPos.y + 2; y++) {
+				if (!lIdvmPosList.contains(new Pos(x, y)))
+					mBlockGrid.setBlock(new Pos(x, y), null);
 			}
 		}
 	}
@@ -71,45 +73,11 @@ public class Soup implements iSoup {
 			mBlockGrid.setBlock(iBlock.getPos(), iBlock);
 	}
 
-	public HashMap<Pos, Sensor> getDetectedPos() {
-		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
-		return lPresentIdvm.getDetectedPos();
-	}
-
-	public Direction getTargetDirection() {
-		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
-		return lPresentIdvm.getTargetDirection();
-	}
-
-	public int getStepCount() {
-		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
-		return lPresentIdvm.getStepCount();
-	}
-
-	public boolean isAlive() {
-		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
-		return lPresentIdvm.isAlive();
-	}
-
-	public Boolean isHungry() {
-		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
-		return lPresentIdvm.isHungry();
-	}
-
-	public IdvmState getState() {
-		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
-		return lPresentIdvm.getState();
-	}
-
-	public Pos getPosition() {
-		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
-		return lPresentIdvm.getPos();
-	}
-
 	public void step() {
 		try {
 			mIdvm.step();
-			Thread.sleep(100);
+			refreshBlocks();
+			Thread.sleep(250);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

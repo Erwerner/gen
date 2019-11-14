@@ -1,7 +1,8 @@
 package datatypes;
 
+import java.util.ArrayList;
+
 import exceptions.ExWrongDirection;
-import soup.block.iBlock;
 
 public class Pos {
 	public int x;
@@ -65,4 +66,20 @@ public class Pos {
 			return Direction.RIGHT;
 		return Direction.SAME;
 	}
+
+	public static ArrayList<Pos> getAllGridPos() {
+		ArrayList<Pos>  lAllPos = new ArrayList<Pos>();
+		for (int x = 0; x < Constants.soupSize; x++) {
+			for (int y = 0; y < Constants.soupSize; y++) {
+				lAllPos.add(new Pos(x,y));
+			}
+		}
+		return lAllPos;
+	}
+
+	@Override
+	public String toString() {
+		return x + ", " + y;
+	}
+
 }
