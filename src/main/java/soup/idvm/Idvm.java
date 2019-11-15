@@ -42,8 +42,9 @@ public class Idvm implements iIdvm {
 		grow();
 		grow();
 
-		addaptMovementSequence(IdvmState.IDLE, pGenome);
-		addaptMovementSequence(IdvmState.FOOD, pGenome);
+		for(IdvmState iState : pGenome.movementSequences.keySet()) {
+			addaptMovementSequence(iState, pGenome);
+		}
 	}
 
 	private void addaptMovementSequence(IdvmState pState, Genome pGenome) {
