@@ -38,6 +38,5 @@ public class Genome {
 
 	private void mutateHunger() {
 		// TODO Auto-generated method stub
-
 	}
 }

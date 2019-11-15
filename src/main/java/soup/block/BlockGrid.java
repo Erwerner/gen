@@ -1,10 +1,8 @@
 package soup.block;
 
-import org.junit.internal.runners.TestMethod;
-
-import soup.idvm.iIdvm;
 import datatypes.Constants;
 import datatypes.Pos;
+import soup.idvm.iIdvm;
 
 public class BlockGrid implements iBlockGrid {
 	private iBlock[][] mGrid;

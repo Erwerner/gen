@@ -2,15 +2,15 @@ package soup;
 
 import java.util.ArrayList;
 
+import datatypes.Constants;
+import datatypes.Pos;
+import mvc.present.iPresentSoup;
 import soup.block.BlockGrid;
 import soup.block.Enemy;
 import soup.block.Food;
 import soup.block.iBlock;
 import soup.block.iBlockGrid;
 import soup.idvm.iIdvm;
-import datatypes.Constants;
-import datatypes.Pos;
-import exceptions.ExWrongBlockType;
 
 public class Soup implements iSoup {
 	private iIdvm mIdvm;
@@ -72,7 +72,7 @@ public class Soup implements iSoup {
 		for (iBlock iBlock : mAllBlocks) {
 			mBlockGrid.setBlock(iBlock.getPos(), iBlock);
 		}
-		mIdvm.detectCollisions();		
+		mIdvm.detectCollisions();
 		for (iBlock iBlock : mIdvm.getUsedBlocks())
 			mBlockGrid.setBlock(iBlock.getPos(), iBlock);
 	}
@@ -82,5 +82,9 @@ public class Soup implements iSoup {
 		for (iBlock iBlock : mAllBlocks)
 			iBlock.step();
 		refreshBlocks();
+	}
+
+	public iPresentSoup getPresenter() {
+		return this;
 	}
 }

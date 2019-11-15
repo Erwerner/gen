@@ -1,11 +1,11 @@
 package ui.console;
 
+import java.util.ArrayList;
+
+import datatypes.Pos;
+import exceptions.ExWrontPresenterType;
 import genes.Genome;
 import genes.MoveProbability;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import mvc.Model;
 import mvc.controller.iControllRunSoup;
 import mvc.present.iPresentIdvm;
@@ -13,53 +13,16 @@ import mvc.present.iPresentSoup;
 import soup.Soup;
 import soup.iSoup;
 import soup.block.BlockType;
-import soup.block.iBlock;
 import soup.idvm.Idvm;
 import soup.idvm.IdvmCell;
 import soup.idvm.IdvmState;
-import soup.idvm.Sensor;
 import soup.idvm.iIdvm;
 import ui.console.monitor.ViewConsoleMonitorIdvm;
-import datatypes.Direction;
-import datatypes.Pos;
 
-public class ModelMonitorIdvm extends Model implements iPresentSoup,
-		iPresentIdvm, iControllRunSoup {
+public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 
 	iIdvm mIdvm;
 	iSoup mSoup;
-
-	public iBlock getBlock(Pos pPos) {
-		return mSoup.getBlock(pPos);
-	}
-
-	public HashMap<Pos, Sensor> getDetectedPos() {
-		return mIdvm.getDetectedPos();
-	}
-
-	public Direction getTargetDirection() {
-		return mIdvm.getTargetDirection();
-	}
-
-	public int getStepCount() {
-		return mIdvm.getStepCount();
-	}
-
-	public boolean isAlive() {
-		return mIdvm.isAlive();
-	}
-
-	public Boolean isHungry() {
-		return mIdvm.isHungry();
-	}
-
-	public IdvmState getState() {
-		return mIdvm.getState();
-	}
-
-	public Pos getPos() {
-		return mIdvm.getPos();
-	}
 
 	public void run() {
 		IdvmCell[] mCellGrow = new IdvmCell[6];
@@ -72,8 +35,7 @@ public class ModelMonitorIdvm extends Model implements iPresentSoup,
 		mCellGrow[5] = new IdvmCell(BlockType.SENSOR, new Pos(2, 2));
 		Genome mGenome = new Genome();
 		for (IdvmCell iCell : mCellGrow) {
-			mGenome.cellGrow.add(new IdvmCell(iCell.getBlockType(), iCell
-					.getPosOnIdvm()));
+			mGenome.cellGrow.add(new IdvmCell(iCell.getBlockType(), iCell.getPosOnIdvm()));
 		}
 		ArrayList<MoveProbability> lIdlelMoveProbability = new ArrayList<MoveProbability>();
 		lIdlelMoveProbability.add(new MoveProbability(4, 0, 2, 1));
@@ -99,4 +61,12 @@ public class ModelMonitorIdvm extends Model implements iPresentSoup,
 
 	}
 
+	@Override
+	public Object getPresenter(Class pType) {
+		if (pType == iPresentSoup.class)
+			return mSoup;
+		if (pType == iPresentIdvm.class)
+			return mIdvm;
+		throw new ExWrontPresenterType();
+	}
 }
