@@ -52,7 +52,7 @@ public class IdvmTest {
 
 		mGenome = new Genome();
 		for (IdvmCell iCell : mCellGrow) {
-			mGenome.cell.add(new IdvmCell(iCell.getBlockType(), iCell
+			mGenome.cellGrow.add(new IdvmCell(iCell.getBlockType(), iCell
 					.getPosOnIdvm()));
 		}
 		ArrayList<MoveProbability> lIdlelMoveProbability = new ArrayList<MoveProbability>();

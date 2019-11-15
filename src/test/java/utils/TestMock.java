@@ -25,7 +25,7 @@ public class TestMock {
 
 		lGenome = new Genome();
 		for (IdvmCell iCell : lCellGrow) {
-			lGenome.cell.add(new IdvmCell(iCell.getBlockType(), iCell
+			lGenome.cellGrow.add(new IdvmCell(iCell.getBlockType(), iCell
 					.getPosOnIdvm()));
 		}
 		ArrayList<MoveProbability> lIdlelMoveProbability = new ArrayList<MoveProbability>();
