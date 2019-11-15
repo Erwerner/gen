@@ -2,6 +2,7 @@ package soup.block;
 
 import datatypes.Constants;
 import datatypes.Pos;
+import exceptions.ExOutOfGrid;
 import soup.idvm.iIdvm;
 
 public class BlockGrid implements iBlockGrid {
@@ -11,7 +12,8 @@ public class BlockGrid implements iBlockGrid {
 		mGrid = new iBlock[Constants.soupSize][Constants.soupSize];
 	}
 
-	public iBlock getBlock(Pos pos) {
+	public iBlock getBlock(Pos pos) throws ExOutOfGrid {
+		pos.isInGrid();
 		return mGrid[pos.x][pos.y];
 	}
 
@@ -22,10 +24,13 @@ public class BlockGrid implements iBlockGrid {
 	public void setRandomBlock(iBlock pBlock) {
 		while (true) {
 			Pos lPos = Pos.getRandomSoupPosition();
-			if (getBlock(lPos) == null) {
-				setBlock(lPos, pBlock);
-				pBlock.setPosition(lPos);
-				return;
+			try {
+				if (getBlock(lPos) == null) {
+					setBlock(lPos, pBlock);
+					pBlock.setPosition(lPos);
+					return;
+				}
+			} catch (ExOutOfGrid e) {
 			}
 		}
 	}

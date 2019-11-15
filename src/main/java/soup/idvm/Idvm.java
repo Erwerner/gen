@@ -147,12 +147,16 @@ public class Idvm implements iIdvm {
 		}
 
 		for (Entry<Pos, Sensor> iPos : lDetectedPos.entrySet()) {
-			iBlock lGridBlock = mBlockGrid.getBlock(iPos.getKey());
-			if (lGridBlock != null && lGridBlock.getBlockType() == lSearchBlock) {
-				Direction lDircetion;
-				Pos lSensorPos = iPos.getValue().getPos();
-				lDircetion = lSensorPos.getDircetionTo(iPos.getKey());
-				return lDircetion;
+			iBlock lGridBlock;
+			try {
+				lGridBlock = mBlockGrid.getBlock(iPos.getKey());
+				if (lGridBlock != null && lGridBlock.getBlockType() == lSearchBlock) {
+					Direction lDircetion;
+					Pos lSensorPos = iPos.getValue().getPos();
+					lDircetion = lSensorPos.getDircetionTo(iPos.getKey());
+					return lDircetion;
+				}
+			} catch (ExOutOfGrid e) {
 			}
 		}
 		throw new ExWrongDirection();
@@ -246,21 +250,24 @@ public class Idvm implements iIdvm {
 			lIdvmPos.add(iBlock.getPos());
 		}
 		for (Pos iPos : lIdvmPos) {
-			// TODO Border Check
-			iBlock lGridBlock = mBlockGrid.getBlock(iPos);
-			if (lGridBlock != null) {
-				switch (lGridBlock.getBlockType()) {
-				case FOOD:
-					lInteractedBlock = interactWithFood((Food) lGridBlock);
-					mBlockGrid.setBlock(iPos, lInteractedBlock);
-					break;
-				case ENEMY:
-					lInteractedBlock = interactWithEnemy((Enemy) lGridBlock);
-					mBlockGrid.setBlock(iPos, lInteractedBlock);
-					break;
-				default:
-					break;
+			iBlock lGridBlock;
+			try {
+				lGridBlock = mBlockGrid.getBlock(iPos);
+				if (lGridBlock != null) {
+					switch (lGridBlock.getBlockType()) {
+					case FOOD:
+						lInteractedBlock = interactWithFood((Food) lGridBlock);
+						mBlockGrid.setBlock(iPos, lInteractedBlock);
+						break;
+					case ENEMY:
+						lInteractedBlock = interactWithEnemy((Enemy) lGridBlock);
+						mBlockGrid.setBlock(iPos, lInteractedBlock);
+						break;
+					default:
+						break;
+					}
 				}
+			} catch (ExOutOfGrid e) {
 			}
 		}
 

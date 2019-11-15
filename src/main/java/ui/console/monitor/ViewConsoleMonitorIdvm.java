@@ -50,7 +50,7 @@ public class ViewConsoleMonitorIdvm extends View {
 		}
 	}
 
-	private String getCharForBlock(int y, int x) {
+	private String getCharForBlock(int y, int x) throws ExOutOfGrid {
 		String lBlockChar;
 		iBlock lBlock = mSoup.getBlock(new Pos(x, y));
 		if (lBlock != null) {

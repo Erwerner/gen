@@ -17,6 +17,7 @@ import org.junit.Test;
 
 import datatypes.Direction;
 import datatypes.Pos;
+import exceptions.ExOutOfGrid;
 import exceptions.ExWrongState;
 import genes.Genome;
 import genes.MoveProbability;
@@ -121,12 +122,16 @@ public class IdvmTest {
 
 	@Test
 	public void killNothingsCell() {
-		assertHasGrowCellOnPosDiff(true, 0, 0, 0);
+		try {
+			assertHasGrowCellOnPosDiff(true, 0, 0, 0);
 
-		cut.killCell(new Pos(cStartPosX, cStartPosY));
+			cut.killCell(new Pos(cStartPosX, cStartPosY));
 
-		assertHasGrowCellOnPosDiff(false, 0, 0, 0);
-		assertNull(mBlockGrid.getBlock(new Pos(cStartPosX, cStartPosY)));
+			assertHasGrowCellOnPosDiff(false, 0, 0, 0);
+			assertNull(mBlockGrid.getBlock(new Pos(cStartPosX, cStartPosY)));
+		} catch (ExOutOfGrid e) {
+			fail();
+		}
 	}
 
 	private void assertHasGrowCellOnPosDiff(Boolean pAssert, int lIdx, int lDiffX, int lDiffY) {
@@ -213,17 +218,21 @@ public class IdvmTest {
 
 	@Test
 	public void enemyKillsCell() {
-		int lIdxKillCell = 2;
-		assertHasGrowCellOnPosDiff(true, lIdxKillCell, 0, 0);
-		Enemy lEnemy = new Enemy();
-		Pos lPos = getSoupPosFromGrowCell(lIdxKillCell);
-		lEnemy.setPosition(lPos);
-		cut.interactWithEnemy(lEnemy);
+		try {
+			int lIdxKillCell = 2;
+			assertHasGrowCellOnPosDiff(true, lIdxKillCell, 0, 0);
+			Enemy lEnemy = new Enemy();
+			Pos lPos = getSoupPosFromGrowCell(lIdxKillCell);
+			lEnemy.setPosition(lPos);
+			cut.interactWithEnemy(lEnemy);
 
-		assertHasGrowCellOnPosDiff(false, lIdxKillCell, 0, 0);
-		// IdvmCell lGrowCell = mCellGrow[lIdxKillCell];
-		Pos lSoupPos = getSoupPosFromGrowCell(lIdxKillCell);
-		assertNull(mBlockGrid.getBlock(new Pos(lSoupPos.x, lSoupPos.y)));
+			assertHasGrowCellOnPosDiff(false, lIdxKillCell, 0, 0);
+			// IdvmCell lGrowCell = mCellGrow[lIdxKillCell];
+			Pos lSoupPos = getSoupPosFromGrowCell(lIdxKillCell);
+			assertNull(mBlockGrid.getBlock(new Pos(lSoupPos.x, lSoupPos.y)));
+		} catch (ExOutOfGrid e) {
+			fail();
+		}
 	}
 
 	private Pos getSoupPosFromGrowCell(int pIdx) {

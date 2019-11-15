@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import datatypes.Constants;
 import datatypes.Pos;
+import exceptions.ExOutOfGrid;
 import mvc.present.iPresentSoup;
 import soup.block.BlockGrid;
 import soup.block.Enemy;
@@ -63,7 +64,7 @@ public class Soup implements iSoup {
 		}
 	}
 
-	public iBlock getBlock(Pos pos) {
+	public iBlock getBlock(Pos pos) throws ExOutOfGrid {
 		return mBlockGrid.getBlock(pos);
 	}
 
