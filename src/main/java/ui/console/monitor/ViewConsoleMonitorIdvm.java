@@ -2,13 +2,13 @@ package ui.console.monitor;
 
 import java.io.IOException;
 
+import datatypes.Pos;
+import exceptions.ExOutOfGrid;
 import mvc.Model;
 import mvc.View;
 import mvc.present.iPresentIdvm;
 import mvc.present.iPresentSoup;
 import soup.block.iBlock;
-import datatypes.Pos;
-import exceptions.ExOutOfGrid;
 
 public class ViewConsoleMonitorIdvm extends View {
 
@@ -75,8 +75,9 @@ public class ViewConsoleMonitorIdvm extends View {
 			return "M";
 		case DEFENCE:
 			return "D";
+		default:
+			return "?";
 		}
-		return "?";
 	}
 
 	private void printStats() {

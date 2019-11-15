@@ -1,13 +1,11 @@
 package ui.console;
 
+import java.util.ArrayList;
+
+import datatypes.Pos;
+import exceptions.ExWrontPresenterType;
 import genes.Genome;
 import genes.MoveProbability;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import org.hamcrest.core.IsInstanceOf;
-
 import mvc.Model;
 import mvc.controller.iControllRunSoup;
 import mvc.present.iPresentIdvm;
@@ -15,16 +13,11 @@ import mvc.present.iPresentSoup;
 import soup.Soup;
 import soup.iSoup;
 import soup.block.BlockType;
-import soup.block.iBlock;
 import soup.idvm.Idvm;
 import soup.idvm.IdvmCell;
 import soup.idvm.IdvmState;
-import soup.idvm.Sensor;
 import soup.idvm.iIdvm;
 import ui.console.monitor.ViewConsoleMonitorIdvm;
-import datatypes.Direction;
-import datatypes.Pos;
-import exceptions.ExWrontPresenterType;
 
 public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 

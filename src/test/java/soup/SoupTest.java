@@ -1,24 +1,15 @@
 package soup;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-
-import genes.Genome;
-import genes.MoveProbability;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import datatypes.Constants;
 import datatypes.Pos;
-
-import soup.block.BlockGrid;
 import soup.block.BlockType;
 import soup.block.iBlock;
-import soup.idvm.Idvm;
-import soup.idvm.IdvmCell;
-import soup.idvm.IdvmState;
 import soup.idvm.iIdvm;
 import utils.TestMock;
 
@@ -28,7 +19,7 @@ public class SoupTest {
 
 	@Before
 	public void setUp() throws Exception {
-		mIdvm= TestMock.getIdvmMock();
+		mIdvm = TestMock.getIdvmMock();
 		cut = new Soup(mIdvm);
 	}
 
@@ -43,7 +34,7 @@ public class SoupTest {
 
 	@Test
 	public void gridHasBlocks() {
-		int lCount=0;
+		int lCount = 0;
 		for (int x = 0; x < Constants.soupSize; x++) {
 			for (int y = 0; y < Constants.soupSize; y++) {
 				iBlock lBlock = cut.getBlock(new Pos(x, y));
