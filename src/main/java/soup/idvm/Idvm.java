@@ -249,6 +249,7 @@ public class Idvm implements iIdvm {
 			lIdvmPos.add(iBlock.getPos());
 		}
 		for (Pos iPos : lIdvmPos) {
+			//TODO Border Check
 			iBlock lGridBlock = mBlockGrid.getBlock(iPos);
 			if (lGridBlock != null) {
 				switch (lGridBlock.getBlockType()) {

@@ -16,6 +16,7 @@ public class Genome {
 	public HashMap<IdvmState, ArrayList<MoveProbability>> movementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
 
 	public Genome mutate() {
+		//TODO  mutate;
 		mutateHunger();
 		for (int iIdx = 0; iIdx < cMaxSequence; iIdx++) {
 			mutateCellGrow(iIdx);
