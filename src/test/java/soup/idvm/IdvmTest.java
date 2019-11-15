@@ -62,7 +62,7 @@ public class IdvmTest {
 		mGenome.movementSequences.put(IdvmState.IDLE, lIdlelMoveProbability);
 		mGenome.movementSequences.put(IdvmState.FOOD, lIdlelMoveProbability);
 
-		mGenome.setHunger(new GeneInt(0, 100, 50));
+		mGenome.setHunger(50);
 
 		cut = new Idvm(mGenome);
 		cut.setBlockGrid(mBlockGrid);

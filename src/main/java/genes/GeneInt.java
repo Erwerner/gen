@@ -13,7 +13,7 @@ public class GeneInt extends Gene implements iGene {
 		mValue = lRnd;
 	}
 
-	public GeneInt(int pPMax, int pPMin, int pStartValue) {
+	public GeneInt(int pPMin, int pPMax, int pStartValue) {
 		super();
 		pMax = pPMax;
 		pMin = pPMin;
@@ -22,6 +22,10 @@ public class GeneInt extends Gene implements iGene {
 
 	public int getValue() {
 		return mValue;
+	}
+
+	public void setValue(int pInt) {
+		mValue = pInt;
 	}
 
 }

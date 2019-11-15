@@ -33,7 +33,7 @@ public class TestMock {
 		lIdlelMoveProbability.add(new MoveProbability(0, 1, 0, 0, 0));
 		lGenome.movementSequences.put(IdvmState.IDLE, lIdlelMoveProbability);
 
-		lGenome.setHunger(new GeneInt(0, 100, 50));
+		lGenome.setHunger(50);
 		return new Idvm(lGenome);
 	}
 }

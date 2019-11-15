@@ -9,9 +9,13 @@ import soup.idvm.IdvmCell;
 import soup.idvm.IdvmState;
 
 public class Genome {
+	public Genome() {
+		mGenes.add(mHunger);
+	}
+
 	private static final int cMaxSequence = 48;
 	ArrayList<Gene> mGenes = new ArrayList<Gene>();
-	private GeneInt mHunger;
+	private GeneInt mHunger = new GeneInt(0, 100, 50);
 	public ArrayList<IdvmCell> cellGrow = new ArrayList<IdvmCell>();
 	public HashMap<IdvmState, ArrayList<MoveProbability>> movementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
 
@@ -40,8 +44,7 @@ public class Genome {
 		return mHunger.getValue();
 	}
 
-	public void setHunger(GeneInt pHunger) {
-		mHunger = pHunger;
-		mGenes.add(mHunger);
+	public void setHunger(int pInt) {
+		mHunger.setValue(pInt);
 	}
 }

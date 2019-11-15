@@ -46,7 +46,7 @@ public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 		mGenome.movementSequences.put(IdvmState.IDLE, lIdlelMoveProbability);
 		mGenome.movementSequences.put(IdvmState.FOOD, lIdlelMoveProbability);
 
-		mGenome.setHunger(new GeneInt(0, 100, 50));
+		mGenome.setHunger(50);
 
 		mIdvm = new Idvm(mGenome);
 		mSoup = new Soup(mIdvm);
