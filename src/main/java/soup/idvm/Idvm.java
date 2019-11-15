@@ -23,7 +23,6 @@ public class Idvm implements iIdvm {
 
 	@SuppressWarnings("unused")
 	private Genome mGenomeOrigin;
-	private int mLastFood;
 	private Pos mMidPosition = new Pos(0, 0);
 	private IdvmCell[][] mCellGrid = new IdvmCell[4][4];
 	private HashMap<IdvmState, MovementSequence> mMovementSequences = new HashMap<IdvmState, MovementSequence>();
@@ -31,18 +30,18 @@ public class Idvm implements iIdvm {
 	private int mHunger;
 	private iBlockGrid mBlockGrid;
 	private int mStepCount;
+	private int mEnergy = 100;
 
 	public Idvm(Genome pGenome) {
 		mGenomeOrigin = pGenome;
 		mCellGrow = pGenome.cellGrow;
 		mHunger = pGenome.hunger;
-		mLastFood = 0;
 		grow();
 		grow();
 		grow();
 		grow();
 
-		for(IdvmState iState : pGenome.movementSequences.keySet()) {
+		for (IdvmState iState : pGenome.movementSequences.keySet()) {
 			addaptMovementSequence(iState, pGenome);
 		}
 	}
@@ -65,7 +64,7 @@ public class Idvm implements iIdvm {
 	}
 
 	public boolean isAlive() {
-		if (mLastFood == 100)
+		if (mEnergy <= 0)
 			return false;
 		for (iBlock iCell : getUsedBlocks()) {
 			if (iCell.getBlockType() == BlockType.LIFE) {
@@ -76,7 +75,7 @@ public class Idvm implements iIdvm {
 	}
 
 	public Boolean isHungry() {
-		return mLastFood > mHunger;
+		return mEnergy < mHunger;
 	}
 
 	public BlockType getBlockType() {
@@ -124,7 +123,6 @@ public class Idvm implements iIdvm {
 	public void step() {
 		mStepCount++;
 		Direction lTargetDirection = null;
-		mLastFood++;
 		IdvmState lState = getState();
 		if (lState != IdvmState.IDLE)
 			lTargetDirection = getTargetDirection();
@@ -161,7 +159,7 @@ public class Idvm implements iIdvm {
 	}
 
 	private void eat(Food pFood) {
-		mLastFood = 0;
+		mEnergy = 100;
 		grow();
 		for (Entry<IdvmState, MovementSequence> iSequence : mMovementSequences.entrySet()) {
 			iSequence.getValue().pop();
@@ -181,6 +179,7 @@ public class Idvm implements iIdvm {
 
 		Pos lNewPos = mMidPosition.getPosFromDirection(pDirection);
 		setPosition(lNewPos);
+		mEnergy--;
 	}
 
 	public iBlock interactWithFood(Food pFood) {
