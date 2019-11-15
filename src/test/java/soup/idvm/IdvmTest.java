@@ -19,6 +19,7 @@ import datatypes.Direction;
 import datatypes.Pos;
 import exceptions.ExOutOfGrid;
 import exceptions.ExWrongState;
+import genes.GeneInt;
 import genes.Genome;
 import genes.MoveProbability;
 import soup.block.BlockGrid;
@@ -61,7 +62,7 @@ public class IdvmTest {
 		mGenome.movementSequences.put(IdvmState.IDLE, lIdlelMoveProbability);
 		mGenome.movementSequences.put(IdvmState.FOOD, lIdlelMoveProbability);
 
-		mGenome.hunger = 50;
+		mGenome.setHunger(new GeneInt(0, 100, 50));
 
 		cut = new Idvm(mGenome);
 		cut.setBlockGrid(mBlockGrid);
@@ -158,7 +159,7 @@ public class IdvmTest {
 	@Test
 	public void getsHungry() {
 		assertFalse(cut.isHungry());
-		for (int i = 0; i <= mGenome.hunger - 1; i++) {
+		for (int i = 0; i <= mGenome.getHunger() - 1; i++) {
 			cut.step();
 		}
 		assertFalse(cut.isHungry());
@@ -169,7 +170,7 @@ public class IdvmTest {
 	@Test
 	public void aferEatNoHunger() {
 		assertFalse(cut.isHungry());
-		for (int i = 0; i <= mGenome.hunger - 1; i++) {
+		for (int i = 0; i <= mGenome.getHunger() - 1; i++) {
 			cut.step();
 		}
 		assertFalse(cut.isHungry());

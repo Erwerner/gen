@@ -18,6 +18,7 @@ public class BlockGrid implements iBlockGrid {
 	}
 
 	public void setBlock(Pos pos, iBlock block) {
+		//TODO pos.isInGrid();
 		mGrid[pos.x][pos.y] = block;
 	}
 

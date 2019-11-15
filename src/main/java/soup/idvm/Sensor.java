@@ -10,8 +10,6 @@ public class Sensor extends Block{
 	}
 
 	public void step() {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

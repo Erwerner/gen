@@ -1,5 +1,6 @@
 package utils;
 
+import genes.GeneInt;
 import genes.Genome;
 import genes.MoveProbability;
 
@@ -32,7 +33,7 @@ public class TestMock {
 		lIdlelMoveProbability.add(new MoveProbability(0, 1, 0, 0, 0));
 		lGenome.movementSequences.put(IdvmState.IDLE, lIdlelMoveProbability);
 
-		lGenome.hunger = 50;
+		lGenome.setHunger(new GeneInt(0, 100, 50));
 		return new Idvm(lGenome);
 	}
 }

@@ -35,7 +35,7 @@ public class Idvm implements iIdvm {
 	public Idvm(Genome pGenome) {
 		mGenomeOrigin = pGenome;
 		mCellGrow = pGenome.cellGrow;
-		mHunger = pGenome.hunger;
+		mHunger = pGenome.getHunger();
 		grow();
 		grow();
 		grow();
