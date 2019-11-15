@@ -6,6 +6,8 @@ import genes.MoveProbability;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.hamcrest.core.IsInstanceOf;
+
 import mvc.Model;
 import mvc.controller.iControllRunSoup;
 import mvc.present.iPresentIdvm;
@@ -24,42 +26,10 @@ import datatypes.Direction;
 import datatypes.Pos;
 import exceptions.ExWrontPresenterType;
 
-public class ModelMonitorIdvm extends Model implements iPresentIdvm, iControllRunSoup {
+public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 
 	iIdvm mIdvm;
 	iSoup mSoup;
-
-	public iBlock getBlock(Pos pPos) {
-		return mSoup.getBlock(pPos);
-	}
-
-	public HashMap<Pos, Sensor> getDetectedPos() {
-		return mIdvm.getDetectedPos();
-	}
-
-	public Direction getTargetDirection() {
-		return mIdvm.getTargetDirection();
-	}
-
-	public int getStepCount() {
-		return mIdvm.getStepCount();
-	}
-
-	public boolean isAlive() {
-		return mIdvm.isAlive();
-	}
-
-	public Boolean isHungry() {
-		return mIdvm.isHungry();
-	}
-
-	public IdvmState getState() {
-		return mIdvm.getState();
-	}
-
-	public Pos getPos() {
-		return mIdvm.getPos();
-	}
 
 	public void run() {
 		IdvmCell[] mCellGrow = new IdvmCell[6];
@@ -99,7 +69,11 @@ public class ModelMonitorIdvm extends Model implements iPresentIdvm, iControllRu
 	}
 
 	@Override
-	public <T> Object getPresenter(T pType) {
-		return mSoup;
+	public Object getPresenter(Class pType) {
+		if (pType == iPresentSoup.class)
+			return mSoup;
+		if (pType == iPresentIdvm.class)
+			return mIdvm;
+		throw new ExWrontPresenterType();
 	}
 }

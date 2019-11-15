@@ -13,5 +13,5 @@ public abstract class Model {
 	protected void notifyViews() {
 		for(View iView : mViews)iView.update();
 	}
-	public abstract <T> Object getPresenter(T pType);
+	public abstract <T> Object getPresenter(Class pType);
 }

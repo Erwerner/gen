@@ -18,8 +18,8 @@ public class ViewConsoleMonitorIdvm extends View {
 
 	public ViewConsoleMonitorIdvm(Model pModel) {
 		super(pModel);
-		mIdvm = (iPresentIdvm) pModel;
 		mSoup = (iPresentSoup) pModel.getPresenter(iPresentSoup.class);
+		mIdvm = (iPresentIdvm) pModel.getPresenter(iPresentIdvm.class);
 	}
 
 	public void update() {

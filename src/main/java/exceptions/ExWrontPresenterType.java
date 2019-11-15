@@ -1,5 +1,6 @@
 package exceptions;
 
-public class ExWrontPresenterType extends Exception {
+@SuppressWarnings("serial")
+public class ExWrontPresenterType extends RuntimeException {
 
 }
