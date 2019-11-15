@@ -2,12 +2,14 @@ package soup;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import datatypes.Constants;
 import datatypes.Pos;
+import exceptions.ExOutOfGrid;
 import soup.block.BlockType;
 import soup.block.iBlock;
 import soup.idvm.iIdvm;
@@ -25,15 +27,20 @@ public class SoupTest {
 
 	@Test
 	public void midBlockIsCell() {
-		Pos lMidPos = mIdvm.getPos();
-		System.out.println(lMidPos);
-		iBlock lMidBlock = cut.getBlock(lMidPos);
-		assertNotNull(lMidBlock);
-		assertEquals(BlockType.LIFE, lMidBlock.getBlockType());
+		try {
+			Pos lMidPos = mIdvm.getPos();
+			System.out.println(lMidPos);
+			iBlock lMidBlock;
+			lMidBlock = cut.getBlock(lMidPos);
+			assertNotNull(lMidBlock);
+			assertEquals(BlockType.LIFE, lMidBlock.getBlockType());
+		} catch (ExOutOfGrid e) {
+			fail();
+		}
 	}
 
 	@Test
-	public void gridHasBlocks() {
+	public void gridHasBlocks() throws ExOutOfGrid {
 		int lCount = 0;
 		for (int x = 0; x < Constants.soupSize; x++) {
 			for (int y = 0; y < Constants.soupSize; y++) {

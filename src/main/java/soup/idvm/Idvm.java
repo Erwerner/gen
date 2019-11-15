@@ -23,7 +23,6 @@ public class Idvm implements iIdvm {
 
 	@SuppressWarnings("unused")
 	private Genome mGenomeOrigin;
-	private int mLastFood;
 	private Pos mMidPosition = new Pos(0, 0);
 	private IdvmCell[][] mCellGrid = new IdvmCell[4][4];
 	private HashMap<IdvmState, MovementSequence> mMovementSequences = new HashMap<IdvmState, MovementSequence>();
@@ -31,18 +30,18 @@ public class Idvm implements iIdvm {
 	private int mHunger;
 	private iBlockGrid mBlockGrid;
 	private int mStepCount;
+	private int mEnergy = 100;
 
 	public Idvm(Genome pGenome) {
 		mGenomeOrigin = pGenome;
 		mCellGrow = pGenome.cellGrow;
-		mHunger = pGenome.hunger;
-		mLastFood = 0;
+		mHunger = pGenome.getHunger();
 		grow();
 		grow();
 		grow();
 		grow();
 
-		for(IdvmState iState : pGenome.movementSequences.keySet()) {
+		for (IdvmState iState : pGenome.movementSequences.keySet()) {
 			addaptMovementSequence(iState, pGenome);
 		}
 	}
@@ -64,7 +63,7 @@ public class Idvm implements iIdvm {
 	}
 
 	public boolean isAlive() {
-		if (mLastFood == 100)
+		if (mEnergy <= 0)
 			return false;
 		for (iBlock iCell : getUsedBlocks()) {
 			if (iCell.getBlockType() == BlockType.LIFE) {
@@ -75,7 +74,7 @@ public class Idvm implements iIdvm {
 	}
 
 	public Boolean isHungry() {
-		return mLastFood > mHunger;
+		return mEnergy < mHunger;
 	}
 
 	public BlockType getBlockType() {
@@ -123,13 +122,15 @@ public class Idvm implements iIdvm {
 	public void step() {
 		mStepCount++;
 		Direction lTargetDirection = null;
-		mLastFood++;
 		IdvmState lState = getState();
 		if (lState != IdvmState.IDLE)
 			lTargetDirection = getTargetDirection();
 		MovementSequence lSequence = mMovementSequences.get(lState);
 		Direction lDirection = lSequence.getDirection();
-		move(lDirection, lTargetDirection);
+		try {
+			move(lDirection, lTargetDirection);
+		} catch (ExOutOfGrid e) {
+		}
 	}
 
 	public Direction getTargetDirection() {
@@ -148,42 +149,55 @@ public class Idvm implements iIdvm {
 		}
 
 		for (Entry<Pos, Sensor> iPos : lDetectedPos.entrySet()) {
-			iBlock lGridBlock = mBlockGrid.getBlock(iPos.getKey());
-			if (lGridBlock != null && lGridBlock.getBlockType() == lSearchBlock) {
-				Direction lDircetion;
-				Pos lSensorPos = iPos.getValue().getPos();
-				lDircetion = lSensorPos.getDircetionTo(iPos.getKey());
-				return lDircetion;
+			iBlock lGridBlock;
+			try {
+				lGridBlock = mBlockGrid.getBlock(iPos.getKey());
+				if (lGridBlock != null && lGridBlock.getBlockType() == lSearchBlock) {
+					Direction lDircetion;
+					Pos lSensorPos = iPos.getValue().getPos();
+					lDircetion = lSensorPos.getDircetionTo(iPos.getKey());
+					return lDircetion;
+				}
+			} catch (ExOutOfGrid e) {
 			}
 		}
 		throw new ExWrongDirection();
 	}
 
 	private void eat(Food pFood) {
-		mLastFood = 0;
+		mEnergy = 100;
 		grow();
 		for (Entry<IdvmState, MovementSequence> iSequence : mMovementSequences.entrySet()) {
 			iSequence.getValue().pop();
 		}
 	}
 
-	private void move(Direction pDirection, Direction pTarget) {
+	private void move(Direction pDirection, Direction pTarget) throws ExOutOfGrid {
 		switch (pDirection) {
 		case UP:
 		case DOWN:
 		case LEFT:
 		case RIGHT:
+		case NOTHING:
 			break;
 		default:
 			throw new ExWrongDirection();
 		}
 
-		Pos lNewPos = mMidPosition.getPosFromDirection(pDirection);
+		Direction lDirection = pDirection;
+
+		for (iBlock iBlock : getUsedBlocks()) {
+			iBlock.getPos().getPosFromDirection(lDirection).isInGrid();
+		}
+
+		Pos lNewPos = mMidPosition.getPosFromDirection(lDirection);
 		setPosition(lNewPos);
+		mEnergy--;
 	}
 
 	public iBlock interactWithFood(Food pFood) {
 		eat(pFood);
+		//TODO must erase Food
 		return null;
 	}
 
@@ -245,21 +259,24 @@ public class Idvm implements iIdvm {
 			lIdvmPos.add(iBlock.getPos());
 		}
 		for (Pos iPos : lIdvmPos) {
-			// TODO Border Check
-			iBlock lGridBlock = mBlockGrid.getBlock(iPos);
-			if (lGridBlock != null) {
-				switch (lGridBlock.getBlockType()) {
-				case FOOD:
-					lInteractedBlock = interactWithFood((Food) lGridBlock);
-					mBlockGrid.setBlock(iPos, lInteractedBlock);
-					break;
-				case ENEMY:
-					lInteractedBlock = interactWithEnemy((Enemy) lGridBlock);
-					mBlockGrid.setBlock(iPos, lInteractedBlock);
-					break;
-				default:
-					break;
+			iBlock lGridBlock;
+			try {
+				lGridBlock = mBlockGrid.getBlock(iPos);
+				if (lGridBlock != null) {
+					switch (lGridBlock.getBlockType()) {
+					case FOOD:
+						lInteractedBlock = interactWithFood((Food) lGridBlock);
+						mBlockGrid.setBlock(iPos, lInteractedBlock);
+						break;
+					case ENEMY:
+						lInteractedBlock = interactWithEnemy((Enemy) lGridBlock);
+						mBlockGrid.setBlock(iPos, lInteractedBlock);
+						break;
+					default:
+						break;
+					}
 				}
+			} catch (ExOutOfGrid e) {
 			}
 		}
 

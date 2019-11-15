@@ -1,4 +1,6 @@
 package utils;
+
+import genes.GeneInt;
 import genes.Genome;
 import genes.MoveProbability;
 
@@ -11,9 +13,8 @@ import soup.idvm.IdvmCell;
 import soup.idvm.IdvmState;
 import soup.idvm.iIdvm;
 
-
 public class TestMock {
-	public static iIdvm getIdvmMock(){
+	public static iIdvm getIdvmMock() {
 		Genome lGenome;
 		IdvmCell[] lCellGrow = new IdvmCell[6];
 		lCellGrow[0] = new IdvmCell(BlockType.LIFE, new Pos(0, 0));
@@ -25,15 +26,14 @@ public class TestMock {
 
 		lGenome = new Genome();
 		for (IdvmCell iCell : lCellGrow) {
-			lGenome.cellGrow.add(new IdvmCell(iCell.getBlockType(), iCell
-					.getPosOnIdvm()));
+			lGenome.cellGrow.add(new IdvmCell(iCell.getBlockType(), iCell.getPosOnIdvm()));
 		}
 		ArrayList<MoveProbability> lIdlelMoveProbability = new ArrayList<MoveProbability>();
-		lIdlelMoveProbability.add(new MoveProbability(0, 0, 1, 0));
-		lIdlelMoveProbability.add(new MoveProbability(0, 1, 0, 0));
+		lIdlelMoveProbability.add(new MoveProbability(0, 0, 1, 0, 0));
+		lIdlelMoveProbability.add(new MoveProbability(0, 1, 0, 0, 0));
 		lGenome.movementSequences.put(IdvmState.IDLE, lIdlelMoveProbability);
 
-		lGenome.hunger = 50;
+		lGenome.setHunger(50);
 		return new Idvm(lGenome);
 	}
 }

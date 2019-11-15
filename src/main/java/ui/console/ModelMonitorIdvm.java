@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import datatypes.Pos;
 import exceptions.ExWrontPresenterType;
+import genes.GeneInt;
 import genes.Genome;
 import genes.MoveProbability;
 import mvc.Model;
@@ -38,14 +39,14 @@ public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 			mGenome.cellGrow.add(new IdvmCell(iCell.getBlockType(), iCell.getPosOnIdvm()));
 		}
 		ArrayList<MoveProbability> lIdlelMoveProbability = new ArrayList<MoveProbability>();
-		lIdlelMoveProbability.add(new MoveProbability(4, 0, 2, 1));
-		lIdlelMoveProbability.add(new MoveProbability(0, 1, 0, 1));
-		lIdlelMoveProbability.add(new MoveProbability(1, 0, 0, 1));
-		lIdlelMoveProbability.add(new MoveProbability(0, 2, 1, 0));
+		lIdlelMoveProbability.add(new MoveProbability(4, 0, 2, 1, 1));
+		lIdlelMoveProbability.add(new MoveProbability(0, 1, 0, 1, 1));
+		lIdlelMoveProbability.add(new MoveProbability(1, 0, 0, 1, 1));
+		lIdlelMoveProbability.add(new MoveProbability(0, 2, 1, 0, 1));
 		mGenome.movementSequences.put(IdvmState.IDLE, lIdlelMoveProbability);
 		mGenome.movementSequences.put(IdvmState.FOOD, lIdlelMoveProbability);
 
-		mGenome.hunger = 50;
+		mGenome.setHunger(50);
 
 		mIdvm = new Idvm(mGenome);
 		mSoup = new Soup(mIdvm);

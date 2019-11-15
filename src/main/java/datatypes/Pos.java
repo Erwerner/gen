@@ -40,7 +40,9 @@ public class Pos {
 		case RIGHT:
 			lNewPos = new Pos(x + 1, y);
 			break;
-
+		case NOTHING:
+			lNewPos = new Pos(x, y);
+			break;
 		default:
 			throw new ExWrongDirection();
 		}
