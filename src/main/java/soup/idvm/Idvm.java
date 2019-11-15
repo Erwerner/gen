@@ -172,6 +172,7 @@ public class Idvm implements iIdvm {
 		case DOWN:
 		case LEFT:
 		case RIGHT:
+		case NOTHING:
 			break;
 		default:
 			throw new ExWrongDirection();

@@ -55,8 +55,8 @@ public class IdvmTest {
 			mGenome.cellGrow.add(new IdvmCell(iCell.getBlockType(), iCell.getPosOnIdvm()));
 		}
 		ArrayList<MoveProbability> lIdlelMoveProbability = new ArrayList<MoveProbability>();
-		lIdlelMoveProbability.add(new MoveProbability(0, 0, 1, 0));
-		lIdlelMoveProbability.add(new MoveProbability(0, 1, 0, 0));
+		lIdlelMoveProbability.add(new MoveProbability(0, 0, 1, 0, 0));
+		lIdlelMoveProbability.add(new MoveProbability(0, 1, 0, 0, 0));
 		mGenome.movementSequences.put(IdvmState.IDLE, lIdlelMoveProbability);
 		mGenome.movementSequences.put(IdvmState.FOOD, lIdlelMoveProbability);
 
