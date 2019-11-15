@@ -21,7 +21,7 @@ public class ViewConsoleMonitorIdvm extends View {
 	public static final String ANSI_CYAN = "\u001B[36m";
 	public static final String ANSI_WHITE = "\u001B[37m";
 
-	private static final int cViewSize = 8;
+	private static final int cViewSize = 20;
 	private iPresentIdvm mIdvm;
 	private iPresentSoup mSoup;
 
@@ -42,12 +42,14 @@ public class ViewConsoleMonitorIdvm extends View {
 		for (int y = lIdvMidPos.y - cViewSize; y < lIdvMidPos.y + cViewSize; y++) {
 			String lGridLine = "";
 			for (int x = lIdvMidPos.x - cViewSize; x < lIdvMidPos.x + cViewSize; x++) {
+				String lBlockChar;
 				try {
 					new Pos(x, y).isInGrid();
-					String lBlockChar = getCharForBlock(y, x);
-					lGridLine = lGridLine + lBlockChar;
+					lBlockChar = getCharForBlock(y, x);
 				} catch (ExOutOfGrid e) {
+					lBlockChar = "+";
 				}
+				lGridLine = lGridLine + lBlockChar;
 			}
 			System.out.println(lGridLine);
 		}

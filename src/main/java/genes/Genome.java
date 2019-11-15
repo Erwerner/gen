@@ -8,8 +8,8 @@ import soup.block.BlockType;
 import soup.idvm.IdvmCell;
 import soup.idvm.IdvmState;
 
-public class Genome {
-	public Genome() {
+public class Genome implements iGene{
+	public Genome()  {
 		mGenes.add(mHunger);
 	}
 
@@ -19,7 +19,7 @@ public class Genome {
 	public ArrayList<IdvmCell> cellGrow = new ArrayList<IdvmCell>();
 	public HashMap<IdvmState, ArrayList<MoveProbability>> movementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
 
-	public Genome mutate() {
+	public void mutate() {
 		for (Gene iGene : mGenes) {
 			iGene.mutate();
 		}
@@ -27,7 +27,6 @@ public class Genome {
 			mutateCellGrow(iIdx);
 			mutateMoveSequences(iIdx);
 		}
-		return this;
 	}
 
 	private void mutateMoveSequences(int pIdx) {
