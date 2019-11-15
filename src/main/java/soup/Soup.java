@@ -1,44 +1,65 @@
 package soup;
 
+import java.util.ArrayList;
+
 import soup.block.BlockGrid;
+import soup.block.Enemy;
 import soup.block.Food;
 import soup.block.iBlock;
 import soup.block.iBlockGrid;
-import soup.idvm.IdvmState;
-import soup.idvm.Sensor;
 import soup.idvm.iIdvm;
-
-import java.util.HashMap;
-
 import datatypes.Constants;
-import datatypes.Direction;
 import datatypes.Pos;
-import mvc.Model;
-import mvc.controller.iControllRunSoup;
-import mvc.present.iPresentIdvm;
-import mvc.present.iPresentSoup;
+import exceptions.ExWrongBlockType;
 
-public class Soup extends Model implements iPresentSoup, iPresentIdvm, iControllRunSoup {
+public class Soup implements iSoup {
 	private iIdvm mIdvm;
 	private iBlockGrid mBlockGrid;
+	private ArrayList<iBlock> mAllBlocks = new ArrayList<iBlock>();
 
 	public Soup(iIdvm pIdvm) {
 		mBlockGrid = new BlockGrid();
 		mIdvm = pIdvm;
 		mIdvm.setBlockGrid(mBlockGrid);
-		mBlockGrid.addInitialIdvm(mIdvm);
 		initFoodBlocks();
-		finishSoup();
+		initEnemyBlocks();
+		mBlockGrid.addInitialIdvm(mIdvm);
+		clearSurroundingsOfIdvm();
 	}
 
-	private void finishSoup() {
-		// TODO delete surrounding blocks of idvm
+	private void initEnemyBlocks() {
+		Enemy[] lEnemyList = new Enemy[Constants.enemySupply];
+		for (int i = 0; i < Constants.enemySupply; i++)
+			lEnemyList[i] = new Enemy();
+		for (iBlock iEnemyBlock : lEnemyList) {
+			mBlockGrid.setRandomBlock(iEnemyBlock);
+			mAllBlocks.add(iEnemyBlock);
+		}
+	}
+
+	private void clearSurroundingsOfIdvm() {
+		Pos lIdvmMidPos = mIdvm.getPos();
+		ArrayList<Pos> lIdvmPosList = new ArrayList<Pos>();
+
+		for (iBlock iBlock : mIdvm.getUsedBlocks()) {
+			lIdvmPosList.add(iBlock.getPos());
+		}
+
+		for (int x = lIdvmMidPos.x - 1; x <= lIdvmMidPos.x + 2; x++) {
+			for (int y = lIdvmMidPos.y - 1; y <= lIdvmMidPos.y + 2; y++) {
+				if (!lIdvmPosList.contains(new Pos(x, y)))
+					mBlockGrid.setBlock(new Pos(x, y), null);
+			}
+		}
 	}
 
 	private void initFoodBlocks() {
-		Food[] food = new Food[Constants.foodSupply];
-		for (iBlock foodBlock : food) {
-			mBlockGrid.setRandomBlock(foodBlock);
+		Food[] lFoodBlocks = new Food[Constants.foodSupply];
+		for (int i = 0; i < Constants.foodSupply; i++)
+			lFoodBlocks[i] = new Food();
+		for (iBlock iFoodBlock : lFoodBlocks) {
+			mBlockGrid.setRandomBlock(iFoodBlock);
+			mAllBlocks.add(iFoodBlock);
 		}
 	}
 
@@ -47,55 +68,19 @@ public class Soup extends Model implements iPresentSoup, iPresentIdvm, iControll
 	}
 
 	public void refreshBlocks() {
-		// #TODO abc;
-		// all Nothing
-		// loop rest via block array
-	}
-
-	public HashMap<Pos, Sensor> getDetectedPos() {
-		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
-		return lPresentIdvm.getDetectedPos();
-	}
-
-	public Direction getTargetDirection() {
-		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
-		return lPresentIdvm.getTargetDirection();
-	}
-
-	public int getStepCount() {
-		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
-		return lPresentIdvm.getStepCount();
-	}
-
-	public boolean isAlive() {
-		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
-		return lPresentIdvm.isAlive();
-	}
-
-	public Boolean isHungry() {
-		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
-		return lPresentIdvm.isHungry();
-	}
-
-	public IdvmState getState() {
-		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
-		return lPresentIdvm.getState();
-	}
-
-	public Pos getPosition() {
-		iPresentIdvm lPresentIdvm = (iPresentIdvm) mIdvm;
-		return lPresentIdvm.getPosition();
-	}
-
-	public void run() {
-		for (int i = 0; i < 10; i++) {
-			try {
-				mIdvm.step();
-				notifyViews();
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+		mBlockGrid.clearBlocks();
+		for (iBlock iBlock : mAllBlocks) {
+			mBlockGrid.setBlock(iBlock.getPos(), iBlock);
 		}
+		mIdvm.detectCollisions();		
+		for (iBlock iBlock : mIdvm.getUsedBlocks())
+			mBlockGrid.setBlock(iBlock.getPos(), iBlock);
+	}
+
+	public void step() {
+		mIdvm.step();
+		for (iBlock iBlock : mAllBlocks)
+			iBlock.step();
+		refreshBlocks();
 	}
 }

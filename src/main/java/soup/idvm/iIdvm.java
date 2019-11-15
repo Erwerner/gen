@@ -4,16 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import mvc.present.iPresentIdvm;
-
-import datatypes.Direction;
-import datatypes.Pos;
-
 import soup.block.Enemy;
 import soup.block.Food;
 import soup.block.iBlock;
 import soup.block.iBlockGrid;
+import datatypes.Direction;
+import datatypes.Pos;
 
-public interface iIdvm extends iBlock {
+public interface iIdvm extends iBlock, iPresentIdvm {
 
 	ArrayList<iBlock> getUsedBlocks();
 
@@ -34,4 +32,6 @@ public interface iIdvm extends iBlock {
 	boolean isAlive();
 
 	Boolean isHungry();
+
+	void detectCollisions();
 }

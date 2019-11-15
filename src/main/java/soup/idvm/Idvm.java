@@ -1,28 +1,26 @@
 package soup.idvm;
 
+import genes.Genome;
+import genes.MoveProbability;
+import genes.MovementSequence;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
-
-import mvc.Model;
-import mvc.present.iPresentIdvm;
 
 import soup.block.BlockType;
 import soup.block.Enemy;
 import soup.block.Food;
 import soup.block.iBlock;
 import soup.block.iBlockGrid;
-
 import datatypes.Direction;
 import datatypes.Pos;
 import exceptions.ExFailedDetection;
+import exceptions.ExOutOfGrid;
 import exceptions.ExWrongDirection;
 import exceptions.ExWrongState;
-import genes.Genome;
-import genes.MoveProbability;
-import genes.MovementSequence;
 
-public class Idvm implements iIdvm, iPresentIdvm {
+public class Idvm implements iIdvm {
 
 	private Genome mGenomeOrigin;
 	private int mLastFood;
@@ -45,6 +43,7 @@ public class Idvm implements iIdvm, iPresentIdvm {
 		grow();
 
 		addaptMovementSequence(IdvmState.IDLE, pGenome);
+		addaptMovementSequence(IdvmState.FOOD, pGenome);
 	}
 
 	private void addaptMovementSequence(IdvmState pState, Genome pGenome) {
@@ -62,6 +61,8 @@ public class Idvm implements iIdvm, iPresentIdvm {
 	}
 
 	public boolean isAlive() {
+		if (mLastFood == 100)
+			return false;
 		for (iBlock iCell : getUsedBlocks()) {
 			if (iCell.getBlockType() == BlockType.LIFE) {
 				return true;
@@ -97,7 +98,7 @@ public class Idvm implements iIdvm, iPresentIdvm {
 		}
 	}
 
-	public Pos getPosition() {
+	public Pos getPos() {
 		return mMidPosition;
 	}
 
@@ -114,8 +115,7 @@ public class Idvm implements iIdvm, iPresentIdvm {
 	}
 
 	public void killCell(Pos pPos) {
-		mCellGrid[pPos.x - mMidPosition.x + 1][pPos.y - mMidPosition.y + 1]
-				.kill();
+		mCellGrid[pPos.x - mMidPosition.x + 1][pPos.y - mMidPosition.y + 1] = null;
 	}
 
 	public void step() {
@@ -125,7 +125,8 @@ public class Idvm implements iIdvm, iPresentIdvm {
 		IdvmState lState = getState();
 		if (lState != IdvmState.IDLE)
 			lTargetDirection = getTargetDirection();
-		Direction lDirection = mMovementSequences.get(lState).getDirection();
+		MovementSequence lSequence = mMovementSequences.get(lState);
+		Direction lDirection = lSequence.getDirection();
 		move(lDirection, lTargetDirection);
 	}
 
@@ -146,14 +147,14 @@ public class Idvm implements iIdvm, iPresentIdvm {
 
 		for (Entry<Pos, Sensor> iPos : lDetectedPos.entrySet()) {
 			iBlock lGridBlock = mBlockGrid.getBlock(iPos.getKey());
-			if(lGridBlock != null && lGridBlock.getBlockType() == lSearchBlock){
+			if (lGridBlock != null && lGridBlock.getBlockType() == lSearchBlock) {
 				Direction lDircetion;
-				Pos lSensorPos = iPos.getValue().getPosition();
+				Pos lSensorPos = iPos.getValue().getPos();
 				lDircetion = lSensorPos.getDircetionTo(iPos.getKey());
 				return lDircetion;
 			}
 		}
-			throw new ExWrongDirection();
+		throw new ExWrongDirection();
 	}
 
 	private void eat(Food pFood) {
@@ -186,7 +187,7 @@ public class Idvm implements iIdvm, iPresentIdvm {
 	}
 
 	public iBlock interactWithEnemy(Enemy pEnemy) {
-		killCell(pEnemy.getPosition());
+		killCell(pEnemy.getPos());
 		return pEnemy;
 	}
 
@@ -200,10 +201,14 @@ public class Idvm implements iIdvm, iPresentIdvm {
 	private boolean detectFood() {
 		for (Entry<Pos, Sensor> iPos : getDetectedPos().entrySet()) {
 			Pos lPos = iPos.getKey();
-			iBlock lGridBlock = mBlockGrid.getBlock(lPos);
-			if (lGridBlock != null
-					&& lGridBlock.getBlockType() == BlockType.FOOD)
-				return true;
+			try {
+				lPos.isInGrid();
+				iBlock lGridBlock = mBlockGrid.getBlock(lPos);
+				if (lGridBlock != null
+						&& lGridBlock.getBlockType() == BlockType.FOOD)
+					return true;
+			} catch (ExOutOfGrid e) {
+			}
 		}
 		return false;
 	}
@@ -214,10 +219,11 @@ public class Idvm implements iIdvm, iPresentIdvm {
 			if (iCell.getBlockType() == BlockType.SENSOR) {
 				for (int x = -1; x <= 1; x++) {
 					for (int y = -1; y <= 1; y++) {
-						int lCellX = iCell.getPosition().x;
-						int lCellY = iCell.getPosition().y;
+						int lCellX = iCell.getPos().x;
+						int lCellY = iCell.getPos().y;
 						lDetectedPos.put(new Pos(lCellX + x, lCellY + y),
-								(Sensor)new Sensor().setPosition(iCell.getPosition()));
+								(Sensor) new Sensor().setPosition(iCell
+										.getPos()));
 					}
 				}
 			}
@@ -228,8 +234,33 @@ public class Idvm implements iIdvm, iPresentIdvm {
 	public void setBlockGrid(iBlockGrid pBlockGrid) {
 		mBlockGrid = pBlockGrid;
 	}
+
 	public int getStepCount() {
 		return mStepCount;
+	}
+
+	public void detectCollisions() {
+		iBlock lInteractedBlock = null;
+		ArrayList<Pos> lIdvmPos = new ArrayList<Pos>();
+		for (iBlock iBlock : getUsedBlocks()) {
+			lIdvmPos.add(iBlock.getPos());
+		}
+		for (Pos iPos : lIdvmPos) {
+			iBlock lGridBlock = mBlockGrid.getBlock(iPos);
+			if (lGridBlock != null) {
+				switch (lGridBlock.getBlockType()) {
+				case FOOD:
+					lInteractedBlock = interactWithFood((Food) lGridBlock);
+					mBlockGrid.setBlock(iPos, lInteractedBlock);
+					break;
+				case ENEMY:
+					lInteractedBlock = interactWithEnemy((Enemy) lGridBlock);
+					mBlockGrid.setBlock(iPos, lInteractedBlock);
+					break;
+				}
+			}
+		}
+
 	}
 
 }

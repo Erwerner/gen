@@ -1,7 +1,9 @@
 package datatypes;
 
+import java.util.ArrayList;
+
+import exceptions.ExOutOfGrid;
 import exceptions.ExWrongDirection;
-import soup.block.iBlock;
 
 public class Pos {
 	public int x;
@@ -43,18 +45,46 @@ public class Pos {
 			throw new ExWrongDirection();
 		}
 
-		if(lNewPos.x<0)lNewPos.x=0;
-		if(lNewPos.x>Constants.soupSize-1)lNewPos.x=Constants.soupSize-1;
-		if(lNewPos.y<0)lNewPos.y=0;
-		if(lNewPos.y>Constants.soupSize-1)lNewPos.y=Constants.soupSize-1;
+		if (lNewPos.x < 0)
+			lNewPos.x = 0;
+		if (lNewPos.x > Constants.soupSize - 1)
+			lNewPos.x = Constants.soupSize - 1;
+		if (lNewPos.y < 0)
+			lNewPos.y = 0;
+		if (lNewPos.y > Constants.soupSize - 1)
+			lNewPos.y = Constants.soupSize - 1;
 		return lNewPos;
 	}
 
 	public Direction getDircetionTo(Pos pTargetPos) {
-		if(pTargetPos.y < this.y)return Direction.UP;
-		if(pTargetPos.y > this.y)return Direction.DOWN;
-		if(pTargetPos.x < this.x)return Direction.LEFT;
-		if(pTargetPos.x > this.x)return Direction.RIGHT;
+		if (pTargetPos.y < this.y)
+			return Direction.UP;
+		if (pTargetPos.y > this.y)
+			return Direction.DOWN;
+		if (pTargetPos.x < this.x)
+			return Direction.LEFT;
+		if (pTargetPos.x > this.x)
+			return Direction.RIGHT;
 		return Direction.SAME;
+	}
+
+	public static ArrayList<Pos> getAllGridPos() {
+		ArrayList<Pos> lAllPos = new ArrayList<Pos>();
+		for (int x = 0; x < Constants.soupSize; x++) {
+			for (int y = 0; y < Constants.soupSize; y++) {
+				lAllPos.add(new Pos(x, y));
+			}
+		}
+		return lAllPos;
+	}
+
+	@Override
+	public String toString() {
+		return x + ", " + y;
+	}
+
+	public void isInGrid() throws ExOutOfGrid {
+		if (!(x >= 0 && y >= 0 && x < Constants.soupSize && y < Constants.soupSize))
+			throw new ExOutOfGrid();
 	}
 }

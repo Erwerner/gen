@@ -21,7 +21,11 @@ public abstract class Block implements iBlock {
 		return this;
 	}
 
-	public Pos getPosition() {
+	public Pos getPos() {
 		return mPos;
+	}
+	@Override
+	public String toString(){
+		return mBlockType + " " + mPos;
 	}
 }
