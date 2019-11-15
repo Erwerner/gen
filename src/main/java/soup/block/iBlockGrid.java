@@ -8,7 +8,7 @@ public interface iBlockGrid {
 
 	iBlock getBlock(Pos pos) throws ExOutOfGrid;
 
-	void setBlock(Pos pos, iBlock block);
+	void setBlock(Pos pos, iBlock block) throws ExOutOfGrid;
 
 	void setRandomBlock(iBlock foodBlock);
 

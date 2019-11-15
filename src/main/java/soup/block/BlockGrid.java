@@ -17,8 +17,8 @@ public class BlockGrid implements iBlockGrid {
 		return mGrid[pos.x][pos.y];
 	}
 
-	public void setBlock(Pos pos, iBlock block) {
-		//TODO pos.isInGrid();
+	public void setBlock(Pos pos, iBlock block) throws ExOutOfGrid {
+		pos.isInGrid();
 		mGrid[pos.x][pos.y] = block;
 	}
 

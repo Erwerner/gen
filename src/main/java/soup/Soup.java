@@ -49,7 +49,11 @@ public class Soup implements iSoup {
 		for (int x = lIdvmMidPos.x - 1; x <= lIdvmMidPos.x + 2; x++) {
 			for (int y = lIdvmMidPos.y - 1; y <= lIdvmMidPos.y + 2; y++) {
 				if (!lIdvmPosList.contains(new Pos(x, y)))
-					mBlockGrid.setBlock(new Pos(x, y), null);
+					try {
+						mBlockGrid.setBlock(new Pos(x, y), null);
+					} catch (ExOutOfGrid e) {
+						e.printStackTrace();
+					}
 			}
 		}
 	}
@@ -71,11 +75,19 @@ public class Soup implements iSoup {
 	public void refreshBlocks() {
 		mBlockGrid.clearBlocks();
 		for (iBlock iBlock : mAllBlocks) {
-			mBlockGrid.setBlock(iBlock.getPos(), iBlock);
+			try {
+				mBlockGrid.setBlock(iBlock.getPos(), iBlock);
+			} catch (ExOutOfGrid e) {
+				e.printStackTrace();
+			}
 		}
 		mIdvm.detectCollisions();
 		for (iBlock iBlock : mIdvm.getUsedBlocks())
-			mBlockGrid.setBlock(iBlock.getPos(), iBlock);
+			try {
+				mBlockGrid.setBlock(iBlock.getPos(), iBlock);
+			} catch (ExOutOfGrid e) {
+				e.printStackTrace();
+			}
 	}
 
 	public void step() {

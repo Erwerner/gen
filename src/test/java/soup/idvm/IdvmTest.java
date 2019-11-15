@@ -318,7 +318,7 @@ public class IdvmTest {
 	}
 
 	@Test
-	public void stateIsFOODWhenFoodIsDetected() {
+	public void stateIsFOODWhenFoodIsDetected() throws ExOutOfGrid {
 		assertHasCell(true, BlockType.SENSOR, 1, 0, cStartPosX + 1, cStartPosY);
 		mBlockGrid.setBlock(new Pos(cStartPosX + 2, cStartPosY - 1), new Food());
 		assertEquals(IdvmState.FOOD, cut.getState());
@@ -330,7 +330,7 @@ public class IdvmTest {
 	}
 
 	@Test
-	public void targetIsRight() {
+	public void targetIsRight() throws ExOutOfGrid {
 		assertHasCell(true, BlockType.SENSOR, 1, 0, cStartPosX + 1, cStartPosY);
 		mBlockGrid.setBlock(new Pos(cStartPosX + 2, cStartPosY), new Food());
 		assertEquals(IdvmState.FOOD, cut.getState());
