@@ -70,7 +70,7 @@ public class ModelMonitorIdvm extends Model implements iPresentSoup,
 		mCellGrow[4] = new IdvmCell(BlockType.MOVE, new Pos(0, 2));
 		mCellGrow[5] = new IdvmCell(BlockType.SENSOR, new Pos(-1, -1));
 		mCellGrow[5] = new IdvmCell(BlockType.SENSOR, new Pos(2, 2));
-
+		//TODO initGenome;
 		Genome mGenome = new Genome();
 		for (IdvmCell iCell : mCellGrow) {
 			mGenome.cell.add(new IdvmCell(iCell.getBlockType(), iCell

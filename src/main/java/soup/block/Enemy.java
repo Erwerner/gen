@@ -29,7 +29,8 @@ public class Enemy extends Block {
 	}
 
 	private void setRandomDirection() {
-		Direction[] lDirections = {Direction.UP,Direction.DOWN,Direction.LEFT,Direction.RIGHT,};
+		Direction[] lDirections = { Direction.UP, Direction.DOWN,
+				Direction.LEFT, Direction.RIGHT, };
 		int rnd = new Random().nextInt(lDirections.length);
 		mCurrentDirection = lDirections[rnd];
 	}

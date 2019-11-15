@@ -47,12 +47,15 @@ public class Idvm implements iIdvm {
 	}
 
 	private void addaptMovementSequence(IdvmState pState, Genome pGenome) {
+		//TODO more dynamic
 		ArrayList<MoveProbability> lMoveProbability = (ArrayList<MoveProbability>) pGenome.movementSequences
 				.get(pState).clone();
 		mMovementSequences.put(pState, new MovementSequence(lMoveProbability));
 	}
 
 	private void grow() {
+		if (mCellGrow.size() == 0)
+			return;
 		IdvmCell lCell = mCellGrow.get(0);
 		mCellGrow.remove(0);
 		Pos lPos = lCell.getPosOnIdvm();

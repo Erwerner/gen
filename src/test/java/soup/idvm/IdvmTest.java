@@ -59,6 +59,7 @@ public class IdvmTest {
 		lIdlelMoveProbability.add(new MoveProbability(0, 0, 1, 0));
 		lIdlelMoveProbability.add(new MoveProbability(0, 1, 0, 0));
 		mGenome.movementSequences.put(IdvmState.IDLE, lIdlelMoveProbability);
+		mGenome.movementSequences.put(IdvmState.FOOD, lIdlelMoveProbability);
 
 		mGenome.hunger = 50;
 
@@ -127,7 +128,7 @@ public class IdvmTest {
 		cut.killCell(new Pos(cStartPosX, cStartPosY));
 
 		assertHasGrowCellOnPosDiff(false, 0, 0, 0);
-		assertHasCell(true, BlockType.NOTHING, 0, 0, cStartPosX, cStartPosY);
+		assertNull(mBlockGrid.getBlock(new Pos(cStartPosX, cStartPosY)));
 	}
 
 	private void assertHasGrowCellOnPosDiff(Boolean pAssert, int lIdx,
@@ -227,8 +228,7 @@ public class IdvmTest {
 		assertHasGrowCellOnPosDiff(false, lIdxKillCell, 0, 0);
 		IdvmCell lGrowCell = mCellGrow[lIdxKillCell];
 		Pos lSoupPos = getSoupPosFromGrowCell(lIdxKillCell);
-		assertHasCell(true, BlockType.NOTHING, lGrowCell.getPosOnIdvm().x,
-				lGrowCell.getPosOnIdvm().y, lSoupPos.x, lSoupPos.y);
+		assertNull(mBlockGrid.getBlock(new Pos(lSoupPos.x, lSoupPos.y)));
 	}
 
 	private Pos getSoupPosFromGrowCell(int pIdx) {
@@ -334,5 +334,11 @@ public class IdvmTest {
 		mBlockGrid.setBlock(new Pos(cStartPosX + 2, cStartPosY), new Food());
 		assertEquals(IdvmState.FOOD, cut.getState());
 		assertEquals(Direction.RIGHT, cut.getTargetDirection());
+	}
+	
+	@Test
+	public void eatNeverThrows(){
+		for(int i=0;i<100;i++)
+			cut.interactWithFood(new Food());
 	}
 }

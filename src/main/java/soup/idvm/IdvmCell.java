@@ -1,10 +1,9 @@
 package soup.idvm;
 
 import lombok.Data;
-import datatypes.Pos;
 import soup.block.Block;
 import soup.block.BlockType;
-import soup.block.iBlock;
+import datatypes.Pos;
 
 @Data
 public class IdvmCell extends Block {
@@ -41,6 +40,7 @@ public class IdvmCell extends Block {
 				this.mPos.equals(other.mPos) &&
 				this.mPosOnIdvm.equals(other.mPosOnIdvm);
 	}
+
 	public void kill() {
 		mBlockType = BlockType.NOTHING;
 	}

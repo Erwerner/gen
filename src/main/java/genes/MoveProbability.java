@@ -12,6 +12,7 @@ public class MoveProbability {
 	private int mRight;
 	public MoveProbability(int pUp, int pDown, int pLeft, int pRight) {
 		super();
+		//TODO moreDirections;
 		mUp = pUp;
 		mDown = pDown;
 		mLeft = pLeft;
