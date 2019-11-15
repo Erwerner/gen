@@ -127,7 +127,10 @@ public class Idvm implements iIdvm {
 			lTargetDirection = getTargetDirection();
 		MovementSequence lSequence = mMovementSequences.get(lState);
 		Direction lDirection = lSequence.getDirection();
-		move(lDirection, lTargetDirection);
+		try {
+			move(lDirection, lTargetDirection);
+		} catch (ExOutOfGrid e) {
+		}
 	}
 
 	public Direction getTargetDirection() {
@@ -169,7 +172,7 @@ public class Idvm implements iIdvm {
 		}
 	}
 
-	private void move(Direction pDirection, Direction pTarget) {
+	private void move(Direction pDirection, Direction pTarget) throws ExOutOfGrid {
 		switch (pDirection) {
 		case UP:
 		case DOWN:
@@ -181,13 +184,20 @@ public class Idvm implements iIdvm {
 			throw new ExWrongDirection();
 		}
 
-		Pos lNewPos = mMidPosition.getPosFromDirection(pDirection);
+		Direction lDirection = pDirection;
+
+		for (iBlock iBlock : getUsedBlocks()) {
+			iBlock.getPos().getPosFromDirection(lDirection).isInGrid();
+		}
+
+		Pos lNewPos = mMidPosition.getPosFromDirection(lDirection);
 		setPosition(lNewPos);
 		mEnergy--;
 	}
 
 	public iBlock interactWithFood(Food pFood) {
 		eat(pFood);
+		//TODO must erase Food
 		return null;
 	}
 
