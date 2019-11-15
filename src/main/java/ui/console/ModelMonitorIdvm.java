@@ -22,9 +22,9 @@ import soup.idvm.iIdvm;
 import ui.console.monitor.ViewConsoleMonitorIdvm;
 import datatypes.Direction;
 import datatypes.Pos;
+import exceptions.ExWrontPresenterType;
 
-public class ModelMonitorIdvm extends Model implements iPresentSoup,
-		iPresentIdvm, iControllRunSoup {
+public class ModelMonitorIdvm extends Model implements iPresentIdvm, iControllRunSoup {
 
 	iIdvm mIdvm;
 	iSoup mSoup;
@@ -72,8 +72,7 @@ public class ModelMonitorIdvm extends Model implements iPresentSoup,
 		mCellGrow[5] = new IdvmCell(BlockType.SENSOR, new Pos(2, 2));
 		Genome mGenome = new Genome();
 		for (IdvmCell iCell : mCellGrow) {
-			mGenome.cellGrow.add(new IdvmCell(iCell.getBlockType(), iCell
-					.getPosOnIdvm()));
+			mGenome.cellGrow.add(new IdvmCell(iCell.getBlockType(), iCell.getPosOnIdvm()));
 		}
 		ArrayList<MoveProbability> lIdlelMoveProbability = new ArrayList<MoveProbability>();
 		lIdlelMoveProbability.add(new MoveProbability(4, 0, 2, 1));
@@ -99,4 +98,8 @@ public class ModelMonitorIdvm extends Model implements iPresentSoup,
 
 	}
 
+	@Override
+	public <T> Object getPresenter(T pType) {
+		return mSoup;
+	}
 }

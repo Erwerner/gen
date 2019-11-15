@@ -11,6 +11,7 @@ import soup.idvm.iIdvm;
 import datatypes.Constants;
 import datatypes.Pos;
 import exceptions.ExWrongBlockType;
+import mvc.present.iPresentSoup;
 
 public class Soup implements iSoup {
 	private iIdvm mIdvm;
@@ -82,5 +83,9 @@ public class Soup implements iSoup {
 		for (iBlock iBlock : mAllBlocks)
 			iBlock.step();
 		refreshBlocks();
+	}
+
+	public iPresentSoup getPresenter() {
+		return this;
 	}
 }
