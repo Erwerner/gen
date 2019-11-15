@@ -186,6 +186,7 @@ public class Idvm implements iIdvm {
 
 		Direction lDirection = pDirection;
 
+		//TODO not working; write test
 		for (iBlock iBlock : getUsedBlocks()) {
 			iBlock.getPos().getPosFromDirection(lDirection).isInGrid();
 		}
