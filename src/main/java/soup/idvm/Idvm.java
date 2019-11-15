@@ -186,7 +186,7 @@ public class Idvm implements iIdvm {
 
 		Direction lDirection = pDirection;
 
-		//TODO not working; write test
+		//TODO FIX not working; write test
 		for (iBlock iBlock : getUsedBlocks()) {
 			iBlock.getPos().getPosFromDirection(lDirection).isInGrid();
 		}
@@ -198,7 +198,7 @@ public class Idvm implements iIdvm {
 
 	public iBlock interactWithFood(Food pFood) {
 		eat(pFood);
-		//TODO must erase Food
+		//TODO FIX must erase Food
 		return null;
 	}
 

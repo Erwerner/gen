@@ -14,7 +14,7 @@ public class MoveProbability {
 
 	public MoveProbability(int pUp, int pDown, int pLeft, int pRight, int pNothing) {
 		super();
-		// TODO moreDirections;
+		// TODO IMPL moreDirections;
 		mUp = pUp;
 		mDown = pDown;
 		mLeft = pLeft;
@@ -24,7 +24,7 @@ public class MoveProbability {
 
 	public Direction getDirection() {
 		ArrayList<Direction> lPossibleDirection = new ArrayList<Direction>();
-		// TODO dynamic
+		// TODO REF dynamic
 		for (int i = 0; i < mUp; i++)
 			lPossibleDirection.add(Direction.UP);
 		for (int i = 0; i < mDown; i++)
