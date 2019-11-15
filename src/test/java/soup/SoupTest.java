@@ -42,7 +42,7 @@ public class SoupTest {
 					lCount++;
 			}
 		}
-		assertEquals(Constants.foodSupply + 4, lCount);
+		assertEquals(Constants.foodSupply + Constants.enemySupply + 4, lCount);
 	}
 
 }
