@@ -61,6 +61,9 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 		case FOOD:
 			lSearchBlock = BlockType.FOOD;
 			break;
+		case ENEMY:
+			lSearchBlock = BlockType.ENEMY;
+			break;
 		default:
 			throw new ExWrongState();
 		}

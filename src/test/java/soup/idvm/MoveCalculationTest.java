@@ -11,12 +11,16 @@ import org.junit.Test;
 
 import soup.block.BlockGrid;
 import soup.block.BlockType;
+import soup.block.Enemy;
+import soup.block.Food;
 import soup.block.iBlock;
 import soup.block.iBlockGrid;
+import utils.TestMock;
 import datatypes.Constants;
 import datatypes.Direction;
 import datatypes.Pos;
 import exceptions.ExOutOfGrid;
+import genes.Genome;
 import genes.MoveProbability;
 import genes.MovementSequence;
 
@@ -143,5 +147,48 @@ public class MoveCalculationTest {
 		Direction lAct = cut.calcMovingDirection(lMovementSequences,
 				IdvmState.IDLE, Direction.RIGHT);
 		assertEquals(Direction.LEFT, lAct);
+	}
+
+	@Test
+	public void idvmMovesToFood() throws ExOutOfGrid {
+		Pos lFoodPos = new Pos(10,10);
+		mBlockGrid.setBlock(lFoodPos, new Food());
+		
+		HashMap<IdvmState, MovementSequence> lMovementSequences = new HashMap<IdvmState, MovementSequence>();
+		ArrayList<MoveProbability> lMoveList = new ArrayList<MoveProbability>();
+		lMoveList.add(new MoveProbability(0,0,0,0,0,0).setDirection(Direction.TARGET, 1));
+		MovementSequence lMoveSeq = new MovementSequence(lMoveList );
+		lMovementSequences.put(IdvmState.FOOD, lMoveSeq );
+		iIdvm lIdvm = TestMock.getIdvmMock();
+		
+		lIdvm.setBlockGrid(mBlockGrid);
+		Pos lIdvmPos = lFoodPos.getPosFromDirection(Direction.LEFT).getPosFromDirection(Direction.LEFT);
+		lIdvm.setPosition(lIdvmPos);
+		
+		
+		Pos lAct = cut.getMovingPosition(lIdvm, lMovementSequences);
+
+		assertEquals(lIdvmPos.getPosFromDirection(Direction.RIGHT), lAct);
+	}
+	@Test
+	public void idvmMovesAwayFromEnemy() throws ExOutOfGrid {
+		Pos lEnemyPos = new Pos(10,10);
+		mBlockGrid.setBlock(lEnemyPos, new Enemy());
+		
+		HashMap<IdvmState, MovementSequence> lMovementSequences = new HashMap<IdvmState, MovementSequence>();
+		ArrayList<MoveProbability> lMoveList = new ArrayList<MoveProbability>();
+		lMoveList.add(new MoveProbability(0,0,0,0,0,0).setDirection(Direction.TARGET_OPPOSITE, 1));
+		MovementSequence lMoveSeq = new MovementSequence(lMoveList );
+		lMovementSequences.put(IdvmState.ENEMY, lMoveSeq );
+		iIdvm lIdvm = TestMock.getIdvmMock();
+		
+		lIdvm.setBlockGrid(mBlockGrid);
+		Pos lIdvmPos = lEnemyPos.getPosFromDirection(Direction.LEFT).getPosFromDirection(Direction.LEFT);
+		lIdvm.setPosition(lIdvmPos);
+		
+		
+		Pos lAct = cut.getMovingPosition(lIdvm, lMovementSequences);
+
+		assertEquals(lIdvmPos.getPosFromDirection(Direction.LEFT), lAct);
 	}
 }

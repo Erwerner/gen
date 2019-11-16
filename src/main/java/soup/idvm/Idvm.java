@@ -171,6 +171,8 @@ public class Idvm extends Block implements iIdvm {
 		IdvmState lState = IdvmState.IDLE;
 		if (detectSurroundingBlockType(BlockType.FOOD))
 			lState = IdvmState.FOOD;
+		if (detectSurroundingBlockType(BlockType.ENEMY))
+			lState = IdvmState.ENEMY;
 		return lState;
 	}
 
