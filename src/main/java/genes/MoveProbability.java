@@ -7,36 +7,33 @@ import datatypes.Direction;
 
 //TODO 1 IMPL Target Movement
 public class MoveProbability {
-	private int mUp;
-	private int mDown;
-	private int mLeft;
-	private int mRight;
-	private int mNothing;
+	private ArrayList<Direction> mPossibleDirection;
 
-	public MoveProbability(int pUp, int pDown, int pLeft, int pRight, int pNothing) {
-		super();
-		// TODO IMPL moreDirections;
-		mUp = pUp;
-		mDown = pDown;
-		mLeft = pLeft;
-		mRight = pRight;
-		mNothing = pNothing;
+	//TODO Delete Parameter
+	public MoveProbability(int pUp, int pDown, int pLeft, int pRight, int pNothing, int pCurrent) {
+		mPossibleDirection = new ArrayList<Direction>();
+		for (int i = 0; i < pUp; i++)
+			mPossibleDirection.add(Direction.UP);
+		for (int i = 0; i < pDown; i++)
+			mPossibleDirection.add(Direction.DOWN);
+		for (int i = 0; i < pLeft; i++)
+			mPossibleDirection.add(Direction.LEFT);
+		for (int i = 0; i < pRight; i++)
+			mPossibleDirection.add(Direction.RIGHT);
+		for (int i = 0; i < pNothing; i++)
+			mPossibleDirection.add(Direction.NOTHING);
+		mPossibleDirection.clear();
+	}
+
+	public MoveProbability setDirection(Direction pDirection, int pProbability) {
+		for (int i = 0; i < pProbability; i++)
+			mPossibleDirection.add(pDirection);
+		return this;
 	}
 
 	public Direction getDirection() {
-		ArrayList<Direction> lPossibleDirection = new ArrayList<Direction>();
-		// TODO REF dynamic
-		for (int i = 0; i < mUp; i++)
-			lPossibleDirection.add(Direction.UP);
-		for (int i = 0; i < mDown; i++)
-			lPossibleDirection.add(Direction.DOWN);
-		for (int i = 0; i < mLeft; i++)
-			lPossibleDirection.add(Direction.LEFT);
-		for (int i = 0; i < mRight; i++)
-			lPossibleDirection.add(Direction.RIGHT);
-		for (int i = 0; i < mNothing; i++)
-			lPossibleDirection.add(Direction.NOTHING);
-		int rnd = new Random().nextInt(lPossibleDirection.size());
-		return lPossibleDirection.get(rnd);
+		//TODO FIX not empty
+		int rnd = new Random().nextInt(mPossibleDirection.size());
+		return mPossibleDirection.get(rnd);
 	}
 }

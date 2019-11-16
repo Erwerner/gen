@@ -1,6 +1,6 @@
 package datatypes;
 
 public enum Direction {
-	UP, DOWN, LEFT, RIGHT, SAME, NOTHING
+	UP, DOWN, LEFT, RIGHT, SAME, NOTHING, CURRENT
 
 }

@@ -49,7 +49,7 @@ public class IdvmTest {
 		mCellGrow[1] = new IdvmCell(BlockType.SENSOR, new Pos(1, 0));
 		mCellGrow[2] = new IdvmCell(BlockType.MOVE, new Pos(0, 1));
 		mCellGrow[3] = new IdvmCell(BlockType.DEFENCE, new Pos(1, 1));
-		mCellGrow[4] = new IdvmCell(BlockType.MOVE, new Pos(0, 2));
+		mCellGrow[4] = new IdvmCell(BlockType.SENSOR, new Pos(0, 2));
 		mCellGrow[5] = new IdvmCell(BlockType.SENSOR, new Pos(1, 1));
 
 		mGenome = new Genome();
@@ -57,8 +57,8 @@ public class IdvmTest {
 			mGenome.cellGrow.add(new IdvmCell(iCell.getBlockType(), iCell.getPosOnIdvm()));
 		}
 		ArrayList<MoveProbability> lIdlelMoveProbability = new ArrayList<MoveProbability>();
-		lIdlelMoveProbability.add(new MoveProbability(0, 0, 1, 0, 0));
-		lIdlelMoveProbability.add(new MoveProbability(0, 1, 0, 0, 0));
+		lIdlelMoveProbability.add(new MoveProbability(0, 0, 1, 0, 0, 0));
+		lIdlelMoveProbability.add(new MoveProbability(0, 1, 0, 0, 0, 0));
 		mGenome.movementSequences.put(IdvmState.IDLE, lIdlelMoveProbability);
 		mGenome.movementSequences.put(IdvmState.FOOD, lIdlelMoveProbability);
 
@@ -158,12 +158,12 @@ public class IdvmTest {
 
 	@Test
 	public void getsHungry() {
-		mGenome.setHunger(Idvm.cMaxEnergy-10);		
+		mGenome.setHunger(Idvm.cMaxEnergy - 10);
 		cut = new Idvm(mGenome);
 		cut.setBlockGrid(mBlockGrid);
 		cut.setPosition(new Pos(cStartPosX, cStartPosY));
 		assertFalse(cut.isHungry());
-		for (int i = 0; i <= Idvm.cMaxEnergy - mGenome.getHunger() - 1; i=i+2) {
+		for (int i = 0; i <= Idvm.cMaxEnergy - mGenome.getHunger() - 1; i = i +1) {
 			cut.step();
 		}
 		assertFalse(cut.isHungry());
@@ -173,12 +173,12 @@ public class IdvmTest {
 
 	@Test
 	public void aferEatNoHunger() {
-		mGenome.setHunger(Idvm.cMaxEnergy-10);		
+		mGenome.setHunger(Idvm.cMaxEnergy - 10);
 		cut = new Idvm(mGenome);
 		cut.setBlockGrid(mBlockGrid);
 		cut.setPosition(new Pos(cStartPosX, cStartPosY));
 		assertFalse(cut.isHungry());
-		for (int i = 0; i <= Idvm.cMaxEnergy - mGenome.getHunger() - 1; i=i+2) {
+		for (int i = 0; i <= Idvm.cMaxEnergy - mGenome.getHunger() - 1; i = i +1) {
 			cut.step();
 		}
 		assertFalse(cut.isHungry());
@@ -350,10 +350,10 @@ public class IdvmTest {
 		for (int i = 0; i < 100; i++)
 			cut.interactWithFood(new Food());
 	}
-	
+
 	@Test
-	public void initialPosIsCorrect(){
+	public void initialPosIsCorrect() {
 		Pos lPos = cut.getPos();
-		assertEquals(new Pos(cStartPosX,cStartPosY), lPos);
+		assertEquals(new Pos(cStartPosX, cStartPosY), lPos);
 	}
 }
