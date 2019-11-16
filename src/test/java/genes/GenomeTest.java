@@ -11,14 +11,6 @@ public class GenomeTest {
 	public void setUp() throws Exception {
 	}
 
-	@Test
-	public void mutateSetsInitialCells() {
-		cut.mutate();
-		assertNotNull(cut.cellGrow.get(0));
-		assertNotNull(cut.cellGrow.get(1));
-		assertNotNull(cut.cellGrow.get(2));
-		assertNotNull(cut.cellGrow.get(3));
-	}
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void mutateSetsNotMoreThanInitialCells() {
 		cut.mutate();

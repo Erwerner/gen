@@ -5,6 +5,7 @@ import java.util.Random;
 
 import datatypes.Direction;
 
+//TODO make this a gene
 public class MoveProbability {
 	private ArrayList<Direction> mPossibleDirection;
 
