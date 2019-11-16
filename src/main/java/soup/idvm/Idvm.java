@@ -2,7 +2,6 @@ package soup.idvm;
 
 import genes.Genome;
 import genes.MoveProbability;
-import genes.MovementSequence;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +24,7 @@ public class Idvm extends Block implements iIdvm {
 	private Genome mGenomeOrigin;
 	// private Pos mMidPosition = new Pos(0, 0);
 	private IdvmCell[][] mCellGrid = new IdvmCell[4][4];
-	private HashMap<IdvmState, MovementSequence> mMovementSequences = new HashMap<IdvmState, MovementSequence>();
+	private HashMap<IdvmState, ArrayList<MoveProbability>> mMovementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
 	private ArrayList<IdvmCell> mCellGrow;
 	private int mHunger;
 	private iBlockGrid mBlockGrid;
@@ -49,10 +48,11 @@ public class Idvm extends Block implements iIdvm {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void addaptMovementSequence(IdvmState pState, Genome pGenome) {
 		ArrayList<MoveProbability> lMoveProbability = (ArrayList<MoveProbability>) pGenome.movementSequences
 				.get(pState).clone();
-		mMovementSequences.put(pState, new MovementSequence(lMoveProbability));
+		mMovementSequences.put(pState, lMoveProbability);
 	}
 
 	// TODO REF Class Cell Grid
@@ -138,10 +138,10 @@ public class Idvm extends Block implements iIdvm {
 	private void eat(Food pFood) {
 		mEnergy = cMaxEnergy;
 		grow();
-		for (Entry<IdvmState, MovementSequence> iSequence : mMovementSequences
+		for (Entry<IdvmState, ArrayList<MoveProbability>> iSequence : mMovementSequences
 				.entrySet()) {
 			try {
-				iSequence.getValue().mMovementList.remove(0);
+				iSequence.getValue().remove(0);
 			} catch (RuntimeException e) {
 				// Empty Sequence
 			}

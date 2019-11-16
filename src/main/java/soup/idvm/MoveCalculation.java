@@ -14,7 +14,7 @@ import exceptions.ExOutOfGrid;
 import exceptions.ExWrongBlockType;
 import exceptions.ExWrongDirection;
 import exceptions.ExWrongState;
-import genes.MovementSequence;
+import genes.MoveProbability;
 
 public class MoveCalculation implements iIdvmMoveCalculation {
 
@@ -89,7 +89,7 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 	}
 
 	public Pos getMovingPosition(iIdvm pIdvm,
-			HashMap<IdvmState, MovementSequence> pMovementSequences)
+			HashMap<IdvmState, ArrayList<MoveProbability>> pMovementSequences)
 			throws ExOutOfGrid {
 		Direction lTargetDirection = mCurrentDirection;
 		IdvmState lState = pIdvm.getState();
@@ -106,10 +106,10 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 	}
 
 	public Direction calcMovingDirection(
-			HashMap<IdvmState, MovementSequence> pMovementSequences,
+			HashMap<IdvmState, ArrayList<MoveProbability>> pMovementSequences,
 			IdvmState lState, Direction pTargetDirection) {
-		MovementSequence lSequence = pMovementSequences.get(lState);
-		Direction lSequenceDirection = lSequence.mMovementList.get(0).getDirection();
+		ArrayList<MoveProbability> lSequence = pMovementSequences.get(lState);
+		Direction lSequenceDirection = lSequence.get(0).getDirection();
 		Direction lNewDirection = null;
 		switch (lSequenceDirection) {
 		case CURRENT:
