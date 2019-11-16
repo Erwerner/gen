@@ -1,22 +1,21 @@
 package soup.idvm;
 
-import genes.Genome;
-import genes.MoveProbability;
-import genes.MovementSequence;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import datatypes.Direction;
+import datatypes.Pos;
+import exceptions.ExOutOfGrid;
+import genes.Genome;
+import genes.MoveProbability;
+import genes.MovementSequence;
 import soup.block.Block;
 import soup.block.BlockType;
 import soup.block.Enemy;
 import soup.block.Food;
 import soup.block.iBlock;
 import soup.block.iBlockGrid;
-import datatypes.Direction;
-import datatypes.Pos;
-import exceptions.ExOutOfGrid;
 
 public class Idvm extends Block implements iIdvm {
 
@@ -50,8 +49,8 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	private void addaptMovementSequence(IdvmState pState, Genome pGenome) {
-		ArrayList<MoveProbability> lMoveProbability = (ArrayList<MoveProbability>) pGenome.movementSequences
-				.get(pState).clone();
+		ArrayList<MoveProbability> lMoveProbability = (ArrayList<MoveProbability>) pGenome.movementSequences.get(pState)
+				.clone();
 		mMovementSequences.put(pState, new MovementSequence(lMoveProbability));
 	}
 
@@ -98,6 +97,14 @@ public class Idvm extends Block implements iIdvm {
 		}
 	}
 
+	public ArrayList<iBlock> getUsedBlocks(BlockType pBlockType) {
+		ArrayList<iBlock> lBlocks = new ArrayList<iBlock>();
+		for (iBlock iBlock : getUsedBlocks())
+			if (iBlock.getBlockType() == pBlockType)
+				lBlocks.add(iBlock);
+		return lBlocks;
+	}
+
 	public ArrayList<iBlock> getUsedBlocks() {
 		ArrayList<iBlock> lBlocks = new ArrayList<iBlock>();
 		for (IdvmCell[] iRow : mCellGrid) {
@@ -123,23 +130,23 @@ public class Idvm extends Block implements iIdvm {
 	private void eat(Food pFood) {
 		mEnergy = cMaxEnergy;
 		grow();
-		for (Entry<IdvmState, MovementSequence> iSequence : mMovementSequences
-				.entrySet()) {
+		for (Entry<IdvmState, MovementSequence> iSequence : mMovementSequences.entrySet()) {
 			iSequence.getValue().pop();
 		}
 	}
 
 	private void move() {
-		Direction lTargetDirection = null;
-		for (int i = 0; i < 10; i++) {
-			try {
-				Pos lNewPos;
-				lNewPos = mMoveCalculation.getMovingPosition(this,
-						mMovementSequences, lTargetDirection);
-				setPosition(lNewPos);
-				mEnergy--;
-				break;
-			} catch (ExOutOfGrid e) {
+		for (iBlock iCount : getUsedBlocks(BlockType.MOVE)) {
+			Direction lTargetDirection = null;
+			for (int i = 0; i < 10; i++) {
+				try {
+					Pos lNewPos;
+					lNewPos = mMoveCalculation.getMovingPosition(this, mMovementSequences, lTargetDirection);
+					setPosition(lNewPos);
+					mEnergy--;
+					break;
+				} catch (ExOutOfGrid e) {
+				}
 			}
 		}
 	}
@@ -165,8 +172,7 @@ public class Idvm extends Block implements iIdvm {
 			try {
 				lPos.isInGrid();
 				iBlock lGridBlock = mBlockGrid.getBlock(lPos);
-				if (lGridBlock != null
-						&& lGridBlock.getBlockType() == BlockType.FOOD)
+				if (lGridBlock != null && lGridBlock.getBlockType() == BlockType.FOOD)
 					return true;
 			} catch (ExOutOfGrid e) {
 			}
@@ -183,8 +189,7 @@ public class Idvm extends Block implements iIdvm {
 						int lCellX = iCell.getPos().x;
 						int lCellY = iCell.getPos().y;
 						lDetectedPos.put(new Pos(lCellX + x, lCellY + y),
-								(Sensor) new Sensor().setPosition(iCell
-										.getPos()));
+								(Sensor) new Sensor().setPosition(iCell.getPos()));
 					}
 				}
 			}
@@ -229,8 +234,7 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	public Direction getTargetDirection() {
-		return mMoveCalculation
-				.getTargetDirection(getState(), getDetectedPos());
+		return mMoveCalculation.getTargetDirection(getState(), getDetectedPos());
 	}
 
 	public int getEnergyCount() {

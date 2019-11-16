@@ -41,7 +41,7 @@ public class ViewConsoleMonitorIdvm extends View {
 		Pos lIdvMidPos = mIdvm.getPos();
 		for (int y = lIdvMidPos.y - cViewSize; y < lIdvMidPos.y + cViewSize; y++) {
 			String lGridLine = "";
-			for (int x = lIdvMidPos.x - cViewSize; x < lIdvMidPos.x + cViewSize; x++) {
+			for (int x = lIdvMidPos.x - cViewSize; x < lIdvMidPos.x + cViewSize*2; x++) {
 				String lBlockChar;
 				try {
 					new Pos(x, y).isInGrid();
@@ -69,9 +69,9 @@ public class ViewConsoleMonitorIdvm extends View {
 	private String getPixel(iBlock pBlock) {
 		switch (pBlock.getBlockType()) {
 		case FOOD:
-			return "¥";
-		case ENEMY:
 			return "©";
+		case ENEMY:
+			return "Σ";
 		case LIFE:
 			return "▓";
 		case SENSOR:
