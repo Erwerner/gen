@@ -186,7 +186,7 @@ public class Idvm implements iIdvm {
 
 		Direction lDirection = pDirection;
 
-		//TODO FIX not working; write test
+		// TODO FIX not working; write test
 		for (iBlock iBlock : getUsedBlocks()) {
 			iBlock.getPos().getPosFromDirection(lDirection).isInGrid();
 		}
@@ -198,7 +198,7 @@ public class Idvm implements iIdvm {
 
 	public iBlock interactWithFood(Food pFood) {
 		eat(pFood);
-		//TODO FIX must erase Food
+		// TODO FIX must erase Food
 		return null;
 	}
 
@@ -254,7 +254,6 @@ public class Idvm implements iIdvm {
 	}
 
 	public void detectCollisions() {
-		iBlock lInteractedBlock = null;
 		ArrayList<Pos> lIdvmPos = new ArrayList<Pos>();
 		for (iBlock iBlock : getUsedBlocks()) {
 			lIdvmPos.add(iBlock.getPos());
@@ -263,19 +262,21 @@ public class Idvm implements iIdvm {
 			iBlock lGridBlock;
 			try {
 				lGridBlock = mBlockGrid.getBlock(iPos);
+				iBlock lInteractedBlock;
 				if (lGridBlock != null) {
 					switch (lGridBlock.getBlockType()) {
 					case FOOD:
 						lInteractedBlock = interactWithFood((Food) lGridBlock);
-						mBlockGrid.setBlock(iPos, lInteractedBlock);
 						break;
 					case ENEMY:
 						lInteractedBlock = interactWithEnemy((Enemy) lGridBlock);
-						mBlockGrid.setBlock(iPos, lInteractedBlock);
 						break;
 					default:
+						lInteractedBlock = lGridBlock;
 						break;
 					}
+					//if (lInteractedBlock != lGridBlock)
+						//lInteractedBlock.setNull();
 				}
 			} catch (ExOutOfGrid e) {
 			}
