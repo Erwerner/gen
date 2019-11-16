@@ -19,7 +19,7 @@ public class Genome implements iGene{
 	public ArrayList<IdvmCell> cellGrow = new ArrayList<IdvmCell>();
 	public HashMap<IdvmState, ArrayList<MoveProbability>> movementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
 
-	//TODO 1 IMPL Randomize Genome
+	//TODO 2 IMPL Randomize Genome
 	public void mutate() {
 		for (Gene iGene : mGenes) {
 			iGene.mutate();

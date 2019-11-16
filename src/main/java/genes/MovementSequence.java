@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import datatypes.Direction;
 
+//TODO REF Delete
 public class MovementSequence {
 
 	private ArrayList<MoveProbability> mMovementList;

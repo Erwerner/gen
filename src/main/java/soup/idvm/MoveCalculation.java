@@ -50,6 +50,7 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 		return lNewPos;
 	}
 
+	// TODO REF Sensor Class
 	public Direction getTargetDirection(IdvmState pState,
 			HashMap<Pos, Sensor> pDetectedPos) {
 		BlockType lSearchBlock;
@@ -82,14 +83,16 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 	}
 
 	public Pos getMovingPosition(iIdvm pIdvm,
-			HashMap<IdvmState, MovementSequence> pMovementSequences,
-			Direction pTargetDirection) throws ExOutOfGrid {
-		Direction lTargetDirection;
+			HashMap<IdvmState, MovementSequence> pMovementSequences)
+			throws ExOutOfGrid {
+		Direction lTargetDirection = mCurrentDirection;
 		IdvmState lState = pIdvm.getState();
-		if (lState != IdvmState.IDLE)
+		if (lState != IdvmState.IDLE) {
 			lTargetDirection = getTargetDirection(lState,
 					pIdvm.getDetectedPos());
-		Direction lDirection = calcMovingDirection(pMovementSequences, lState);
+		}
+		Direction lDirection = calcMovingDirection(pMovementSequences, lState,
+				lTargetDirection);
 
 		Pos lNewPos = calcPosFromDirection(lDirection, pIdvm.getPos(),
 				pIdvm.getUsedBlocks());
@@ -98,14 +101,14 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 
 	private Direction calcMovingDirection(
 			HashMap<IdvmState, MovementSequence> pMovementSequences,
-			IdvmState lState) {
+			IdvmState lState, Direction pTargetDirection) {
 		MovementSequence lSequence = pMovementSequences.get(lState);
 		Direction lDirection = lSequence.getDirection();
 		switch (lDirection) {
 		case CURRENT:
 			return mCurrentDirection;
 
-			// TODO Calc for target
+			// TODO 1 IMPL Calc for target
 		default:
 			break;
 		}

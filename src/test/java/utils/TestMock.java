@@ -1,17 +1,16 @@
 package utils;
 
-import genes.GeneInt;
 import genes.Genome;
 import genes.MoveProbability;
 
 import java.util.ArrayList;
 
-import datatypes.Pos;
 import soup.block.BlockType;
 import soup.idvm.Idvm;
 import soup.idvm.IdvmCell;
 import soup.idvm.IdvmState;
 import soup.idvm.iIdvm;
+import datatypes.Pos;
 
 public class TestMock {
 	public static iIdvm getIdvmMock() {

@@ -8,7 +8,6 @@ import soup.block.Enemy;
 import soup.block.Food;
 import soup.block.iBlock;
 import soup.block.iBlockGrid;
-import datatypes.Direction;
 import datatypes.Pos;
 
 public interface iIdvm extends iBlock, iPresentIdvm {
@@ -25,7 +24,7 @@ public interface iIdvm extends iBlock, iPresentIdvm {
 
 	IdvmState getState();
 
-	//Direction getTargetDirection();
+	// Direction getTargetDirection();
 
 	void setBlockGrid(iBlockGrid pBlockGrid);
 

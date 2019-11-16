@@ -48,7 +48,7 @@ public class PosTest {
 	@Test(expected = ExOutOfGrid.class)
 	public void stopsAtBorderLeft() throws ExOutOfGrid{
 		cut = new Pos(0,cStartY);
-		Pos lActPos = cut.getPosFromDirection(Direction.LEFT);
+		cut.getPosFromDirection(Direction.LEFT);
 	}
 	@Test(expected = ExOutOfGrid.class)
 	public void stopsAtBorderRight() throws ExOutOfGrid{

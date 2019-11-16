@@ -9,7 +9,7 @@ import datatypes.Direction;
 public class MoveProbability {
 	private ArrayList<Direction> mPossibleDirection;
 
-	//TODO Delete Parameter
+	//TODO REF Delete Parameter
 	public MoveProbability(int pUp, int pDown, int pLeft, int pRight, int pNothing, int pCurrent) {
 		mPossibleDirection = new ArrayList<Direction>();
 		for (int i = 0; i < pUp; i++)
