@@ -22,7 +22,7 @@ public class Idvm extends Block implements iIdvm {
 
 	@SuppressWarnings("unused")
 	private Genome mGenomeOrigin;
-	//private Pos mMidPosition = new Pos(0, 0);
+	// private Pos mMidPosition = new Pos(0, 0);
 	private IdvmCell[][] mCellGrid = new IdvmCell[4][4];
 	private HashMap<IdvmState, MovementSequence> mMovementSequences = new HashMap<IdvmState, MovementSequence>();
 	private ArrayList<IdvmCell> mCellGrow;
@@ -34,7 +34,7 @@ public class Idvm extends Block implements iIdvm {
 
 	public Idvm(Genome pGenome) {
 		super(BlockType.IDVM);
-		mPos = new Pos(0,0);
+		mPos = new Pos(0, 0);
 		mGenomeOrigin = pGenome;
 		mCellGrow = pGenome.cellGrow;
 		mHunger = pGenome.getHunger();
@@ -92,8 +92,7 @@ public class Idvm extends Block implements iIdvm {
 	private void refreshCellPos(int pCellX, int pCellY) {
 		IdvmCell lCell = mCellGrid[pCellX][pCellY];
 		if (lCell != null) {
-			Pos lNewPos = new Pos(mPos.x - 1 + pCellX, mPos.y
-					- 1 + pCellY);
+			Pos lNewPos = new Pos(mPos.x - 1 + pCellX, mPos.y - 1 + pCellY);
 			lCell.setPosition(lNewPos);
 		}
 	}
@@ -116,10 +115,7 @@ public class Idvm extends Block implements iIdvm {
 
 	public void step() {
 		mStepCount++;
-		try {
-			move();
-		} catch (ExOutOfGrid e) {
-		}
+		move();
 	}
 
 	private void eat(Food pFood) {
@@ -131,13 +127,19 @@ public class Idvm extends Block implements iIdvm {
 		}
 	}
 
-	private void move() throws ExOutOfGrid {
-		//TODO IMPL at border new direction
+	private void move() {
 		Direction lTargetDirection = null;
-		Pos lNewPos = mMoveCalculation.getMovingPosition(this,
-				mMovementSequences, lTargetDirection);
-		setPosition(lNewPos);
-		mEnergy--;
+		for (int i = 0; i < 10; i++){
+			try {
+				Pos lNewPos;
+				lNewPos = mMoveCalculation.getMovingPosition(this,
+						mMovementSequences, lTargetDirection);
+				setPosition(lNewPos);
+				mEnergy--;
+				break;
+			} catch (ExOutOfGrid e) {
+			}
+		}
 	}
 
 	public void interactWithFood(Food pFood) {
