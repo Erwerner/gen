@@ -5,7 +5,6 @@ import java.util.Random;
 
 import datatypes.Direction;
 
-//TODO 1 IMPL Target Movement
 public class MoveProbability {
 	private ArrayList<Direction> mPossibleDirection;
 

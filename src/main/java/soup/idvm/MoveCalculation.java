@@ -11,6 +11,7 @@ import datatypes.Direction;
 import datatypes.Pos;
 import exceptions.ExFailedDetection;
 import exceptions.ExOutOfGrid;
+import exceptions.ExWrongBlockType;
 import exceptions.ExWrongDirection;
 import exceptions.ExWrongState;
 import genes.MovementSequence;
@@ -27,6 +28,7 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 
 	public Pos calcPosFromDirection(Direction pDirection, Pos pIdvmPos,
 			ArrayList<iBlock> pIdvmBlocks) throws ExOutOfGrid {
+		Direction lDirection = pDirection;
 		switch (pDirection) {
 		case UP:
 		case DOWN:
@@ -34,11 +36,12 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 		case RIGHT:
 		case NOTHING:
 			break;
+		case CURRENT:
+			lDirection = mCurrentDirection;
+			break;
 		default:
-			throw new ExWrongDirection();
+			throw new ExWrongDirection(pDirection);
 		}
-
-		Direction lDirection = pDirection;
 
 		for (iBlock iBlock : pIdvmBlocks) {
 			Pos lPosFromDirection = iBlock.getPos().getPosFromDirection(
@@ -82,7 +85,7 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 			} catch (ExOutOfGrid e) {
 			}
 		}
-		throw new ExWrongDirection();
+		throw new ExWrongBlockType();
 	}
 
 	public Pos getMovingPosition(iIdvm pIdvm,
@@ -106,36 +109,53 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 			HashMap<IdvmState, MovementSequence> pMovementSequences,
 			IdvmState lState, Direction pTargetDirection) {
 		MovementSequence lSequence = pMovementSequences.get(lState);
-		Direction lDirection = lSequence.getDirection();
-		switch (lDirection) {
+		Direction lSequenceDirection = lSequence.getDirection();
+		Direction lNewDirection = null;
+		switch (lSequenceDirection) {
 		case CURRENT:
 			return mCurrentDirection;
 		case CURRENT_OPPOSITE:
-			lDirection = mCurrentDirection.opposite();
+			lNewDirection = mCurrentDirection.opposite();
 			break;
 		case CURRENT_SITE1:
-			lDirection = mCurrentDirection.site1();
+			lNewDirection = mCurrentDirection.site1();
 			break;
 		case CURRENT_SITE2:
-			lDirection = mCurrentDirection.site2();
+			lNewDirection = mCurrentDirection.site2();
 			break;
 		case TARGET:
-			lDirection = pTargetDirection;
+			lNewDirection = pTargetDirection;
 			break;
 		case TARGET_OPPOSITE:
-			lDirection = pTargetDirection.opposite();
+			lNewDirection = pTargetDirection.opposite();
 			break;
 		case TARGET_SITE1:
-			lDirection = pTargetDirection.site2();
+			lNewDirection = pTargetDirection.site2();
 			break;
 		case TARGET_SITE2:
-			lDirection = pTargetDirection.site2();
+			lNewDirection = pTargetDirection.site2();
 			break;
 		default:
+			lNewDirection = lSequenceDirection;
 			break;
 		}
-		mCurrentDirection = lDirection;
-		return lDirection;
+		setCurrentDirection(lNewDirection);
+		return lNewDirection;
+	}
+
+	private void setCurrentDirection(Direction pDirection) {
+		switch (pDirection) {
+		case UP:
+		case DOWN:
+		case RIGHT:
+		case LEFT:
+		case NOTHING:
+			break;
+
+		default:
+			throw new ExWrongDirection(pDirection);
+		}
+		mCurrentDirection = pDirection;
 	}
 
 }

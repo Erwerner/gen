@@ -29,7 +29,7 @@ public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 		IdvmCell[] mCellGrow = new IdvmCell[6];
 		mCellGrow[0] = new IdvmCell(BlockType.LIFE, new Pos(0, 0));
 		mCellGrow[1] = new IdvmCell(BlockType.SENSOR, new Pos(1, 0));
-		mCellGrow[2] = new IdvmCell(BlockType.SENSOR, new Pos(0, 1));
+		mCellGrow[2] = new IdvmCell(BlockType.MOVE, new Pos(0, 1));
 		mCellGrow[3] = new IdvmCell(BlockType.MOVE, new Pos(1, 1));
 		mCellGrow[5] = new IdvmCell(BlockType.SENSOR, new Pos(0, -1));
 		mCellGrow[4] = new IdvmCell(BlockType.SENSOR, new Pos(-1, 0));

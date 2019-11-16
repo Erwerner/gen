@@ -3,10 +3,16 @@ package datatypes;
 import exceptions.ExWrongDirection;
 
 public enum Direction {
-	UP, DOWN, LEFT, RIGHT, SAME, NOTHING, CURRENT, TARGET, CURRENT_OPPOSITE, TARGET_OPPOSITE, TARGET_SITE2, CURRENT_SITE1, TARGET_SITE1, CURRENT_SITE2;
+	UP, DOWN, LEFT, RIGHT, 
+	NOTHING, 
+	CURRENT,
+	CURRENT_OPPOSITE, CURRENT_SITE1, CURRENT_SITE2,
+	TARGET, TARGET_OPPOSITE, TARGET_SITE1, TARGET_SITE2;
 
 	public Direction opposite() {
 		switch (this) {
+		case NOTHING:
+			return NOTHING;
 		case UP:
 			return DOWN;
 		case DOWN:
@@ -16,12 +22,14 @@ public enum Direction {
 		case RIGHT:
 			return LEFT;
 		default:
-			throw new ExWrongDirection();
+			throw new ExWrongDirection(this);
 		}
 	}
 
 	public Direction site2() {
 		switch (this) {
+		case NOTHING:
+			return NOTHING;
 		case UP:
 			return RIGHT;
 		case DOWN:
@@ -31,11 +39,13 @@ public enum Direction {
 		case RIGHT:
 			return DOWN;
 		default:
-			throw new ExWrongDirection();
+			throw new ExWrongDirection(this);
 		}
 	}
 	public Direction site1() {
 		switch (this) {
+		case NOTHING:
+			return NOTHING;
 		case UP:
 			return LEFT;
 		case DOWN:
@@ -45,7 +55,7 @@ public enum Direction {
 		case RIGHT:
 			return UP;
 		default:
-			throw new ExWrongDirection();
+			throw new ExWrongDirection(this);
 		}
 	}
 }

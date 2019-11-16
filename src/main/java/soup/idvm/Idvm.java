@@ -129,6 +129,7 @@ public class Idvm extends Block implements iIdvm {
 
 	public void step() {
 		mStepCount++;
+		if(mStepCount % 2==0)return;
 		mEnergy--;
 		move();
 	}
