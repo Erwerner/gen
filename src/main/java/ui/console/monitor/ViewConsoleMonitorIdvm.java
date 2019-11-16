@@ -69,17 +69,17 @@ public class ViewConsoleMonitorIdvm extends View {
 	private String getPixel(iBlock pBlock) {
 		switch (pBlock.getBlockType()) {
 		case FOOD:
-			return "O";
+			return "¥";
 		case ENEMY:
-			return "#";
+			return "©";
 		case LIFE:
-			return "L";
+			return "▓";
 		case SENSOR:
-			return "S";
+			return "▒";
 		case MOVE:
-			return "M";
+			return "▒";
 		case DEFENCE:
-			return "D";
+			return "▒";
 		default:
 			return "?";
 		}

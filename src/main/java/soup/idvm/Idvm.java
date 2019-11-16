@@ -20,6 +20,7 @@ import exceptions.ExOutOfGrid;
 
 public class Idvm extends Block implements iIdvm {
 
+	public static final int cMaxEnergy = 240;
 	@SuppressWarnings("unused")
 	private Genome mGenomeOrigin;
 	// private Pos mMidPosition = new Pos(0, 0);
@@ -29,7 +30,7 @@ public class Idvm extends Block implements iIdvm {
 	private int mHunger;
 	private iBlockGrid mBlockGrid;
 	private int mStepCount;
-	private int mEnergy = 100;
+	private int mEnergy = cMaxEnergy;
 	private iIdvmMoveCalculation mMoveCalculation;
 
 	public Idvm(Genome pGenome) {
@@ -115,11 +116,12 @@ public class Idvm extends Block implements iIdvm {
 
 	public void step() {
 		mStepCount++;
+		mEnergy--;
 		move();
 	}
 
 	private void eat(Food pFood) {
-		mEnergy = 100;
+		mEnergy = cMaxEnergy;
 		grow();
 		for (Entry<IdvmState, MovementSequence> iSequence : mMovementSequences
 				.entrySet()) {
