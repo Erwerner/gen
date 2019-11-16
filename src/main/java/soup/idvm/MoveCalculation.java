@@ -109,7 +109,7 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 			HashMap<IdvmState, MovementSequence> pMovementSequences,
 			IdvmState lState, Direction pTargetDirection) {
 		MovementSequence lSequence = pMovementSequences.get(lState);
-		Direction lSequenceDirection = lSequence.getDirection();
+		Direction lSequenceDirection = lSequence.mMovementList.get(0).getDirection();
 		Direction lNewDirection = null;
 		switch (lSequenceDirection) {
 		case CURRENT:

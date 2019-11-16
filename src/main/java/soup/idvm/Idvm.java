@@ -55,7 +55,7 @@ public class Idvm extends Block implements iIdvm {
 		mMovementSequences.put(pState, new MovementSequence(lMoveProbability));
 	}
 
-	//TODO REF Class Cell Grid
+	// TODO REF Class Cell Grid
 	private void grow() {
 		if (mCellGrow.size() == 0)
 			return;
@@ -91,7 +91,7 @@ public class Idvm extends Block implements iIdvm {
 		return this;
 	}
 
-	//TODO REF Class Cell Grid
+	// TODO REF Class Cell Grid
 	private void refreshCellPos(int pCellX, int pCellY) {
 		IdvmCell lCell = mCellGrid[pCellX][pCellY];
 		if (lCell != null) {
@@ -100,7 +100,7 @@ public class Idvm extends Block implements iIdvm {
 		}
 	}
 
-	//TODO REF Class Cell Grid
+	// TODO REF Class Cell Grid
 	public ArrayList<iBlock> getUsedBlocks(BlockType pBlockType) {
 		ArrayList<iBlock> lBlocks = new ArrayList<iBlock>();
 		for (iBlock iBlock : getUsedBlocks())
@@ -109,7 +109,7 @@ public class Idvm extends Block implements iIdvm {
 		return lBlocks;
 	}
 
-	//TODO REF Class Cell Grid
+	// TODO REF Class Cell Grid
 	public ArrayList<iBlock> getUsedBlocks() {
 		ArrayList<iBlock> lBlocks = new ArrayList<iBlock>();
 		for (IdvmCell[] iRow : mCellGrid) {
@@ -122,14 +122,15 @@ public class Idvm extends Block implements iIdvm {
 		return lBlocks;
 	}
 
-	//TODO REF Class Cell Grid
+	// TODO REF Class Cell Grid
 	public void killCell(Pos pPos) {
 		mCellGrid[pPos.x - mPos.x + 1][pPos.y - mPos.y + 1] = null;
 	}
 
 	public void step() {
 		mStepCount++;
-		if(mStepCount % 2==0)return;
+		if (mStepCount % 2 == 0)
+			return;
 		mEnergy--;
 		move();
 	}
@@ -139,7 +140,11 @@ public class Idvm extends Block implements iIdvm {
 		grow();
 		for (Entry<IdvmState, MovementSequence> iSequence : mMovementSequences
 				.entrySet()) {
-			iSequence.getValue().pop();
+			try {
+				iSequence.getValue().mMovementList.remove(0);
+			} catch (RuntimeException e) {
+				// Empty Sequence
+			}
 		}
 	}
 
@@ -218,7 +223,7 @@ public class Idvm extends Block implements iIdvm {
 		return mStepCount;
 	}
 
-	//TODO REF Class Cell Grid
+	// TODO REF Class Cell Grid
 	public void detectCollisions() {
 		ArrayList<Pos> lIdvmPos = new ArrayList<Pos>();
 		for (iBlock iBlock : getUsedBlocks()) {
