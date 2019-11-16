@@ -55,8 +55,14 @@ public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 		System.out.println("start");
 		notifyViews();
 		while (mIdvm.isAlive()) {
-			mSoup.step();
-			notifyViews();
+			try {
+				Thread.sleep(180);
+				mSoup.step();
+				notifyViews();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		System.out.println("stop");
 

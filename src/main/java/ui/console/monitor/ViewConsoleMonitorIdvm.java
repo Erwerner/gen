@@ -33,8 +33,8 @@ public class ViewConsoleMonitorIdvm extends View {
 
 	public void update() {
 		clearScreen();
-		printStats();
 		printGrid();
+		printStats();
 	}
 
 	private void printGrid() {
@@ -52,11 +52,6 @@ public class ViewConsoleMonitorIdvm extends View {
 				lGridLine = lGridLine + lBlockChar;
 			}
 			System.out.println(lGridLine);
-		}
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -96,11 +91,20 @@ public class ViewConsoleMonitorIdvm extends View {
 		System.out.print(" State: " + mIdvm.getState());
 		System.out.print(" Pos: " + mIdvm.getPos());
 		System.out.println();
+		for(int x = 1; x<=mIdvm.getEnergyCount();x++)
+			System.out.print("*");
+		System.out.println();
 	}
 
 	private void clearScreen() {
 		try {
 			Runtime.getRuntime().exec("clear");
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

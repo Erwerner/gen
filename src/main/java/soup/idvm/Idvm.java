@@ -227,4 +227,8 @@ public class Idvm extends Block implements iIdvm {
 		return mMoveCalculation
 				.getTargetDirection(getState(), getDetectedPos());
 	}
+
+	public int getEnergyCount() {
+		return mEnergy;
+	}
 }
