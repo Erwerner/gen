@@ -11,13 +11,15 @@ import datatypes.Direction;
 import datatypes.Pos;
 import exceptions.ExFailedDetection;
 import exceptions.ExOutOfGrid;
+import exceptions.ExWrongBlockType;
 import exceptions.ExWrongDirection;
 import exceptions.ExWrongState;
-import genes.MovementSequence;
+import genes.MoveProbability;
 
 public class MoveCalculation implements iIdvmMoveCalculation {
 
 	private iBlockGrid mBlockGrid;
+	private Direction mCurrentDirection = Direction.UP;
 
 	public MoveCalculation(iBlockGrid pBlockGrid) {
 		super();
@@ -26,6 +28,7 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 
 	public Pos calcPosFromDirection(Direction pDirection, Pos pIdvmPos,
 			ArrayList<iBlock> pIdvmBlocks) throws ExOutOfGrid {
+		Direction lDirection = pDirection;
 		switch (pDirection) {
 		case UP:
 		case DOWN:
@@ -33,14 +36,16 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 		case RIGHT:
 		case NOTHING:
 			break;
+		case CURRENT:
+			lDirection = mCurrentDirection;
+			break;
 		default:
-			throw new ExWrongDirection();
+			throw new ExWrongDirection(pDirection);
 		}
 
-		Direction lDirection = pDirection;
-
 		for (iBlock iBlock : pIdvmBlocks) {
-			Pos lPosFromDirection = iBlock.getPos().getPosFromDirection(lDirection);
+			Pos lPosFromDirection = iBlock.getPos().getPosFromDirection(
+					lDirection);
 			lPosFromDirection.isInGrid();
 		}
 
@@ -48,6 +53,7 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 		return lNewPos;
 	}
 
+	// TODO REF Sensor Class
 	public Direction getTargetDirection(IdvmState pState,
 			HashMap<Pos, Sensor> pDetectedPos) {
 		BlockType lSearchBlock;
@@ -57,6 +63,9 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 		switch (pState) {
 		case FOOD:
 			lSearchBlock = BlockType.FOOD;
+			break;
+		case ENEMY:
+			lSearchBlock = BlockType.ENEMY;
 			break;
 		default:
 			throw new ExWrongState();
@@ -76,23 +85,77 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 			} catch (ExOutOfGrid e) {
 			}
 		}
-		throw new ExWrongDirection();
+		throw new ExWrongBlockType();
 	}
 
 	public Pos getMovingPosition(iIdvm pIdvm,
-			HashMap<IdvmState, MovementSequence> pMovementSequences,
-			Direction pTargetDirection) throws ExOutOfGrid {
-		Direction lTargetDirection;
+			HashMap<IdvmState, ArrayList<MoveProbability>> pMovementSequences)
+			throws ExOutOfGrid {
+		Direction lTargetDirection = mCurrentDirection;
 		IdvmState lState = pIdvm.getState();
-		if (lState != IdvmState.IDLE)
+		if (lState != IdvmState.IDLE) {
 			lTargetDirection = getTargetDirection(lState,
 					pIdvm.getDetectedPos());
-		MovementSequence lSequence = pMovementSequences.get(lState);
-		Direction lDirection = lSequence.getDirection();
+		}
+		Direction lDirection = calcMovingDirection(pMovementSequences, lState,
+				lTargetDirection);
 
 		Pos lNewPos = calcPosFromDirection(lDirection, pIdvm.getPos(),
 				pIdvm.getUsedBlocks());
 		return lNewPos;
+	}
+
+	public Direction calcMovingDirection(
+			HashMap<IdvmState, ArrayList<MoveProbability>> pMovementSequences,
+			IdvmState lState, Direction pTargetDirection) {
+		ArrayList<MoveProbability> lSequence = pMovementSequences.get(lState);
+		Direction lSequenceDirection = lSequence.get(0).getDirection();
+		Direction lNewDirection = null;
+		switch (lSequenceDirection) {
+		case CURRENT:
+			return mCurrentDirection;
+		case CURRENT_OPPOSITE:
+			lNewDirection = mCurrentDirection.opposite();
+			break;
+		case CURRENT_SITE1:
+			lNewDirection = mCurrentDirection.site1();
+			break;
+		case CURRENT_SITE2:
+			lNewDirection = mCurrentDirection.site2();
+			break;
+		case TARGET:
+			lNewDirection = pTargetDirection;
+			break;
+		case TARGET_OPPOSITE:
+			lNewDirection = pTargetDirection.opposite();
+			break;
+		case TARGET_SITE1:
+			lNewDirection = pTargetDirection.site2();
+			break;
+		case TARGET_SITE2:
+			lNewDirection = pTargetDirection.site2();
+			break;
+		default:
+			lNewDirection = lSequenceDirection;
+			break;
+		}
+		setCurrentDirection(lNewDirection);
+		return lNewDirection;
+	}
+
+	private void setCurrentDirection(Direction pDirection) {
+		switch (pDirection) {
+		case UP:
+		case DOWN:
+		case RIGHT:
+		case LEFT:
+		case NOTHING:
+			break;
+
+		default:
+			throw new ExWrongDirection(pDirection);
+		}
+		mCurrentDirection = pDirection;
 	}
 
 }

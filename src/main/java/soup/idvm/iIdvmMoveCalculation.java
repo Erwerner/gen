@@ -7,14 +7,21 @@ import soup.block.iBlock;
 import datatypes.Direction;
 import datatypes.Pos;
 import exceptions.ExOutOfGrid;
-import genes.MovementSequence;
+import genes.MoveProbability;
 
 public interface iIdvmMoveCalculation {
-	public Pos calcPosFromDirection(Direction pDirection, Pos pIdvmPos, ArrayList<iBlock> pIdvmBlocks) throws ExOutOfGrid;
+	public Pos calcPosFromDirection(Direction pDirection, Pos pIdvmPos,
+			ArrayList<iBlock> pIdvmBlocks) throws ExOutOfGrid;
 
 	public Direction getTargetDirection(IdvmState pState,
 			HashMap<Pos, Sensor> pDetectedPos);
 
-	public Pos getMovingPosition(iIdvm pIdvm, HashMap<IdvmState, MovementSequence> pMovementSequences, Direction pTargetDirection) throws ExOutOfGrid;
+	public Pos getMovingPosition(iIdvm pIdvm,
+			HashMap<IdvmState, ArrayList<MoveProbability>> pMovementSequences)
+			throws ExOutOfGrid;
+
+	Direction calcMovingDirection(
+			HashMap<IdvmState, ArrayList<MoveProbability>> pMovementSequences,
+			IdvmState pLState, Direction pTargetDirection);
 
 }

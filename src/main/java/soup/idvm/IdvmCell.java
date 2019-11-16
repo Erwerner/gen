@@ -11,6 +11,7 @@ public class IdvmCell extends Block {
 	private Pos mPosOnIdvm;
 	private BlockType mBlockType;
     
+	//TODO 1 make this a gene
 	public IdvmCell(BlockType pCellType, Pos pPos){
 		super(BlockType.CELL);
 		mBlockType = pCellType;
@@ -41,6 +42,7 @@ public class IdvmCell extends Block {
 				this.mPosOnIdvm.equals(other.mPosOnIdvm);
 	}
 
+    //TODO REF check if needed
 	public void kill() {
 		mBlockType = BlockType.NOTHING;
 	}

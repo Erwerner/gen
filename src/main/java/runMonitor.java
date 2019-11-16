@@ -1,4 +1,4 @@
-import ui.console.ModelMonitorIdvm;
+import ui.console.monitor.ModelMonitorIdvm;
 
 public class runMonitor {
 

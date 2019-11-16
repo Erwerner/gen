@@ -8,7 +8,8 @@ public class GeneInt extends Gene implements iGene {
 	private int pMin;
 	private int mValue;
 
-	public void mutate() {
+	public void mutate(Double pMutationRate) {
+		//TODO FIX add mutation rate
 		int lRnd = ThreadLocalRandom.current().nextInt(pMin, pMax + 1);
 		mValue = lRnd;
 	}
@@ -26,6 +27,6 @@ public class GeneInt extends Gene implements iGene {
 
 	public void setValue(int pInt) {
 		mValue = pInt;
-	}
+	} 
 
 }

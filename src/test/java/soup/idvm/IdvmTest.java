@@ -6,6 +6,8 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import genes.Genome;
+import genes.MoveProbability;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,19 +17,16 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import datatypes.Direction;
-import datatypes.Pos;
-import exceptions.ExOutOfGrid;
-import exceptions.ExWrongState;
-import genes.GeneInt;
-import genes.Genome;
-import genes.MoveProbability;
 import soup.block.BlockGrid;
 import soup.block.BlockType;
 import soup.block.Enemy;
 import soup.block.Food;
 import soup.block.iBlock;
 import soup.block.iBlockGrid;
+import datatypes.Direction;
+import datatypes.Pos;
+import exceptions.ExOutOfGrid;
+import exceptions.ExWrongState;
 
 public class IdvmTest {
 	private static final int cStartPosX = 50;
@@ -49,16 +48,17 @@ public class IdvmTest {
 		mCellGrow[1] = new IdvmCell(BlockType.SENSOR, new Pos(1, 0));
 		mCellGrow[2] = new IdvmCell(BlockType.MOVE, new Pos(0, 1));
 		mCellGrow[3] = new IdvmCell(BlockType.DEFENCE, new Pos(1, 1));
-		mCellGrow[4] = new IdvmCell(BlockType.MOVE, new Pos(0, 2));
+		mCellGrow[4] = new IdvmCell(BlockType.SENSOR, new Pos(0, 2));
 		mCellGrow[5] = new IdvmCell(BlockType.SENSOR, new Pos(1, 1));
 
 		mGenome = new Genome();
 		for (IdvmCell iCell : mCellGrow) {
-			mGenome.cellGrow.add(new IdvmCell(iCell.getBlockType(), iCell.getPosOnIdvm()));
+			mGenome.cellGrow.add(new IdvmCell(iCell.getBlockType(), iCell
+					.getPosOnIdvm()));
 		}
 		ArrayList<MoveProbability> lIdlelMoveProbability = new ArrayList<MoveProbability>();
-		lIdlelMoveProbability.add(new MoveProbability(0, 0, 1, 0, 0));
-		lIdlelMoveProbability.add(new MoveProbability(0, 1, 0, 0, 0));
+		lIdlelMoveProbability.add(new MoveProbability(0, 0, 1, 0, 0, 0));
+		lIdlelMoveProbability.add(new MoveProbability(0, 1, 0, 0, 0, 0));
 		mGenome.movementSequences.put(IdvmState.IDLE, lIdlelMoveProbability);
 		mGenome.movementSequences.put(IdvmState.FOOD, lIdlelMoveProbability);
 
@@ -80,7 +80,8 @@ public class IdvmTest {
 		for (int i = 0; i <= 3; i++) {
 			IdvmCell lCell = mCellGrow[i];
 			Pos lPos = lCell.getPosOnIdvm();
-			assertHasCell(true, lCell.getBlockType(), lPos.x, lPos.y, lPos.x + cStartPosX, lPos.y + cStartPosY);
+			assertHasCell(true, lCell.getBlockType(), lPos.x, lPos.y, lPos.x
+					+ cStartPosX, lPos.y + cStartPosY);
 		}
 		assertFalse(lUsedBlocks.contains(lC02));
 		assertHasGrowCellOnPosDiff(false, 4, 0, 0);
@@ -135,9 +136,12 @@ public class IdvmTest {
 		}
 	}
 
-	private void assertHasGrowCellOnPosDiff(Boolean pAssert, int lIdx, int lDiffX, int lDiffY) {
-		assertHasCell(pAssert, mCellGrow[lIdx].getBlockType(), mCellGrow[lIdx].getPosOnIdvm().x,
-				mCellGrow[lIdx].getPosOnIdvm().y, mCellGrow[lIdx].getPosOnIdvm().x + cStartPosX + lDiffX,
+	private void assertHasGrowCellOnPosDiff(Boolean pAssert, int lIdx,
+			int lDiffX, int lDiffY) {
+		assertHasCell(pAssert, mCellGrow[lIdx].getBlockType(),
+				mCellGrow[lIdx].getPosOnIdvm().x,
+				mCellGrow[lIdx].getPosOnIdvm().y,
+				mCellGrow[lIdx].getPosOnIdvm().x + cStartPosX + lDiffX,
 				mCellGrow[lIdx].getPosOnIdvm().y + cStartPosY + lDiffY);
 	}
 
@@ -158,30 +162,34 @@ public class IdvmTest {
 
 	@Test
 	public void getsHungry() {
-		mGenome.setHunger(Idvm.cMaxEnergy-10);		
+		mGenome.setHunger(Idvm.cMaxEnergy - 10);
 		cut = new Idvm(mGenome);
 		cut.setBlockGrid(mBlockGrid);
 		cut.setPosition(new Pos(cStartPosX, cStartPosY));
 		assertFalse(cut.isHungry());
-		for (int i = 0; i <= Idvm.cMaxEnergy - mGenome.getHunger() - 1; i=i+2) {
+		for (int i = 0; i <= Idvm.cMaxEnergy - mGenome.getHunger() - 1; i = i + 1) {
+			cut.step();
 			cut.step();
 		}
 		assertFalse(cut.isHungry());
+		cut.step();
 		cut.step();
 		assertTrue(cut.isHungry());
 	}
 
 	@Test
 	public void aferEatNoHunger() {
-		mGenome.setHunger(Idvm.cMaxEnergy-10);		
+		mGenome.setHunger(Idvm.cMaxEnergy - 10);
 		cut = new Idvm(mGenome);
 		cut.setBlockGrid(mBlockGrid);
 		cut.setPosition(new Pos(cStartPosX, cStartPosY));
 		assertFalse(cut.isHungry());
-		for (int i = 0; i <= Idvm.cMaxEnergy - mGenome.getHunger() - 1; i=i+2) {
+		for (int i = 0; i <= Idvm.cMaxEnergy - mGenome.getHunger() - 1; i = i + 1) {
+			cut.step();
 			cut.step();
 		}
 		assertFalse(cut.isHungry());
+		cut.step();
 		cut.step();
 		assertTrue(cut.isHungry());
 
@@ -247,7 +255,8 @@ public class IdvmTest {
 	private Pos getSoupPosFromGrowCell(int pIdx) {
 		IdvmCell lCell = mCellGrow[pIdx];
 
-		Pos lPos = new Pos(lCell.getPosOnIdvm().x + cStartPosX, lCell.getPosOnIdvm().y + cStartPosY);
+		Pos lPos = new Pos(lCell.getPosOnIdvm().x + cStartPosX,
+				lCell.getPosOnIdvm().y + cStartPosY);
 		return lPos;
 	}
 
@@ -263,7 +272,8 @@ public class IdvmTest {
 		assertEquals(pExpY, pPos.y);
 	}
 
-	private void assertHasCell(Boolean pAssert, BlockType pType, int pCellX, int pCellY, int pPosX, int pPosY) {
+	private void assertHasCell(Boolean pAssert, BlockType pType, int pCellX,
+			int pCellY, int pPosX, int pPosY) {
 		IdvmCell lCell = new IdvmCell(pType, new Pos(pCellX, pCellY));
 		lCell.setPosition(new Pos(pPosX, pPosY));
 		ArrayList<iBlock> lUsedBlocks = cut.getUsedBlocks();
@@ -276,7 +286,8 @@ public class IdvmTest {
 					throw new Exception();
 			}
 		} catch (Exception e) {
-			System.out.println("Searched " + pAssert.toString() + " " + lCell + " in:");
+			System.out.println("Searched " + pAssert.toString() + " " + lCell
+					+ " in:");
 			System.out.println(lUsedBlocks);
 			fail();
 		}
@@ -286,8 +297,10 @@ public class IdvmTest {
 	public void eatChangesDirection() {
 		assertPosition(cStartPosX, cStartPosY, cut.getPos());
 		cut.step();
+		cut.step();
 		assertPosition(cStartPosX - 1, cStartPosY, cut.getPos());
 		cut.interactWithFood(new Food());
+		cut.step();
 		cut.step();
 		assertPosition(cStartPosX - 1, cStartPosY + 1, cut.getPos());
 	}
@@ -296,8 +309,10 @@ public class IdvmTest {
 	public void poppingNeverChangesGenome() {
 		assertPosition(cStartPosX, cStartPosY, cut.getPos());
 		cut.step();
+		cut.step();
 		assertPosition(cStartPosX - 1, cStartPosY, cut.getPos());
 		cut.interactWithFood(new Food());
+		cut.step();
 		cut.step();
 		assertPosition(cStartPosX - 1, cStartPosY + 1, cut.getPos());
 		assertEquals(2, mGenome.movementSequences.get(IdvmState.IDLE).size());
@@ -328,7 +343,8 @@ public class IdvmTest {
 	@Test
 	public void stateIsFOODWhenFoodIsDetected() throws ExOutOfGrid {
 		assertHasCell(true, BlockType.SENSOR, 1, 0, cStartPosX + 1, cStartPosY);
-		mBlockGrid.setBlock(new Pos(cStartPosX + 2, cStartPosY - 1), new Food());
+		mBlockGrid
+				.setBlock(new Pos(cStartPosX + 2, cStartPosY - 1), new Food());
 		assertEquals(IdvmState.FOOD, cut.getState());
 	}
 
@@ -350,10 +366,10 @@ public class IdvmTest {
 		for (int i = 0; i < 100; i++)
 			cut.interactWithFood(new Food());
 	}
-	
+
 	@Test
-	public void initialPosIsCorrect(){
+	public void initialPosIsCorrect() {
 		Pos lPos = cut.getPos();
-		assertEquals(new Pos(cStartPosX,cStartPosY), lPos);
+		assertEquals(new Pos(cStartPosX, cStartPosY), lPos);
 	}
 }

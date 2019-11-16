@@ -44,7 +44,7 @@ public class Pos {
 			lNewPos = new Pos(x, y);
 			break;
 		default:
-			throw new ExWrongDirection();
+			throw new ExWrongDirection(pDirection);
 		}
 
 		if (lNewPos.x < 0)
@@ -67,7 +67,7 @@ public class Pos {
 			return Direction.LEFT;
 		if (pTargetPos.x > this.x)
 			return Direction.RIGHT;
-		return Direction.SAME;
+		return Direction.NOTHING;
 	}
 
 	public static ArrayList<Pos> getAllGridPos() {
