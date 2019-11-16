@@ -4,6 +4,7 @@ import java.util.Random;
 
 import datatypes.Direction;
 import datatypes.Pos;
+import exceptions.ExOutOfGrid;
 
 public class Enemy extends Block {
 	Direction mCurrentDirection;
@@ -20,8 +21,12 @@ public class Enemy extends Block {
 
 	private void move() {
 		//TODO IMPL Enemy turns at border
-		Pos lNewPos = mPos.getPosFromDirection(mCurrentDirection);
-		setPosition(lNewPos);
+		Pos lNewPos;
+		try {
+			lNewPos = mPos.getPosFromDirection(mCurrentDirection);
+			setPosition(lNewPos);
+		} catch (ExOutOfGrid e) {
+		}
 	}
 
 	private void setDirection() {

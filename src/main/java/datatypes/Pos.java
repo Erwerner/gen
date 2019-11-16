@@ -25,7 +25,7 @@ public class Pos {
 		return this.x == other.x && this.y == other.y;
 	}
 
-	public Pos getPosFromDirection(Direction pDirection) {
+	public Pos getPosFromDirection(Direction pDirection) throws ExOutOfGrid {
 		Pos lNewPos;
 		switch (pDirection) {
 		case UP:
@@ -48,13 +48,13 @@ public class Pos {
 		}
 
 		if (lNewPos.x < 0)
-			lNewPos.x = 0;
+			throw new ExOutOfGrid();
 		if (lNewPos.x > Constants.soupSize - 1)
-			lNewPos.x = Constants.soupSize - 1;
+			throw new ExOutOfGrid();
 		if (lNewPos.y < 0)
-			lNewPos.y = 0;
+			throw new ExOutOfGrid();
 		if (lNewPos.y > Constants.soupSize - 1)
-			lNewPos.y = Constants.soupSize - 1;
+			throw new ExOutOfGrid();
 		return lNewPos;
 	}
 

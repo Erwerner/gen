@@ -10,7 +10,6 @@ import exceptions.ExOutOfGrid;
 import genes.MovementSequence;
 
 public interface iIdvmMoveCalculation {
-
 	public Pos calcPosFromDirection(Direction pDirection, Pos pIdvmPos, ArrayList<iBlock> pIdvmBlocks) throws ExOutOfGrid;
 
 	public Direction getTargetDirection(IdvmState pState,

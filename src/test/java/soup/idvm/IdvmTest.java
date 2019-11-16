@@ -158,8 +158,12 @@ public class IdvmTest {
 
 	@Test
 	public void getsHungry() {
+		mGenome.setHunger(90);		
+		cut = new Idvm(mGenome);
+		cut.setBlockGrid(mBlockGrid);
+		cut.setPosition(new Pos(cStartPosX, cStartPosY));
 		assertFalse(cut.isHungry());
-		for (int i = 0; i <= mGenome.getHunger() - 1; i++) {
+		for (int i = 0; i <= 100 - mGenome.getHunger() - 1; i++) {
 			cut.step();
 		}
 		assertFalse(cut.isHungry());
@@ -169,8 +173,12 @@ public class IdvmTest {
 
 	@Test
 	public void aferEatNoHunger() {
+		mGenome.setHunger(90);		
+		cut = new Idvm(mGenome);
+		cut.setBlockGrid(mBlockGrid);
+		cut.setPosition(new Pos(cStartPosX, cStartPosY));
 		assertFalse(cut.isHungry());
-		for (int i = 0; i <= mGenome.getHunger() - 1; i++) {
+		for (int i = 0; i <= 100 - mGenome.getHunger() - 1; i++) {
 			cut.step();
 		}
 		assertFalse(cut.isHungry());
