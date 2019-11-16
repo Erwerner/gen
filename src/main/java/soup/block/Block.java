@@ -28,4 +28,8 @@ public abstract class Block implements iBlock {
 	public String toString(){
 		return mBlockType + " " + mPos;
 	}
+	
+	public void setNull(){
+		mBlockType = BlockType.NULL;
+	}
 }

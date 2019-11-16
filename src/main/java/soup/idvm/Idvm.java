@@ -1,25 +1,27 @@
 package soup.idvm;
 
+import genes.Genome;
+import genes.MoveProbability;
+import genes.MovementSequence;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import soup.block.Block;
+import soup.block.BlockType;
+import soup.block.Enemy;
+import soup.block.Food;
+import soup.block.iBlock;
+import soup.block.iBlockGrid;
 import datatypes.Direction;
 import datatypes.Pos;
 import exceptions.ExFailedDetection;
 import exceptions.ExOutOfGrid;
 import exceptions.ExWrongDirection;
 import exceptions.ExWrongState;
-import genes.Genome;
-import genes.MoveProbability;
-import genes.MovementSequence;
-import soup.block.BlockType;
-import soup.block.Enemy;
-import soup.block.Food;
-import soup.block.iBlock;
-import soup.block.iBlockGrid;
 
-public class Idvm implements iIdvm {
+public class Idvm extends Block implements iIdvm{
 
 	@SuppressWarnings("unused")
 	private Genome mGenomeOrigin;
@@ -33,6 +35,7 @@ public class Idvm implements iIdvm {
 	private int mEnergy = 100;
 
 	public Idvm(Genome pGenome) {
+		super(BlockType.IDVM);
 		mGenomeOrigin = pGenome;
 		mCellGrow = pGenome.cellGrow;
 		mHunger = pGenome.getHunger();
@@ -75,10 +78,6 @@ public class Idvm implements iIdvm {
 
 	public Boolean isHungry() {
 		return mEnergy < mHunger;
-	}
-
-	public BlockType getBlockType() {
-		return BlockType.IDVM;
 	}
 
 	public iBlock setPosition(Pos pPos) {
@@ -196,15 +195,12 @@ public class Idvm implements iIdvm {
 		mEnergy--;
 	}
 
-	public iBlock interactWithFood(Food pFood) {
+	public void interactWithFood(Food pFood) {
 		eat(pFood);
-		// TODO FIX must erase Food
-		return null;
 	}
 
-	public iBlock interactWithEnemy(Enemy pEnemy) {
+	public void interactWithEnemy(Enemy pEnemy) {
 		killCell(pEnemy.getPos());
-		return pEnemy;
 	}
 
 	public IdvmState getState() {
@@ -262,26 +258,22 @@ public class Idvm implements iIdvm {
 			iBlock lGridBlock;
 			try {
 				lGridBlock = mBlockGrid.getBlock(iPos);
-				iBlock lInteractedBlock;
 				if (lGridBlock != null) {
 					switch (lGridBlock.getBlockType()) {
 					case FOOD:
-						lInteractedBlock = interactWithFood((Food) lGridBlock);
+						interactWithFood((Food) lGridBlock);
+						lGridBlock.setNull();
 						break;
 					case ENEMY:
-						lInteractedBlock = interactWithEnemy((Enemy) lGridBlock);
+						interactWithEnemy((Enemy) lGridBlock);
 						break;
 					default:
-						lInteractedBlock = lGridBlock;
 						break;
 					}
-					//if (lInteractedBlock != lGridBlock)
-						//lInteractedBlock.setNull();
 				}
 			} catch (ExOutOfGrid e) {
 			}
 		}
 
 	}
-
 }
