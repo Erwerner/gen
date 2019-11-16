@@ -22,9 +22,10 @@ public class MoveProbability {
 			mPossibleDirection.add(Direction.RIGHT);
 		for (int i = 0; i < pNothing; i++)
 			mPossibleDirection.add(Direction.NOTHING);
-		mPossibleDirection.clear();
 	}
-
+	public MoveProbability(ArrayList<Direction> pPossibleDirection){
+		mPossibleDirection=pPossibleDirection;
+	}
 	public MoveProbability setDirection(Direction pDirection, int pProbability) {
 		for (int i = 0; i < pProbability; i++)
 			mPossibleDirection.add(pDirection);

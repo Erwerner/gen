@@ -18,6 +18,7 @@ import genes.MovementSequence;
 public class MoveCalculation implements iIdvmMoveCalculation {
 
 	private iBlockGrid mBlockGrid;
+	private Direction mCurrentDirection = Direction.UP;
 
 	public MoveCalculation(iBlockGrid pBlockGrid) {
 		super();
@@ -40,7 +41,8 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 		Direction lDirection = pDirection;
 
 		for (iBlock iBlock : pIdvmBlocks) {
-			Pos lPosFromDirection = iBlock.getPos().getPosFromDirection(lDirection);
+			Pos lPosFromDirection = iBlock.getPos().getPosFromDirection(
+					lDirection);
 			lPosFromDirection.isInGrid();
 		}
 
@@ -87,12 +89,28 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 		if (lState != IdvmState.IDLE)
 			lTargetDirection = getTargetDirection(lState,
 					pIdvm.getDetectedPos());
-		MovementSequence lSequence = pMovementSequences.get(lState);
-		Direction lDirection = lSequence.getDirection();
+		Direction lDirection = calcMovingDirection(pMovementSequences, lState);
 
 		Pos lNewPos = calcPosFromDirection(lDirection, pIdvm.getPos(),
 				pIdvm.getUsedBlocks());
 		return lNewPos;
+	}
+
+	private Direction calcMovingDirection(
+			HashMap<IdvmState, MovementSequence> pMovementSequences,
+			IdvmState lState) {
+		MovementSequence lSequence = pMovementSequences.get(lState);
+		Direction lDirection = lSequence.getDirection();
+		switch (lDirection) {
+		case CURRENT:
+			return mCurrentDirection;
+
+			// TODO Calc for target
+		default:
+			break;
+		}
+		mCurrentDirection = lDirection;
+		return lDirection;
 	}
 
 }
