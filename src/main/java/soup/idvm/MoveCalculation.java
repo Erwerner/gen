@@ -39,10 +39,8 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 
 		Direction lDirection = pDirection;
 
-		// TODO FIX not working; write test
 		for (iBlock iBlock : pIdvmBlocks) {
-			Pos lPos = iBlock.getPos();
-			Pos lPosFromDirection = lPos.getPosFromDirection(lDirection);
+			Pos lPosFromDirection = iBlock.getPos().getPosFromDirection(lDirection);
 			lPosFromDirection.isInGrid();
 		}
 

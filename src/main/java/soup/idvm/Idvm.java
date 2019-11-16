@@ -132,6 +132,7 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	private void move() throws ExOutOfGrid {
+		//TODO IMPL at border new direction
 		Direction lTargetDirection = null;
 		Pos lNewPos = mMoveCalculation.getMovingPosition(this,
 				mMovementSequences, lTargetDirection);

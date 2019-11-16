@@ -61,8 +61,13 @@ public class MoveCalculationTest {
 	@Test(expected = ExOutOfGrid.class)
 	public void noMovementAtTopBorder() throws ExOutOfGrid {
 		Pos lStartPos = getIdvmPos(Constants.soupSize / 2, 0);
-		Pos lMovePos = cut.calcPosFromDirection(Direction.UP, lStartPos,
-				mIdvmBlocks);
+		cut.calcPosFromDirection(Direction.UP, lStartPos, mIdvmBlocks);
+	}
+
+	@Test(expected = ExOutOfGrid.class)
+	public void noMovementAtBottomBorder() throws ExOutOfGrid {
+		Pos lStartPos = getIdvmPos(Constants.soupSize/2, Constants.soupSize-1);
+		cut.calcPosFromDirection(Direction.DOWN, lStartPos, mIdvmBlocks);
 	}
 
 }

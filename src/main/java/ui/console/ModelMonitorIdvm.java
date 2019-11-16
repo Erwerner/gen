@@ -39,6 +39,7 @@ public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 			mGenome.cellGrow.add(new IdvmCell(iCell.getBlockType(), iCell.getPosOnIdvm()));
 		}
 		ArrayList<MoveProbability> lIdlelMoveProbability = new ArrayList<MoveProbability>();
+		lIdlelMoveProbability.add(new MoveProbability(0, 1, 1, 0, 0));
 		lIdlelMoveProbability.add(new MoveProbability(4, 0, 2, 1, 1));
 		lIdlelMoveProbability.add(new MoveProbability(0, 1, 0, 1, 1));
 		lIdlelMoveProbability.add(new MoveProbability(1, 0, 0, 1, 1));
@@ -60,7 +61,6 @@ public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 				mSoup.step();
 				notifyViews();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
