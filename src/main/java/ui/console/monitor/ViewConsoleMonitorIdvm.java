@@ -21,7 +21,7 @@ public class ViewConsoleMonitorIdvm extends View {
 	public static final String ANSI_CYAN = "\u001B[36m";
 	public static final String ANSI_WHITE = "\u001B[37m";
 
-	private static final int cViewSize = 20;
+	private static final int cViewSize = 25;
 	private iPresentIdvm mIdvm;
 	private iPresentSoup mSoup;
 
