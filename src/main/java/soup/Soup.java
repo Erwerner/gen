@@ -1,5 +1,6 @@
 package soup;
 
+import java.security.spec.MGF1ParameterSpec;
 import java.util.ArrayList;
 
 import datatypes.Constants;
@@ -7,6 +8,7 @@ import datatypes.Pos;
 import exceptions.ExOutOfGrid;
 import mvc.present.iPresentSoup;
 import soup.block.BlockGrid;
+import soup.block.BlockType;
 import soup.block.Enemy;
 import soup.block.Food;
 import soup.block.iBlock;
@@ -82,12 +84,23 @@ public class Soup implements iSoup {
 			}
 		}
 		mIdvm.detectCollisions();
-		for (iBlock iBlock : mIdvm.getUsedBlocks())
+
+		for (iBlock iBlock : mAllBlocks) {
+			try {
+				if(iBlock.getBlockType()==BlockType.NULL){
+					mBlockGrid.setBlock(iBlock.getPos(), null);
+				}
+			} catch (ExOutOfGrid e) {
+				e.printStackTrace();
+			}
+		}
+		for (iBlock iBlock : mIdvm.getUsedBlocks()){
 			try {
 				mBlockGrid.setBlock(iBlock.getPos(), iBlock);
 			} catch (ExOutOfGrid e) {
 				e.printStackTrace();
 			}
+		}
 	}
 
 	public void step() {

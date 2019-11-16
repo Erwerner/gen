@@ -23,4 +23,6 @@ public interface iPresentIdvm {
 	IdvmState getState();
 
 	Pos getPos();
+
+	int getEnergyCount();
 }

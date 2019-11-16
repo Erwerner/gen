@@ -4,6 +4,7 @@ import java.util.Random;
 
 import datatypes.Direction;
 import datatypes.Pos;
+import exceptions.ExOutOfGrid;
 
 public class Enemy extends Block {
 	Direction mCurrentDirection;
@@ -19,8 +20,14 @@ public class Enemy extends Block {
 	}
 
 	private void move() {
-		Pos lNewPos = mPos.getPosFromDirection(mCurrentDirection);
-		setPosition(lNewPos);
+		while (true)
+			try {
+				Pos lNewPos = mPos.getPosFromDirection(mCurrentDirection);
+				setPosition(lNewPos);
+				break;
+			} catch (ExOutOfGrid e) {
+				setRandomDirection();
+			}
 	}
 
 	private void setDirection() {

@@ -2,18 +2,20 @@ package soup;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import datatypes.Constants;
-import datatypes.Pos;
-import exceptions.ExOutOfGrid;
 import soup.block.BlockType;
 import soup.block.iBlock;
 import soup.idvm.iIdvm;
 import utils.TestMock;
+import datatypes.Constants;
+import datatypes.Direction;
+import datatypes.Pos;
+import exceptions.ExOutOfGrid;
 
 public class SoupTest {
 	Soup cut;
@@ -29,7 +31,6 @@ public class SoupTest {
 	public void midBlockIsCell() {
 		try {
 			Pos lMidPos = mIdvm.getPos();
-			System.out.println(lMidPos);
 			iBlock lMidBlock;
 			lMidBlock = cut.getBlock(lMidPos);
 			assertNotNull(lMidBlock);
@@ -52,4 +53,19 @@ public class SoupTest {
 		assertEquals(Constants.foodSupply + Constants.enemySupply + 4, lCount);
 	}
 
+	@Test
+	public void foodGetsNullAfterInteraction() throws ExOutOfGrid {
+		for (Pos iPos : Pos.getAllGridPos()) {
+			iBlock lBlock = cut.getBlock(iPos);
+			if (lBlock == null || lBlock.getBlockType() != BlockType.FOOD)
+				continue;
+			mIdvm.setPosition(iPos);
+			cut.step();
+			mIdvm.setPosition(iPos.getPosFromDirection(Direction.RIGHT));
+			cut.step();
+			assertNull(cut.getBlock(iPos));
+			return;
+		}
+		fail();
+	}
 }

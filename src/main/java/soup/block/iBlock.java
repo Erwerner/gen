@@ -8,4 +8,5 @@ public interface iBlock {
 	iBlock setPosition(Pos pPos);
 	Pos getPos();
 	void step();
+	void setNull();
 }

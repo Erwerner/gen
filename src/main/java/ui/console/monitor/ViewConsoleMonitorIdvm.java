@@ -21,7 +21,7 @@ public class ViewConsoleMonitorIdvm extends View {
 	public static final String ANSI_CYAN = "\u001B[36m";
 	public static final String ANSI_WHITE = "\u001B[37m";
 
-	private static final int cViewSize = 20;
+	private static final int cViewSize = 25;
 	private iPresentIdvm mIdvm;
 	private iPresentSoup mSoup;
 
@@ -33,15 +33,15 @@ public class ViewConsoleMonitorIdvm extends View {
 
 	public void update() {
 		clearScreen();
-		printStats();
 		printGrid();
+		printStats();
 	}
 
 	private void printGrid() {
 		Pos lIdvMidPos = mIdvm.getPos();
 		for (int y = lIdvMidPos.y - cViewSize; y < lIdvMidPos.y + cViewSize; y++) {
 			String lGridLine = "";
-			for (int x = lIdvMidPos.x - cViewSize; x < lIdvMidPos.x + cViewSize; x++) {
+			for (int x = lIdvMidPos.x - cViewSize; x < lIdvMidPos.x + cViewSize*2; x++) {
 				String lBlockChar;
 				try {
 					new Pos(x, y).isInGrid();
@@ -52,11 +52,6 @@ public class ViewConsoleMonitorIdvm extends View {
 				lGridLine = lGridLine + lBlockChar;
 			}
 			System.out.println(lGridLine);
-		}
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -74,17 +69,17 @@ public class ViewConsoleMonitorIdvm extends View {
 	private String getPixel(iBlock pBlock) {
 		switch (pBlock.getBlockType()) {
 		case FOOD:
-			return "O";
+			return "©";
 		case ENEMY:
-			return "#";
+			return "Σ";
 		case LIFE:
-			return "L";
+			return "▓";
 		case SENSOR:
-			return "S";
+			return "▒";
 		case MOVE:
-			return "M";
+			return "▒";
 		case DEFENCE:
-			return "D";
+			return "▒";
 		default:
 			return "?";
 		}
@@ -96,11 +91,20 @@ public class ViewConsoleMonitorIdvm extends View {
 		System.out.print(" State: " + mIdvm.getState());
 		System.out.print(" Pos: " + mIdvm.getPos());
 		System.out.println();
+		for(int x = 1; x<=mIdvm.getEnergyCount();x++)
+			System.out.print("*");
+		System.out.println();
 	}
 
 	private void clearScreen() {
 		try {
 			Runtime.getRuntime().exec("clear");
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

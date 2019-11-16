@@ -15,9 +15,9 @@ public interface iIdvm extends iBlock, iPresentIdvm {
 
 	ArrayList<iBlock> getUsedBlocks();
 
-	iBlock interactWithFood(Food pFood);
+	void interactWithFood(Food pFood);
 
-	iBlock interactWithEnemy(Enemy pEnemy);
+	void interactWithEnemy(Enemy pEnemy);
 
 	void killCell(Pos pPos);
 
@@ -25,7 +25,7 @@ public interface iIdvm extends iBlock, iPresentIdvm {
 
 	IdvmState getState();
 
-	Direction getTargetDirection();
+	//Direction getTargetDirection();
 
 	void setBlockGrid(iBlockGrid pBlockGrid);
 
