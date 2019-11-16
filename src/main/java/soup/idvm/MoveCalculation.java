@@ -99,7 +99,7 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 		return lNewPos;
 	}
 
-	private Direction calcMovingDirection(
+	public Direction calcMovingDirection(
 			HashMap<IdvmState, MovementSequence> pMovementSequences,
 			IdvmState lState, Direction pTargetDirection) {
 		MovementSequence lSequence = pMovementSequences.get(lState);
@@ -107,11 +107,18 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 		switch (lDirection) {
 		case CURRENT:
 			return mCurrentDirection;
-
-			// TODO 1 IMPL Calc for target
+		case CURRENT_OPPOSITE: 
+			lDirection = mCurrentDirection.opposite(); 
+			break;
+		case TARGET:
+			lDirection = pTargetDirection;
+			break;
+		case TARGET_OPPOSITE:
+			lDirection = pTargetDirection.opposite();
+			break;
 		default:
 			break;
-		}
+		} 
 		mCurrentDirection = lDirection;
 		return lDirection;
 	}

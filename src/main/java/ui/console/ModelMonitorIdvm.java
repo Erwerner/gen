@@ -38,8 +38,8 @@ public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 		for (IdvmCell iCell : mCellGrow) {
 			mGenome.cellGrow.add(new IdvmCell(iCell.getBlockType(), iCell.getPosOnIdvm()));
 		}
-		ArrayList<MoveProbability> lIdlelMoveProbability = new ArrayList<MoveProbability>();
-		lIdlelMoveProbability.add(new MoveProbability(1, 0, 0, 5, 0, 0).setDirection(Direction.DOWN, 1).setDirection(Direction.RIGHT,5).setDirection(Direction.CURRENT,10));
+		ArrayList<MoveProbability> lIdlelMoveProbability = new ArrayList<MoveProbability>(); 
+		lIdlelMoveProbability.add(new MoveProbability(1, 0, 0, 5, 0, 0).setDirection(Direction.DOWN, 1).setDirection(Direction.RIGHT,5).setDirection(Direction.CURRENT,10).setDirection(Direction.CURRENT_OPPOSITE, 1));
 		lIdlelMoveProbability.add(new MoveProbability(4, 0, 2, 1, 1, 0).setDirection(Direction.UP, 4).setDirection(Direction.LEFT, 2).setDirection(Direction.RIGHT, 1).setDirection(Direction.NOTHING, 1));
 		lIdlelMoveProbability.add(new MoveProbability(0, 1, 0, 1, 1, 0));
 		lIdlelMoveProbability.add(new MoveProbability(1, 0, 0, 1, 1, 0));

@@ -17,4 +17,8 @@ public interface iIdvmMoveCalculation {
 
 	public Pos getMovingPosition(iIdvm pIdvm, HashMap<IdvmState, MovementSequence> pMovementSequences) throws ExOutOfGrid;
 
+	Direction calcMovingDirection(
+			HashMap<IdvmState, MovementSequence> pMovementSequences,
+			IdvmState pLState, Direction pTargetDirection);
+
 }
