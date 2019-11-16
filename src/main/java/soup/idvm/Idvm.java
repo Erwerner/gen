@@ -129,7 +129,7 @@ public class Idvm extends Block implements iIdvm {
 
 	private void move() {
 		Direction lTargetDirection = null;
-		for (int i = 0; i < 10; i++){
+		for (int i = 0; i < 10; i++) {
 			try {
 				Pos lNewPos;
 				lNewPos = mMoveCalculation.getMovingPosition(this,

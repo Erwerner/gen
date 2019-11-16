@@ -20,13 +20,14 @@ public class Enemy extends Block {
 	}
 
 	private void move() {
-		//TODO IMPL Enemy turns at border
-		Pos lNewPos;
-		try {
-			lNewPos = mPos.getPosFromDirection(mCurrentDirection);
-			setPosition(lNewPos);
-		} catch (ExOutOfGrid e) {
-		}
+		while (true)
+			try {
+				Pos lNewPos = mPos.getPosFromDirection(mCurrentDirection);
+				setPosition(lNewPos);
+				break;
+			} catch (ExOutOfGrid e) {
+				setRandomDirection();
+			}
 	}
 
 	private void setDirection() {
