@@ -1,6 +1,7 @@
 package soup.idvm;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,45 +70,78 @@ public class MoveCalculationTest {
 
 	@Test(expected = ExOutOfGrid.class)
 	public void noMovementAtBottomBorder() throws ExOutOfGrid {
-		Pos lStartPos = getIdvmPos(Constants.soupSize/2, Constants.soupSize-1);
+		Pos lStartPos = getIdvmPos(Constants.soupSize / 2,
+				Constants.soupSize - 1);
 		cut.calcPosFromDirection(Direction.DOWN, lStartPos, mIdvmBlocks);
 	}
 
 	@Test
-	public void calculateDirectionCurrent(){
+	public void calculateDirectionCurrent() {
 		HashMap<IdvmState, MovementSequence> lMovementSequences = new HashMap<IdvmState, MovementSequence>();
 		ArrayList<MoveProbability> lMovementList = new ArrayList<MoveProbability>();
 		ArrayList<Direction> lMovements = new ArrayList<Direction>();
 		lMovements.add(Direction.CURRENT);
-		lMovementList.add(new MoveProbability(lMovements ));
-		MovementSequence lMovement = new MovementSequence(lMovementList );
-		lMovementSequences.put(IdvmState.IDLE, lMovement );
-		Direction lAct = cut.calcMovingDirection(lMovementSequences, IdvmState.IDLE, Direction.RIGHT);
+		lMovementList.add(new MoveProbability(lMovements));
+		MovementSequence lMovement = new MovementSequence(lMovementList);
+		lMovementSequences.put(IdvmState.IDLE, lMovement);
+		Direction lAct = cut.calcMovingDirection(lMovementSequences,
+				IdvmState.IDLE, Direction.RIGHT);
 		assertEquals(Direction.UP, lAct);
 	}
+
 	@Test
-	public void calculateDirectionTarget(){
+	public void calculateDirectionTarget() {
 		HashMap<IdvmState, MovementSequence> lMovementSequences = new HashMap<IdvmState, MovementSequence>();
 		ArrayList<MoveProbability> lMovementList = new ArrayList<MoveProbability>();
 		ArrayList<Direction> lMovements = new ArrayList<Direction>();
 		lMovements.add(Direction.TARGET);
-		lMovementList.add(new MoveProbability(lMovements ));
-		MovementSequence lMovement = new MovementSequence(lMovementList );
-		lMovementSequences.put(IdvmState.IDLE, lMovement );
-		Direction lAct = cut.calcMovingDirection(lMovementSequences, IdvmState.IDLE, Direction.RIGHT);
+		lMovementList.add(new MoveProbability(lMovements));
+		MovementSequence lMovement = new MovementSequence(lMovementList);
+		lMovementSequences.put(IdvmState.IDLE, lMovement);
+		Direction lAct = cut.calcMovingDirection(lMovementSequences,
+				IdvmState.IDLE, Direction.RIGHT);
 		assertEquals(Direction.RIGHT, lAct);
 	}
+
 	@Test
-	public void calculateDirectionTargetOpposite(){
+	public void calculateDirectionTargetOpposite() {
 		HashMap<IdvmState, MovementSequence> lMovementSequences = new HashMap<IdvmState, MovementSequence>();
 		ArrayList<MoveProbability> lMovementList = new ArrayList<MoveProbability>();
 		ArrayList<Direction> lMovements = new ArrayList<Direction>();
 		lMovements.add(Direction.TARGET_OPPOSITE);
-		lMovementList.add(new MoveProbability(lMovements ));
-		MovementSequence lMovement = new MovementSequence(lMovementList );
-		lMovementSequences.put(IdvmState.IDLE, lMovement );
-		Direction lAct = cut.calcMovingDirection(lMovementSequences, IdvmState.IDLE, Direction.RIGHT);
+		lMovementList.add(new MoveProbability(lMovements));
+		MovementSequence lMovement = new MovementSequence(lMovementList);
+		lMovementSequences.put(IdvmState.IDLE, lMovement);
+		Direction lAct = cut.calcMovingDirection(lMovementSequences,
+				IdvmState.IDLE, Direction.RIGHT);
 		assertEquals(Direction.LEFT, lAct);
 	}
-	//TODO 1 more Tests
+
+	@Test
+	public void calculateDirectionTargetSite2() {
+		HashMap<IdvmState, MovementSequence> lMovementSequences = new HashMap<IdvmState, MovementSequence>();
+		ArrayList<MoveProbability> lMovementList = new ArrayList<MoveProbability>();
+		ArrayList<Direction> lMovements = new ArrayList<Direction>();
+		lMovements.add(Direction.TARGET_SITE2);
+		lMovementList.add(new MoveProbability(lMovements));
+		MovementSequence lMovement = new MovementSequence(lMovementList);
+		lMovementSequences.put(IdvmState.IDLE, lMovement);
+		Direction lAct = cut.calcMovingDirection(lMovementSequences,
+				IdvmState.IDLE, Direction.RIGHT);
+		assertEquals(Direction.DOWN, lAct);
+	}
+
+	@Test
+	public void calculateDirectionCurrentSite1() {
+		HashMap<IdvmState, MovementSequence> lMovementSequences = new HashMap<IdvmState, MovementSequence>();
+		ArrayList<MoveProbability> lMovementList = new ArrayList<MoveProbability>();
+		ArrayList<Direction> lMovements = new ArrayList<Direction>();
+		lMovements.add(Direction.CURRENT_SITE1);
+		lMovementList.add(new MoveProbability(lMovements));
+		MovementSequence lMovement = new MovementSequence(lMovementList);
+		lMovementSequences.put(IdvmState.IDLE, lMovement);
+		Direction lAct = cut.calcMovingDirection(lMovementSequences,
+				IdvmState.IDLE, Direction.RIGHT);
+		assertEquals(Direction.LEFT, lAct);
+	}
 }

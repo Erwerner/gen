@@ -107,8 +107,14 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 		switch (lDirection) {
 		case CURRENT:
 			return mCurrentDirection;
-		case CURRENT_OPPOSITE: 
-			lDirection = mCurrentDirection.opposite(); 
+		case CURRENT_OPPOSITE:
+			lDirection = mCurrentDirection.opposite();
+			break;
+		case CURRENT_SITE1:
+			lDirection = mCurrentDirection.site1();
+			break;
+		case CURRENT_SITE2:
+			lDirection = mCurrentDirection.site2();
 			break;
 		case TARGET:
 			lDirection = pTargetDirection;
@@ -116,9 +122,15 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 		case TARGET_OPPOSITE:
 			lDirection = pTargetDirection.opposite();
 			break;
+		case TARGET_SITE1:
+			lDirection = pTargetDirection.site2();
+			break;
+		case TARGET_SITE2:
+			lDirection = pTargetDirection.site2();
+			break;
 		default:
 			break;
-		} 
+		}
 		mCurrentDirection = lDirection;
 		return lDirection;
 	}
