@@ -16,16 +16,13 @@ import soup.block.iBlock;
 import soup.block.iBlockGrid;
 import datatypes.Direction;
 import datatypes.Pos;
-import exceptions.ExFailedDetection;
 import exceptions.ExOutOfGrid;
-import exceptions.ExWrongDirection;
-import exceptions.ExWrongState;
 
 public class Idvm extends Block implements iIdvm {
 
 	@SuppressWarnings("unused")
 	private Genome mGenomeOrigin;
-	private Pos mMidPosition = new Pos(0, 0);
+	//private Pos mMidPosition = new Pos(0, 0);
 	private IdvmCell[][] mCellGrid = new IdvmCell[4][4];
 	private HashMap<IdvmState, MovementSequence> mMovementSequences = new HashMap<IdvmState, MovementSequence>();
 	private ArrayList<IdvmCell> mCellGrow;
@@ -37,6 +34,7 @@ public class Idvm extends Block implements iIdvm {
 
 	public Idvm(Genome pGenome) {
 		super(BlockType.IDVM);
+		mPos = new Pos(0,0);
 		mGenomeOrigin = pGenome;
 		mCellGrow = pGenome.cellGrow;
 		mHunger = pGenome.getHunger();
@@ -82,7 +80,7 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	public iBlock setPosition(Pos pPos) {
-		mMidPosition = pPos;
+		super.setPosition(pPos);
 		for (int x = 0; x <= 3; x++) {
 			for (int y = 0; y <= 3; y++) {
 				refreshCellPos(x, y);
@@ -94,14 +92,10 @@ public class Idvm extends Block implements iIdvm {
 	private void refreshCellPos(int pCellX, int pCellY) {
 		IdvmCell lCell = mCellGrid[pCellX][pCellY];
 		if (lCell != null) {
-			Pos lNewPos = new Pos(mMidPosition.x - 1 + pCellX, mMidPosition.y
+			Pos lNewPos = new Pos(mPos.x - 1 + pCellX, mPos.y
 					- 1 + pCellY);
 			lCell.setPosition(lNewPos);
 		}
-	}
-
-	public Pos getPos() {
-		return mMidPosition;
 	}
 
 	public ArrayList<iBlock> getUsedBlocks() {
@@ -117,7 +111,7 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	public void killCell(Pos pPos) {
-		mCellGrid[pPos.x - mMidPosition.x + 1][pPos.y - mMidPosition.y + 1] = null;
+		mCellGrid[pPos.x - mPos.x + 1][pPos.y - mPos.y + 1] = null;
 	}
 
 	public void step() {
@@ -138,16 +132,9 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	private void move() throws ExOutOfGrid {
-		Direction lTargetDirection;
-		IdvmState lState = getState();
-		if (lState != IdvmState.IDLE)
-			lTargetDirection = mMoveCalculation.getTargetDirection(lState,
-					getDetectedPos());
-		MovementSequence lSequence = mMovementSequences.get(lState);
-		Direction lDirection = lSequence.getDirection();
-
-		Pos lNewPos = mMoveCalculation.calcMovingPosition(lDirection,
-				mMidPosition, getUsedBlocks());
+		Direction lTargetDirection = null;
+		Pos lNewPos = mMoveCalculation.getMovingPosition(this,
+				mMovementSequences, lTargetDirection);
 		setPosition(lNewPos);
 		mEnergy--;
 	}

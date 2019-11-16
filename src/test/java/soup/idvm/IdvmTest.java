@@ -342,4 +342,10 @@ public class IdvmTest {
 		for (int i = 0; i < 100; i++)
 			cut.interactWithFood(new Food());
 	}
+	
+	@Test
+	public void initialPosIsCorrect(){
+		Pos lPos = cut.getPos();
+		assertEquals(new Pos(cStartPosX,cStartPosY), lPos);
+	}
 }

@@ -13,6 +13,7 @@ import exceptions.ExFailedDetection;
 import exceptions.ExOutOfGrid;
 import exceptions.ExWrongDirection;
 import exceptions.ExWrongState;
+import genes.MovementSequence;
 
 public class MoveCalculation implements iIdvmMoveCalculation {
 
@@ -23,7 +24,7 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 		mBlockGrid = pBlockGrid;
 	}
 
-	public Pos calcMovingPosition(Direction pDirection, Pos pIdvmPos,
+	public Pos calcPosFromDirection(Direction pDirection, Pos pIdvmPos,
 			ArrayList<iBlock> pIdvmBlocks) throws ExOutOfGrid {
 		switch (pDirection) {
 		case UP:
@@ -76,6 +77,22 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 			}
 		}
 		throw new ExWrongDirection();
+	}
+
+	public Pos getMovingPosition(iIdvm pIdvm,
+			HashMap<IdvmState, MovementSequence> pMovementSequences,
+			Direction pTargetDirection) throws ExOutOfGrid {
+		Direction lTargetDirection;
+		IdvmState lState = pIdvm.getState();
+		if (lState != IdvmState.IDLE)
+			lTargetDirection = getTargetDirection(lState,
+					pIdvm.getDetectedPos());
+		MovementSequence lSequence = pMovementSequences.get(lState);
+		Direction lDirection = lSequence.getDirection();
+
+		Pos lNewPos = calcPosFromDirection(lDirection, pIdvm.getPos(),
+				pIdvm.getUsedBlocks());
+		return lNewPos;
 	}
 
 }
