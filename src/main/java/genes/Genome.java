@@ -13,7 +13,7 @@ public class Genome implements Cloneable {
 	private static final int cMaxSequence = 48;
 	private GeneInt mHunger = new GeneInt(0, 100, 50);
 	// TODO IMPL make mutation rate a gene
-	private Double mMutationRate = 0.05;
+	private Double mMutationRate = 0.2;
 	// TODO REF make this private
 	public ArrayList<IdvmCell> cellGrow = new ArrayList<IdvmCell>();
 	public HashMap<IdvmState, ArrayList<MoveProbability>> movementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
