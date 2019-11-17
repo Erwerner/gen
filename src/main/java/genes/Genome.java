@@ -9,28 +9,52 @@ import soup.idvm.IdvmState;
 import datatypes.Pos;
 
 public class Genome {
-	public Genome() {
-		mGenes.add(mHunger);
-		// TODO 1 add all Genes here
-	}
-
 	private static final int cMaxSequence = 48;
-	ArrayList<Gene> mGenes = new ArrayList<Gene>();
 	private GeneInt mHunger = new GeneInt(0, 100, 50);
-	//TODO IMPL make mutation rate a gene
+	// TODO IMPL make mutation rate a gene
 	private Double mMutationRate = 0.1;
-	// TODO 1 make this a gene
-	// TODO make this private
+	// TODO REF make this private
 	public ArrayList<IdvmCell> cellGrow = new ArrayList<IdvmCell>();
-	// TODO make this a gene
+	// TODO 1 make this a gene
 	public HashMap<IdvmState, ArrayList<MoveProbability>> movementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
 
-	// TODO 2 IMPL Randomize Genome
-	public void mutate() {
-		for (Gene iGene : mGenes) {
-			iGene.mutate(mMutationRate);
+	public void forceMutation() {
+		for (int i = 0; i < 48; i++) {
+			cellGrow.add(new IdvmCell(BlockType.NOTHING, new Pos(0, 0)));
 		}
-		//TODO 1 set first 4 Cells Pos
+		mutate(1.0);
+	}
+
+	public void naturalMutation() {
+		mutate(mMutationRate);
+	}
+
+	private void mutate(Double pMutationRate) {
+		ArrayList<iGene> lGenes;
+		lGenes = getGeneCollection();
+
+		for (iGene iGene : lGenes)
+			iGene.mutate(pMutationRate);
+
+		setInitialCell(0, 0, 0);
+		setInitialCell(1, 0, 1);
+		setInitialCell(2, 1, 0);
+		setInitialCell(3, 1, 1);
+	}
+
+	private void setInitialCell(int pIdx, int pX, int pY) {
+		BlockType lCellType = cellGrow.get(pIdx).getBlockType();
+		cellGrow.set(pIdx, new IdvmCell(lCellType, new Pos(pX, pY)));
+	}
+
+	private ArrayList<iGene> getGeneCollection() {
+		ArrayList<iGene> lGenes = new ArrayList<iGene>();
+		// TODO 1 add all Genes here
+		lGenes.add(mHunger);
+		for (iGene iGene : cellGrow) {
+			lGenes.add(iGene);
+		}
+		return lGenes;
 	}
 
 	public int getHunger() {

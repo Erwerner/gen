@@ -6,6 +6,7 @@ public class runMonitor {
 		run();
 	}
 
+	//TODO 3 IMPL Monitor for Randomized Genome
 	public static void run() {
 		ModelMonitorIdvm lMonitor = new ModelMonitorIdvm();
 		lMonitor.run();

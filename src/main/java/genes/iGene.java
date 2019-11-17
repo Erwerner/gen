@@ -1,5 +1,6 @@
 package genes;
 
 public interface iGene {
-	public void mutate(Double pMutationRate);
+
+	void mutate(Double pMutationRate);
 }

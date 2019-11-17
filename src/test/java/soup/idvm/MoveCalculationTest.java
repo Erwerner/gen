@@ -16,11 +16,11 @@ import soup.block.Food;
 import soup.block.iBlock;
 import soup.block.iBlockGrid;
 import utils.TestMock;
-import datatypes.Constants;
 import datatypes.Direction;
 import datatypes.Pos;
 import exceptions.ExOutOfGrid;
 import genes.MoveProbability;
+import globals.Constants;
 
 public class MoveCalculationTest {
 	iIdvmMoveCalculation cut;

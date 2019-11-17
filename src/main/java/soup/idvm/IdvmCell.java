@@ -46,17 +46,13 @@ public class IdvmCell extends Block implements iGene {
 				&& this.mPos.equals(other.mPos)
 				&& this.mPosOnIdvm.equals(other.mPosOnIdvm);
 	}
-
-	// TODO REF check if needed
-	public void kill() {
-		mBlockType = BlockType.NOTHING;
-	}
-
+	
 	public void step() {
 	}
 
 	public void mutate(Double pMutationRate) {
-		if (Global.checkChance(pMutationRate)) {
+		if (Global.checkChance(pMutationRate)) { 
+			// TODO REF move to Globals
 			Random lRandom = new Random();
 			BlockType[] lCellTypes = { BlockType.LIFE, BlockType.DEFENCE,
 					BlockType.MOVE, BlockType.SENSOR };
@@ -64,8 +60,9 @@ public class IdvmCell extends Block implements iGene {
 			mBlockType = lCellTypes[lRndBlock];
 		}
 		if (Global.checkChance(pMutationRate)) {
+			// TODO REF move to Globals
 			Random lRandom = new Random();
-			Pos lNewPos = new Pos(lRandom.nextInt(5),lRandom.nextInt(5));
+			Pos lNewPos = new Pos(lRandom.nextInt(4),lRandom.nextInt(4));
 			mPosOnIdvm = lNewPos;
 		}
 	}

@@ -10,9 +10,9 @@ import soup.block.Food;
 import soup.block.iBlock;
 import soup.block.iBlockGrid;
 import soup.idvm.iIdvm;
-import datatypes.Constants;
 import datatypes.Pos;
 import exceptions.ExOutOfGrid;
+import globals.Constants;
 
 public class Soup implements iSoup {
 	private iIdvm mIdvm;

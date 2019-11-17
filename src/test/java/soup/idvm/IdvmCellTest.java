@@ -36,8 +36,8 @@ public class IdvmCellTest {
 				BlockType.MOVE, BlockType.SENSOR };
 		assertTrue(Arrays.asList(lCellTypes).contains(cut.getBlockType()));
 
-		assertTrue(cut.getPosOnIdvm().x<5);
-		assertTrue(cut.getPosOnIdvm().y<5);
+		assertTrue(cut.getPosOnIdvm().x<4);
+		assertTrue(cut.getPosOnIdvm().y<4);
 		assertTrue(cut.getPosOnIdvm().x>=0);
 		assertTrue(cut.getPosOnIdvm().y>=0);
 	}

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import exceptions.ExOutOfGrid;
 import exceptions.ExWrongDirection;
+import globals.Constants;
 
 public class Pos {
 	public int x;
