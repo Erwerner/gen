@@ -15,12 +15,16 @@ public class Genome {
 	private Double mMutationRate = 0.1;
 	// TODO REF make this private
 	public ArrayList<IdvmCell> cellGrow = new ArrayList<IdvmCell>();
-	// TODO 1 make this a gene
 	public HashMap<IdvmState, ArrayList<MoveProbability>> movementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
 
 	public void forceMutation() {
+		ArrayList<MoveProbability> lInitialMoveProbability = new ArrayList<MoveProbability>();
 		for (int i = 0; i < 48; i++) {
 			cellGrow.add(new IdvmCell(BlockType.NOTHING, new Pos(0, 0)));
+			lInitialMoveProbability.add(new MoveProbability());
+		}
+		for (IdvmState iState : IdvmState.values()) {
+			movementSequences.put(iState, lInitialMoveProbability);
 		}
 		mutate(1.0);
 	}
@@ -47,10 +51,15 @@ public class Genome {
 
 	private ArrayList<iGene> getGeneCollection() {
 		ArrayList<iGene> lGenes = new ArrayList<iGene>();
-		// TODO 1 add all Genes here
 		lGenes.add(mHunger);
 		for (iGene iGene : cellGrow) {
 			lGenes.add(iGene);
+		}
+		for (ArrayList<MoveProbability> iMoveProbability : movementSequences
+				.values()) {
+			for (iGene iGene : iMoveProbability) {
+				lGenes.add(iGene);
+			}
 		}
 		return lGenes;
 	}
