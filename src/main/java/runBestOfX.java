@@ -13,7 +13,7 @@ public class runBestOfX {
 	public static void main(String[] args) throws CloneNotSupportedException {
 		Genome lGenomeGeneration = new Genome();
 		lGenomeGeneration.forceMutation();
-		for (int iGeneration = 0; iGeneration < 1; iGeneration++) {
+		for (int iGeneration = 0; iGeneration < 12; iGeneration++) {
 			lGenomeGeneration = runGeneration(lGenomeGeneration);
 			System.out.println("Generation Finished");
 		}
@@ -24,26 +24,28 @@ public class runBestOfX {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		while(true){
 		ModelMonitorIdvm lMonitor = new ModelMonitorIdvm();
 		lMonitor.runGenome(lGenomeGeneration);
+		}
 	}
 
 	private static Genome runGeneration(Genome lGenomeGeneration)
 			throws CloneNotSupportedException {
 
-		Genome lGenomeBest = lGenomeGeneration;
+		Genome lGenomeBest = (Genome) lGenomeGeneration.clone();
 		int lStepBest = 0;
-		for (int i = 0; i < 50; i++) {
+		for (int i = 0; i < 250; i++) {
 			System.out.println("");
 			System.out.print("Run Genome #" + i);
 			Genome lGenome = (Genome) lGenomeGeneration.clone();
 			lGenome.forceMutation();
 			lGenome.naturalMutation();
 			int lTotalStepCount = 0;
-			for (int j = 0; j < 5; j++) {
+			for (int j = 0; j < 6; j++) {
 				iIdvm lIdvm = new Idvm(lGenome);
 				new Soup(lIdvm).executeIdvm();
-				lTotalStepCount = +lIdvm.getStepCount();
+				lTotalStepCount = lTotalStepCount + lIdvm.getStepCount();
 			}
 			System.out.print(" finished with Step #" + lTotalStepCount);
 			if (lTotalStepCount > lStepBest) {
