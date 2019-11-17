@@ -30,6 +30,7 @@ public class Genome {
 		for (Gene iGene : mGenes) {
 			iGene.mutate(mMutationRate);
 		}
+		//TODO 1 set first 4 Cells Pos
 	}
 
 	public int getHunger() {
