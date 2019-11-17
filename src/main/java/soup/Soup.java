@@ -25,8 +25,8 @@ public class Soup implements iSoup {
 		mIdvm.setBlockGrid(mBlockGrid);
 		initFoodBlocks();
 		initEnemyBlocks();
-		mBlockGrid.addInitialIdvm(mIdvm);
 		clearSurroundingsOfIdvm();
+		mBlockGrid.addInitialIdvm(mIdvm);
 	}
 
 	private void initEnemyBlocks() {
@@ -40,16 +40,16 @@ public class Soup implements iSoup {
 	}
 
 	private void clearSurroundingsOfIdvm() {
-		Pos lIdvmMidPos = mIdvm.getPos();
+//		Pos lIdvmMidPos = mIdvm.getPos();
 		ArrayList<Pos> lIdvmPosList = new ArrayList<Pos>();
 
 		for (iBlock iBlock : mIdvm.getUsedBlocks()) {
 			lIdvmPosList.add(iBlock.getPos());
 		}
 
-		for (int x = lIdvmMidPos.x - 1; x <= lIdvmMidPos.x + 2; x++) {
-			for (int y = lIdvmMidPos.y - 1; y <= lIdvmMidPos.y + 2; y++) {
-				if (!lIdvmPosList.contains(new Pos(x, y)))
+		for (int x = Constants.soupSize/2 - 1; x <= Constants.soupSize/2 + 2; x++) {
+			for (int y = Constants.soupSize/2 - 1; y <= Constants.soupSize/2 + 2; y++) {
+				//if (!lIdvmPosList.contains(new Pos(x, y)))
 					try {
 						mBlockGrid.setBlock(new Pos(x, y), null);
 					} catch (ExOutOfGrid e) {
@@ -111,5 +111,10 @@ public class Soup implements iSoup {
 
 	public iPresentSoup getPresenter() {
 		return this;
+	}
+
+	public void executeIdvm() {
+		while (mIdvm.isAlive())
+			step();
 	}
 }

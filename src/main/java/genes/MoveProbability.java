@@ -8,7 +8,8 @@ import java.util.Random;
 import datatypes.Direction;
 
 public class MoveProbability implements iGene {
-	private ArrayList<Direction> mPossibleDirection = new ArrayList<Direction>();
+	//TODO REF make private
+	public ArrayList<Direction> mPossibleDirection = new ArrayList<Direction>();
 
 	// TODO REF Delete Parameter
 	public MoveProbability(int pUp, int pDown, int pLeft, int pRight,

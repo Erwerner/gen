@@ -6,13 +6,14 @@ import java.util.HashMap;
 import soup.block.BlockType;
 import soup.idvm.IdvmCell;
 import soup.idvm.IdvmState;
+import datatypes.Direction;
 import datatypes.Pos;
 
-public class Genome {
+public class Genome implements Cloneable {
 	private static final int cMaxSequence = 48;
 	private GeneInt mHunger = new GeneInt(0, 100, 50);
 	// TODO IMPL make mutation rate a gene
-	private Double mMutationRate = 0.1;
+	private Double mMutationRate = 0.2;
 	// TODO REF make this private
 	public ArrayList<IdvmCell> cellGrow = new ArrayList<IdvmCell>();
 	public HashMap<IdvmState, ArrayList<MoveProbability>> movementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
@@ -70,5 +71,25 @@ public class Genome {
 
 	public void setHunger(int pInt) {
 		mHunger.setValue(pInt);
+	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		Genome lClone = new Genome();
+		for(IdvmCell iCell : cellGrow){
+			lClone.cellGrow.add(new IdvmCell(iCell.getBlockType(),new Pos(iCell.getPosOnIdvm().x,iCell.getPosOnIdvm().y)));
+		}
+		for (IdvmState iState : IdvmState.values()) {
+			ArrayList<MoveProbability> lMovements = new ArrayList<MoveProbability>();
+			for(MoveProbability iMovement: movementSequences.get(iState)){
+				MoveProbability lProbability = new MoveProbability();
+				for(Direction lDirection : iMovement.mPossibleDirection){
+					lProbability.mPossibleDirection.add(lDirection);
+				}
+				lMovements.add(lProbability );
+			}
+			lClone.movementSequences.put(iState,lMovements);					
+		}
+		return lClone ;
 	}
 }
