@@ -36,10 +36,10 @@ public class IdvmCellTest {
 				BlockType.MOVE, BlockType.SENSOR };
 		assertTrue(Arrays.asList(lCellTypes).contains(cut.getBlockType()));
 
-		assertTrue(cut.getPosOnIdvm().x<4);
-		assertTrue(cut.getPosOnIdvm().y<4);
-		assertTrue(cut.getPosOnIdvm().x>=0);
-		assertTrue(cut.getPosOnIdvm().y>=0);
+		assertTrue(cut.getPosOnIdvm().x<3);
+		assertTrue(cut.getPosOnIdvm().y<3);
+		assertTrue(cut.getPosOnIdvm().x>=-1);
+		assertTrue(cut.getPosOnIdvm().y>=-1);
 	}
 
 	private void initInvalidCut() {

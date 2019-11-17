@@ -79,7 +79,7 @@ public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 		mGenome.movementSequences.put(IdvmState.ENEMY, lEnemyMoveProbability);
 
 		mGenome.setHunger(50);
-
+		mGenome.forceMutation();
 		mIdvm = new Idvm(mGenome);
 		mSoup = new Soup(mIdvm);
 		new ViewConsoleMonitorIdvm(this);

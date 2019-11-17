@@ -36,10 +36,8 @@ public class Genome {
 		for (iGene iGene : lGenes)
 			iGene.mutate(pMutationRate);
 
-		setInitialCell(0, 0, 0);
-		setInitialCell(1, 0, 1);
-		setInitialCell(2, 1, 0);
-		setInitialCell(3, 1, 1);
+		for (int i = 0; i < 4; i++)
+			setInitialCell(i, i / 2, i % 2);
 	}
 
 	private void setInitialCell(int pIdx, int pX, int pY) {

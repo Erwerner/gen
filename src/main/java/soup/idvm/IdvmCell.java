@@ -62,7 +62,7 @@ public class IdvmCell extends Block implements iGene {
 		if (Global.checkChance(pMutationRate)) {
 			// TODO REF move to Globals
 			Random lRandom = new Random();
-			Pos lNewPos = new Pos(lRandom.nextInt(4),lRandom.nextInt(4));
+			Pos lNewPos = new Pos(lRandom.nextInt(4)-1,lRandom.nextInt(4)-1);
 			mPosOnIdvm = lNewPos;
 		}
 	}
