@@ -79,7 +79,11 @@ public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 		mGenome.movementSequences.put(IdvmState.ENEMY, lEnemyMoveProbability);
 
 		mGenome.setHunger(50);
+		runGenome(mGenome);
 
+	}
+
+	public void runGenome(Genome mGenome) {
 		mIdvm = new Idvm(mGenome);
 		mSoup = new Soup(mIdvm);
 		new ViewConsoleMonitorIdvm(this);
@@ -88,7 +92,7 @@ public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 		notifyViews();
 		while (mIdvm.isAlive()) {
 			try {
-				Thread.sleep(180);
+				Thread.sleep(140);
 				mSoup.step();
 				notifyViews();
 			} catch (InterruptedException e) {
@@ -96,7 +100,6 @@ public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 			}
 		}
 		System.out.println("stop");
-
 	}
 
 	@Override

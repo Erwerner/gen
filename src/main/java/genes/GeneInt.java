@@ -2,7 +2,7 @@ package genes;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class GeneInt extends Gene implements iGene {
+public class GeneInt implements iGene {
 
 	private int pMax;
 	private int pMin;

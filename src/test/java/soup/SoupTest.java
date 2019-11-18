@@ -12,10 +12,10 @@ import soup.block.BlockType;
 import soup.block.iBlock;
 import soup.idvm.iIdvm;
 import utils.TestMock;
-import datatypes.Constants;
 import datatypes.Direction;
 import datatypes.Pos;
 import exceptions.ExOutOfGrid;
+import globals.Constants;
 
 public class SoupTest {
 	Soup cut;

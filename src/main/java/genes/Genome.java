@@ -6,30 +6,63 @@ import java.util.HashMap;
 import soup.block.BlockType;
 import soup.idvm.IdvmCell;
 import soup.idvm.IdvmState;
+import datatypes.Direction;
 import datatypes.Pos;
 
-public class Genome {
-	public Genome() {
-		mGenes.add(mHunger);
-		// TODO 1 add all Genes here
-	}
-
+public class Genome implements Cloneable {
 	private static final int cMaxSequence = 48;
-	ArrayList<Gene> mGenes = new ArrayList<Gene>();
 	private GeneInt mHunger = new GeneInt(0, 100, 50);
-	//TODO IMPL make mutation rate a gene
-	private Double mMutationRate = 0.1;
-	// TODO 1 make this a gene
-	// TODO make this private
+	// TODO IMPL make mutation rate a gene
+	private Double mMutationRate = 0.2;
+	// TODO REF make this private
 	public ArrayList<IdvmCell> cellGrow = new ArrayList<IdvmCell>();
-	// TODO make this a gene
 	public HashMap<IdvmState, ArrayList<MoveProbability>> movementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
 
-	// TODO 2 IMPL Randomize Genome
-	public void mutate() {
-		for (Gene iGene : mGenes) {
-			iGene.mutate(mMutationRate);
+	public void forceMutation() {
+		ArrayList<MoveProbability> lInitialMoveProbability = new ArrayList<MoveProbability>();
+		for (int i = 0; i < 48; i++) {
+			cellGrow.add(new IdvmCell(BlockType.NOTHING, new Pos(0, 0)));
+			lInitialMoveProbability.add(new MoveProbability());
 		}
+		for (IdvmState iState : IdvmState.values()) {
+			movementSequences.put(iState, lInitialMoveProbability);
+		}
+		mutate(1.0);
+	}
+
+	public void naturalMutation() {
+		mutate(mMutationRate);
+	}
+
+	private void mutate(Double pMutationRate) {
+		ArrayList<iGene> lGenes;
+		lGenes = getGeneCollection();
+
+		for (iGene iGene : lGenes)
+			iGene.mutate(pMutationRate);
+
+		for (int i = 0; i < 4; i++)
+			setInitialCell(i, i / 2, i % 2);
+	}
+
+	private void setInitialCell(int pIdx, int pX, int pY) {
+		BlockType lCellType = cellGrow.get(pIdx).getBlockType();
+		cellGrow.set(pIdx, new IdvmCell(lCellType, new Pos(pX, pY)));
+	}
+
+	private ArrayList<iGene> getGeneCollection() {
+		ArrayList<iGene> lGenes = new ArrayList<iGene>();
+		lGenes.add(mHunger);
+		for (iGene iGene : cellGrow) {
+			lGenes.add(iGene);
+		}
+		for (ArrayList<MoveProbability> iMoveProbability : movementSequences
+				.values()) {
+			for (iGene iGene : iMoveProbability) {
+				lGenes.add(iGene);
+			}
+		}
+		return lGenes;
 	}
 
 	public int getHunger() {
@@ -38,5 +71,25 @@ public class Genome {
 
 	public void setHunger(int pInt) {
 		mHunger.setValue(pInt);
+	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		Genome lClone = new Genome();
+		for(IdvmCell iCell : cellGrow){
+			lClone.cellGrow.add(new IdvmCell(iCell.getBlockType(),new Pos(iCell.getPosOnIdvm().x,iCell.getPosOnIdvm().y)));
+		}
+		for (IdvmState iState : IdvmState.values()) {
+			ArrayList<MoveProbability> lMovements = new ArrayList<MoveProbability>();
+			for(MoveProbability iMovement: movementSequences.get(iState)){
+				MoveProbability lProbability = new MoveProbability();
+				for(Direction lDirection : iMovement.mPossibleDirection){
+					lProbability.mPossibleDirection.add(lDirection);
+				}
+				lMovements.add(lProbability );
+			}
+			lClone.movementSequences.put(iState,lMovements);					
+		}
+		return lClone ;
 	}
 }

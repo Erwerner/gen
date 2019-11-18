@@ -7,6 +7,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import exceptions.ExOutOfGrid;
+import globals.Constants;
 
 public class PosTest {
 	private static final int cStartY = 20;

@@ -109,6 +109,7 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 			HashMap<IdvmState, ArrayList<MoveProbability>> pMovementSequences,
 			IdvmState lState, Direction pTargetDirection) {
 		ArrayList<MoveProbability> lSequence = pMovementSequences.get(lState);
+		//TODO FIX can be empty
 		Direction lSequenceDirection = lSequence.get(0).getDirection();
 		Direction lNewDirection = null;
 		switch (lSequenceDirection) {
