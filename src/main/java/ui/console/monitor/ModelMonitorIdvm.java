@@ -26,17 +26,23 @@ public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 	iSoup mSoup;
 
 	public void run() {
+		Genome mGenome = initializeGenome();
+		runGenome(mGenome);
+
+	}
+
+	public static Genome initializeGenome() {
+		Genome lGenome  = new Genome();
 		IdvmCell[] mCellGrow = new IdvmCell[7];
 		mCellGrow[0] = new IdvmCell(BlockType.LIFE, new Pos(0, 0));
 		mCellGrow[1] = new IdvmCell(BlockType.SENSOR, new Pos(1, 0));
 		mCellGrow[2] = new IdvmCell(BlockType.SENSOR, new Pos(0, 1));
 		mCellGrow[3] = new IdvmCell(BlockType.MOVE, new Pos(1, 1));
-		mCellGrow[4] = new IdvmCell(BlockType.MOVE, new Pos(2, 2));
-		mCellGrow[5] = new IdvmCell(BlockType.SENSOR, new Pos(0, -1));
-		mCellGrow[6] = new IdvmCell(BlockType.SENSOR, new Pos(-1, 0));
-		Genome mGenome = new Genome();
+		mCellGrow[4] = new IdvmCell(BlockType.SENSOR, new Pos(2, 2));
+		mCellGrow[5] = new IdvmCell(BlockType.SENSOR, new Pos(-1, -1));
+		mCellGrow[6] = new IdvmCell(BlockType.SENSOR, new Pos(-1, 1));
 		for (IdvmCell iCell : mCellGrow) {
-			mGenome.cellGrow.add(new IdvmCell(iCell.getBlockType(), iCell
+			lGenome.cellGrow.add(new IdvmCell(iCell.getBlockType(), iCell
 					.getPosOnIdvm()));
 		}
 		ArrayList<MoveProbability> lIdlelMoveProbability = new ArrayList<MoveProbability>();
@@ -52,7 +58,7 @@ public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 		lIdlelMoveProbability.add(new MoveProbability(0, 1, 0, 1, 1, 0));
 		lIdlelMoveProbability.add(new MoveProbability(1, 0, 0, 1, 1, 0));
 		lIdlelMoveProbability.add(new MoveProbability(0, 2, 1, 0, 1, 0));
-		mGenome.movementSequences.put(IdvmState.IDLE, lIdlelMoveProbability);
+		lGenome.movementSequences.put(IdvmState.IDLE, lIdlelMoveProbability);
 		ArrayList<MoveProbability> lFoodMoveProbability = new ArrayList<MoveProbability>();
 		lFoodMoveProbability.add(new MoveProbability(0, 0, 0, 0, 0, 0)
 				.setDirection(Direction.TARGET, 1));
@@ -64,7 +70,7 @@ public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 				.setDirection(Direction.TARGET, 1));
 		lFoodMoveProbability.add(new MoveProbability(0, 0, 0, 0, 0, 0)
 				.setDirection(Direction.TARGET, 1));
-		mGenome.movementSequences.put(IdvmState.FOOD, lFoodMoveProbability);
+		lGenome.movementSequences.put(IdvmState.FOOD, lFoodMoveProbability);
 		ArrayList<MoveProbability> lEnemyMoveProbability = new ArrayList<MoveProbability>();
 		lEnemyMoveProbability.add(new MoveProbability(0, 0, 0, 0, 0, 0)
 				.setDirection(Direction.TARGET_OPPOSITE, 1));
@@ -76,11 +82,11 @@ public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 				.setDirection(Direction.TARGET_OPPOSITE, 1));
 		lEnemyMoveProbability.add(new MoveProbability(0, 0, 0, 0, 0, 0)
 				.setDirection(Direction.TARGET_OPPOSITE, 1));
-		mGenome.movementSequences.put(IdvmState.ENEMY, lEnemyMoveProbability);
+		lGenome.movementSequences.put(IdvmState.ENEMY, lEnemyMoveProbability);
 
-		mGenome.setHunger(50);
-		runGenome(mGenome);
-
+		lGenome.setHunger(50);
+		
+		return lGenome;
 	}
 
 	public void runGenome(Genome mGenome) {

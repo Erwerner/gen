@@ -40,21 +40,19 @@ public class Soup implements iSoup {
 	}
 
 	private void clearSurroundingsOfIdvm() {
-//		Pos lIdvmMidPos = mIdvm.getPos();
 		ArrayList<Pos> lIdvmPosList = new ArrayList<Pos>();
 
 		for (iBlock iBlock : mIdvm.getUsedBlocks()) {
 			lIdvmPosList.add(iBlock.getPos());
 		}
 
-		for (int x = Constants.soupSize/2 - 1; x <= Constants.soupSize/2 + 2; x++) {
-			for (int y = Constants.soupSize/2 - 1; y <= Constants.soupSize/2 + 2; y++) {
-				//if (!lIdvmPosList.contains(new Pos(x, y)))
-					try {
-						mBlockGrid.setBlock(new Pos(x, y), null);
-					} catch (ExOutOfGrid e) {
-						e.printStackTrace();
-					}
+		for (int x = Constants.soupSize / 2 - 2; x <= Constants.soupSize / 2 + 3; x++) {
+			for (int y = Constants.soupSize / 2 - 2; y <= Constants.soupSize / 2 + 3; y++) {
+				try {
+					mBlockGrid.setBlock(new Pos(x, y), null);
+				} catch (ExOutOfGrid e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -79,7 +77,7 @@ public class Soup implements iSoup {
 			try {
 				mBlockGrid.setBlock(iBlock.getPos(), iBlock);
 			} catch (ExOutOfGrid e) {
-				e.printStackTrace();
+				// TODO e.printStackTrace();
 			}
 		}
 		mIdvm.detectCollisions();
@@ -90,14 +88,14 @@ public class Soup implements iSoup {
 					mBlockGrid.setBlock(iBlock.getPos(), null);
 				}
 			} catch (ExOutOfGrid e) {
-				e.printStackTrace();
+				// TODO e.printStackTrace();
 			}
 		}
 		for (iBlock iBlock : mIdvm.getUsedBlocks()) {
 			try {
 				mBlockGrid.setBlock(iBlock.getPos(), iBlock);
 			} catch (ExOutOfGrid e) {
-				e.printStackTrace();
+				// TODO e.printStackTrace();
 			}
 		}
 	}
@@ -114,6 +112,7 @@ public class Soup implements iSoup {
 	}
 
 	public void executeIdvm() {
+		//TODO 2 messure runtime
 		while (mIdvm.isAlive())
 			step();
 	}

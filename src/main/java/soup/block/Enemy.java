@@ -26,7 +26,8 @@ public class Enemy extends Block {
 				setPosition(lNewPos);
 				break;
 			} catch (ExOutOfGrid e) {
-				setRandomDirection();
+				mCurrentDirection = mCurrentDirection.opposite();
+				move();
 			}
 	}
 
