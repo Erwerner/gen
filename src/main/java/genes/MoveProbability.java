@@ -8,12 +8,11 @@ import java.util.Random;
 import datatypes.Direction;
 
 public class MoveProbability implements iGene {
-	//TODO REF make private
+	// TODO REF make private
 	public ArrayList<Direction> mPossibleDirection = new ArrayList<Direction>();
 
 	// TODO REF Delete Parameter
-	public MoveProbability(int pUp, int pDown, int pLeft, int pRight,
-			int pNothing, int pCurrent) {
+	public MoveProbability(int pUp, int pDown, int pLeft, int pRight, int pNothing, int pCurrent) {
 		mPossibleDirection = new ArrayList<Direction>();
 		for (int i = 0; i < pUp; i++)
 			mPossibleDirection.add(Direction.UP);
@@ -51,17 +50,23 @@ public class MoveProbability implements iGene {
 	public void mutate(Double pMutationRate) {
 		if (!Global.checkChance(pMutationRate))
 			return;
-		//Remove two random Directions
-		for (int i = 0; i < 2; i++) {
+		if (!Global.checkChance(0.9)) {
+			mPossibleDirection = null;
+			return;
+		}
+		if (mPossibleDirection == null)
+			mPossibleDirection = new ArrayList<Direction>();
+		// Remove two random Directions
+		for (int i = 0; i < 1; i++) {
 			// TODO REF move to Globals
 			Random lRandom = new Random();
 			int lRndIdx = lRandom.nextInt(Direction.values().length);
 			Direction lRndDirection = Direction.values()[lRndIdx];
-			while(mPossibleDirection.contains(lRndDirection)){
+			while (mPossibleDirection.contains(lRndDirection)) {
 				mPossibleDirection.remove(lRndDirection);
 			}
 		}
-		//Add two random directions
+		// Add two random directions
 		for (int i = 0; i < 1; i++) {
 			// TODO REF move to Globals
 			Random lRandom = new Random();

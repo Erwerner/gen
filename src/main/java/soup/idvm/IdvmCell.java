@@ -54,7 +54,7 @@ public class IdvmCell extends Block implements iGene {
 		if (Global.checkChance(pMutationRate)) { 
 			// TODO REF move to Globals
 			Random lRandom = new Random();
-			BlockType[] lCellTypes = { BlockType.LIFE, BlockType.DEFENCE,
+			BlockType[] lCellTypes = { BlockType.LIFE,//TODO BlockType.DEFENCE,
 					BlockType.MOVE, BlockType.SENSOR };
 			int lRndBlock = lRandom.nextInt(lCellTypes.length);
 			mBlockType = lCellTypes[lRndBlock];

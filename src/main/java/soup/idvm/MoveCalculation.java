@@ -79,9 +79,8 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 				lGridBlock = mBlockGrid.getBlock(iPos.getKey());
 				if (lGridBlock != null
 						&& lGridBlock.getBlockType() == lSearchBlock) {
-					Direction lDircetion;
 					Pos lSensorPos = iPos.getValue().getPos();
-					lDircetion = lSensorPos.getDircetionTo(iPos.getKey());
+					Direction lDircetion = lSensorPos.getDircetionTo(iPos.getKey());
 					return lDircetion;
 				}
 			} catch (ExOutOfGrid e) {

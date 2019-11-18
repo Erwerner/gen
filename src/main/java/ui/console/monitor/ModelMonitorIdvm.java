@@ -38,9 +38,9 @@ public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 		mCellGrow[1] = new IdvmCell(BlockType.SENSOR, new Pos(1, 0));
 		mCellGrow[2] = new IdvmCell(BlockType.SENSOR, new Pos(0, 1));
 		mCellGrow[3] = new IdvmCell(BlockType.MOVE, new Pos(1, 1));
-		mCellGrow[4] = new IdvmCell(BlockType.MOVE, new Pos(2, 2));
-		mCellGrow[5] = new IdvmCell(BlockType.SENSOR, new Pos(0, -1));
-		mCellGrow[6] = new IdvmCell(BlockType.SENSOR, new Pos(-1, 0));
+		mCellGrow[4] = new IdvmCell(BlockType.SENSOR, new Pos(2, 2));
+		mCellGrow[5] = new IdvmCell(BlockType.SENSOR, new Pos(-1, -1));
+		mCellGrow[6] = new IdvmCell(BlockType.SENSOR, new Pos(-1, 1));
 		for (IdvmCell iCell : mCellGrow) {
 			lGenome.cellGrow.add(new IdvmCell(iCell.getBlockType(), iCell
 					.getPosOnIdvm()));

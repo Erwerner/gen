@@ -2,6 +2,7 @@ package genes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import soup.block.BlockType;
 import soup.idvm.IdvmCell;
@@ -13,7 +14,7 @@ public class Genome implements Cloneable {
 	private static final int cMaxSequence = 48;
 	private GeneInt mHunger = new GeneInt(0, cMaxSequence, 50);
 	// TODO IMPL make mutation rate a gene
-	private Double mMutationRate = 0.05;
+	private Double mMutationRate = 0.02;
 	// TODO REF make this private
 	public ArrayList<IdvmCell> cellGrow = new ArrayList<IdvmCell>();
 	public HashMap<IdvmState, ArrayList<MoveProbability>> movementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
@@ -21,7 +22,7 @@ public class Genome implements Cloneable {
 	public void forceMutation() {
 		ArrayList<MoveProbability> lInitialMoveProbability = new ArrayList<MoveProbability>();
 		for (int i = 0; i < 48; i++) {
-			cellGrow.add(new IdvmCell(BlockType.NOTHING, new Pos(0, 0)));
+			cellGrow.add((new IdvmCell(BlockType.NOTHING, new Pos(0, 0))));
 			lInitialMoveProbability.add(new MoveProbability());
 		}
 		for (IdvmState iState : IdvmState.values()) {
@@ -43,6 +44,20 @@ public class Genome implements Cloneable {
 
 		for (int i = 0; i < 4; i++)
 			setInitialCell(i, i / 2, i % 2);
+
+		//TODO TEST
+		for(Entry<IdvmState, ArrayList<MoveProbability>> iMoveSequence : movementSequences.entrySet()) {
+	
+			ArrayList<Direction> lLastPossible= new ArrayList<Direction>();
+			lLastPossible.add(Direction.UP);
+			for(MoveProbability iProbability: iMoveSequence.getValue()) {
+				if(iProbability.mPossibleDirection == null) {
+					iProbability.mPossibleDirection = lLastPossible;
+				}else {
+					lLastPossible = iProbability.mPossibleDirection;
+				}
+			}
+		}
 	}
 
 	private void setInitialCell(int pIdx, int pX, int pY) {

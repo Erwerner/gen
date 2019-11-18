@@ -19,7 +19,7 @@ import exceptions.ExOutOfGrid;
 
 public class Idvm extends Block implements iIdvm {
 
-	public static final int cMaxEnergy = 1000;
+	public static final int cMaxEnergy = 300;
 	@SuppressWarnings("unused")
 	private Genome mGenomeOrigin;
 	// private Pos mMidPosition = new Pos(0, 0);
@@ -29,7 +29,7 @@ public class Idvm extends Block implements iIdvm {
 	private int mHunger;
 	private iBlockGrid mBlockGrid;
 	private int mStepCount;
-	private int mEnergy = 180;
+	private int mEnergy = cMaxEnergy / 2;
 	private iIdvmMoveCalculation mMoveCalculation;
 
 	public Idvm(Genome pGenome) {
@@ -155,7 +155,7 @@ public class Idvm extends Block implements iIdvm {
 				try {
 					Pos lNewPos = mMoveCalculation.getMovingPosition(this, mMovementSequences);
 					setPosition(lNewPos);
-					mEnergy--;
+					// mEnergy--;
 					break;
 				} catch (ExOutOfGrid e) {
 				}
@@ -178,19 +178,19 @@ public class Idvm extends Block implements iIdvm {
 			lState = IdvmState.FOOD;
 		if (detectSurroundingBlockType(BlockType.ENEMY))
 			lState = IdvmState.ENEMY;
-		if (isHungry()) {
-			switch (lState) {
-			case FOOD:
-				lState = IdvmState.FOOD_HUNGER;
-				break;
-			case ENEMY:
-				lState = IdvmState.ENEMY_HUNGER;
-				break;
-
-			default:
-				break;
-			}
-		}
+//		if (isHungry()) {
+//			switch (lState) {
+//			case FOOD:
+//				lState = IdvmState.FOOD_HUNGER;
+//				break;
+//			case ENEMY:
+//				lState = IdvmState.ENEMY_HUNGER;
+//				break;
+//
+//			default:
+//				break;
+//			}
+//		}
 		return lState;
 	}
 
@@ -213,8 +213,8 @@ public class Idvm extends Block implements iIdvm {
 	public HashMap<Pos, Sensor> getDetectedPos() {
 		HashMap<Pos, Sensor> lDetectedPos = new HashMap<Pos, Sensor>();
 		for (iBlock iCell : getUsedBlocks(BlockType.SENSOR)) {
-			for (int x = -1; x <= 1; x++) {
-				for (int y = -1; y <= 1; y++) {
+			for (int x = -4; x <= 4; x++) {
+				for (int y = -4; y <= 4; y++) {
 					int lCellX = iCell.getPos().x;
 					int lCellY = iCell.getPos().y;
 					lDetectedPos.put(new Pos(lCellX + x, lCellY + y),
@@ -238,15 +238,15 @@ public class Idvm extends Block implements iIdvm {
 	public void detectCollisions() {
 		ArrayList<Pos> lIdvmPos = new ArrayList<Pos>();
 		for (iBlock iBlock : getUsedBlocks()) {
-			lIdvmPos.add(iBlock.getPos());
-		}
-		for (Pos iPos : lIdvmPos) {
+			Pos iPos = iBlock.getPos();
 			iBlock lGridBlock;
 			try {
 				lGridBlock = mBlockGrid.getBlock(iPos);
 				if (lGridBlock != null) {
 					switch (lGridBlock.getBlockType()) {
 					case FOOD:
+						if (iBlock.getBlockType() != BlockType.SENSOR)
+							break;
 						interactWithFood((Food) lGridBlock);
 						lGridBlock.setNull();
 						break;
