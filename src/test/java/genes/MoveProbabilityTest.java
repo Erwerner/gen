@@ -11,9 +11,4 @@ MoveProbability cut = new MoveProbability();
 	public void setUp() throws Exception {
 	}
 
-	@Test
-	public void mutationInitsArray() {
-		cut.mutate(1.0);
-		assertNotNull(cut.getDirection());
-	}
 }

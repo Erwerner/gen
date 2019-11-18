@@ -301,10 +301,8 @@ public class IdvmTest {
 	public void eatChangesDirection() {
 		assertPosition(cStartPosX, cStartPosY, cut.getPos());
 		cut.step();
-		cut.step();
 		assertPosition(cStartPosX - 1, cStartPosY, cut.getPos());
 		cut.interactWithFood(new Food());
-		cut.step();
 		cut.step();
 		assertPosition(cStartPosX - 1, cStartPosY + 1, cut.getPos());
 	}
@@ -313,10 +311,8 @@ public class IdvmTest {
 	public void poppingNeverChangesGenome() {
 		assertPosition(cStartPosX, cStartPosY, cut.getPos());
 		cut.step();
-		cut.step();
 		assertPosition(cStartPosX - 1, cStartPosY, cut.getPos());
 		cut.interactWithFood(new Food());
-		cut.step();
 		cut.step();
 		assertPosition(cStartPosX - 1, cStartPosY + 1, cut.getPos());
 		assertEquals(2, mGenome.movementSequences.get(IdvmState.IDLE).size());

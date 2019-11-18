@@ -77,7 +77,6 @@ public class Soup implements iSoup {
 			try {
 				mBlockGrid.setBlock(iBlock.getPos(), iBlock);
 			} catch (ExOutOfGrid e) {
-				// TODO e.printStackTrace();
 			}
 		}
 		mIdvm.detectCollisions();

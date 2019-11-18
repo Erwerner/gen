@@ -67,6 +67,7 @@ public class MoveProbability implements iGene {
 			}
 		}
 		// Add random direction
+		//TODO Test
 		for (int i = 0; i < 1; i++) {
 			// TODO REF move to Globals
 			Random lRandom = new Random();

@@ -30,6 +30,7 @@ public class Idvm extends Block implements iIdvm {
 	private int mStepCount;
 	private int mEnergy = cMaxEnergy / 2;
 	private iIdvmMoveCalculation mMoveCalculation;
+	private IdvmSensor mIdvmSensor;
 
 	public Idvm(Genome pGenome) {
 		super(BlockType.IDVM);
@@ -37,6 +38,7 @@ public class Idvm extends Block implements iIdvm {
 		mGenomeOrigin = pGenome;
 		mCellGrow = pGenome.cellGrow;
 		mHunger = pGenome.getHunger();
+		
 		grow();
 		grow();
 		grow();
@@ -168,65 +170,22 @@ public class Idvm extends Block implements iIdvm {
 		killCell(pEnemy.getPos());
 	}
 
-	// TODO REF Sensor Class
 	public IdvmState getState() {
-		IdvmState lState = IdvmState.IDLE;
-		if (detectSurroundingBlockType(BlockType.FOOD))
-			lState = IdvmState.FOOD;
-		if (detectSurroundingBlockType(BlockType.ENEMY))
-			lState = IdvmState.ENEMY;
-		//TODO hungry
-//		if (isHungry()) {
-//			switch (lState) {
-//			case FOOD:
-//				lState = IdvmState.FOOD_HUNGER;
-//				break;
-//			case ENEMY:
-//				lState = IdvmState.ENEMY_HUNGER;
-//				break;
-//
-//			default:
-//				break;
-//			}
-//		}
-		return lState;
+		return mIdvmSensor.getState(getDetectedPos());
 	}
 
-	// TODO REF Sensor Class
-	private boolean detectSurroundingBlockType(BlockType pBlockType) {
-		for (Entry<Pos, Sensor> iPos : getDetectedPos().entrySet()) {
-			Pos lPos = iPos.getKey();
-			try {
-				lPos.isInGrid();
-				iBlock lGridBlock = mBlockGrid.getBlock(lPos);
-				if (lGridBlock != null && lGridBlock.getBlockType() == pBlockType)
-					return true;
-			} catch (ExOutOfGrid e) {
-			}
-		}
-		return false;
-	}
 
-	// TODO REF Sensor Class
-	//TODO 2 IMPL detect range depends on sensors
+
 	public HashMap<Pos, Sensor> getDetectedPos() {
-		HashMap<Pos, Sensor> lDetectedPos = new HashMap<Pos, Sensor>();
-		for (iBlock iCell : getUsedBlocks(BlockType.SENSOR)) {
-			for (int x = -4; x <= 4; x++) {
-				for (int y = -4; y <= 4; y++) {
-					int lCellX = iCell.getPos().x;
-					int lCellY = iCell.getPos().y;
-					lDetectedPos.put(new Pos(lCellX + x, lCellY + y),
-							(Sensor) new Sensor().setPosition(iCell.getPos()));
-				}
-			}
-		}
-		return lDetectedPos;
+		ArrayList<iBlock> lSensors = getUsedBlocks(BlockType.SENSOR);
+		return mIdvmSensor.getDetectedPos(lSensors);
 	}
+
 
 	public void setBlockGrid(iBlockGrid pBlockGrid) {
 		mBlockGrid = pBlockGrid;
 		mMoveCalculation = new MoveCalculation(mBlockGrid);
+		mIdvmSensor = new IdvmSensor(mBlockGrid);
 	}
 
 	public int getStepCount() {
