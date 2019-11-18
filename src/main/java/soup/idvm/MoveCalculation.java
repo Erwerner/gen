@@ -62,9 +62,11 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 
 		switch (pState) {
 		case FOOD:
+		case FOOD_HUNGER:
 			lSearchBlock = BlockType.FOOD;
 			break;
 		case ENEMY:
+		case ENEMY_HUNGER:
 			lSearchBlock = BlockType.ENEMY;
 			break;
 		default:

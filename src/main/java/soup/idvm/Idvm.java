@@ -19,7 +19,7 @@ import exceptions.ExOutOfGrid;
 
 public class Idvm extends Block implements iIdvm {
 
-	public static final int cMaxEnergy = 500;
+	public static final int cMaxEnergy = 1000;
 	@SuppressWarnings("unused")
 	private Genome mGenomeOrigin;
 	// private Pos mMidPosition = new Pos(0, 0);
@@ -29,7 +29,7 @@ public class Idvm extends Block implements iIdvm {
 	private int mHunger;
 	private iBlockGrid mBlockGrid;
 	private int mStepCount;
-	private int mEnergy = 300;
+	private int mEnergy = 180;
 	private iIdvmMoveCalculation mMoveCalculation;
 
 	public Idvm(Genome pGenome) {
@@ -50,8 +50,8 @@ public class Idvm extends Block implements iIdvm {
 
 	@SuppressWarnings("unchecked")
 	private void addaptMovementSequence(IdvmState pState, Genome pGenome) {
-		ArrayList<MoveProbability> lMoveProbability = (ArrayList<MoveProbability>) pGenome.movementSequences
-				.get(pState).clone();
+		ArrayList<MoveProbability> lMoveProbability = (ArrayList<MoveProbability>) pGenome.movementSequences.get(pState)
+				.clone();
 		mMovementSequences.put(pState, lMoveProbability);
 	}
 
@@ -129,17 +129,17 @@ public class Idvm extends Block implements iIdvm {
 
 	public void step() {
 		mStepCount++;
-		mEnergy--;
-		if (mStepCount % 2 == 0)
-			return;
+		for (iBlock iCount : getUsedBlocks(BlockType.LIFE))
+			mEnergy--;
+		// if (mStepCount % 2 == 0)
+		// return;
 		move();
 	}
 
 	private void eat(Food pFood) {
 		mEnergy = cMaxEnergy;
 		grow();
-		for (Entry<IdvmState, ArrayList<MoveProbability>> iSequence : mMovementSequences
-				.entrySet()) {
+		for (Entry<IdvmState, ArrayList<MoveProbability>> iSequence : mMovementSequences.entrySet()) {
 			try {
 				iSequence.getValue().remove(0);
 			} catch (RuntimeException e) {
@@ -153,8 +153,7 @@ public class Idvm extends Block implements iIdvm {
 		for (iBlock iCount : getUsedBlocks(BlockType.MOVE)) {
 			for (int i = 0; i < 10; i++) {
 				try {
-					Pos lNewPos = mMoveCalculation.getMovingPosition(this,
-							mMovementSequences);
+					Pos lNewPos = mMoveCalculation.getMovingPosition(this, mMovementSequences);
 					setPosition(lNewPos);
 					mEnergy--;
 					break;
@@ -179,6 +178,19 @@ public class Idvm extends Block implements iIdvm {
 			lState = IdvmState.FOOD;
 		if (detectSurroundingBlockType(BlockType.ENEMY))
 			lState = IdvmState.ENEMY;
+		if (isHungry()) {
+			switch (lState) {
+			case FOOD:
+				lState = IdvmState.FOOD_HUNGER;
+				break;
+			case ENEMY:
+				lState = IdvmState.ENEMY_HUNGER;
+				break;
+
+			default:
+				break;
+			}
+		}
 		return lState;
 	}
 
@@ -189,8 +201,7 @@ public class Idvm extends Block implements iIdvm {
 			try {
 				lPos.isInGrid();
 				iBlock lGridBlock = mBlockGrid.getBlock(lPos);
-				if (lGridBlock != null
-						&& lGridBlock.getBlockType() == pBlockType)
+				if (lGridBlock != null && lGridBlock.getBlockType() == pBlockType)
 					return true;
 			} catch (ExOutOfGrid e) {
 			}
@@ -252,8 +263,7 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	public Direction getTargetDirection() {
-		return mMoveCalculation
-				.getTargetDirection(getState(), getDetectedPos());
+		return mMoveCalculation.getTargetDirection(getState(), getDetectedPos());
 	}
 
 	public int getEnergyCount() {

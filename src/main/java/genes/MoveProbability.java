@@ -62,7 +62,7 @@ public class MoveProbability implements iGene {
 			}
 		}
 		//Add two random directions
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < 1; i++) {
 			// TODO REF move to Globals
 			Random lRandom = new Random();
 			int lRndIdx = lRandom.nextInt(Direction.values().length);

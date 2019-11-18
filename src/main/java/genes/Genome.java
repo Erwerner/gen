@@ -11,9 +11,9 @@ import datatypes.Pos;
 
 public class Genome implements Cloneable {
 	private static final int cMaxSequence = 48;
-	private GeneInt mHunger = new GeneInt(0, 100, 50);
+	private GeneInt mHunger = new GeneInt(0, cMaxSequence, 50);
 	// TODO IMPL make mutation rate a gene
-	private Double mMutationRate = 0.2;
+	private Double mMutationRate = 0.05;
 	// TODO REF make this private
 	public ArrayList<IdvmCell> cellGrow = new ArrayList<IdvmCell>();
 	public HashMap<IdvmState, ArrayList<MoveProbability>> movementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
@@ -77,6 +77,7 @@ public class Genome implements Cloneable {
 	public Object clone() throws CloneNotSupportedException {
 		Genome lClone = new Genome();
 		for(IdvmCell iCell : cellGrow){
+			//TODO check clone pos and Block
 			lClone.cellGrow.add(new IdvmCell(iCell.getBlockType(),new Pos(iCell.getPosOnIdvm().x,iCell.getPosOnIdvm().y)));
 		}
 		for (IdvmState iState : IdvmState.values()) {
@@ -88,7 +89,8 @@ public class Genome implements Cloneable {
 				}
 				lMovements.add(lProbability );
 			}
-			lClone.movementSequences.put(iState,lMovements);					
+			lClone.movementSequences.put(iState,lMovements);
+			lClone.setHunger(getHunger());
 		}
 		return lClone ;
 	}

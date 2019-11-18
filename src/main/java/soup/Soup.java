@@ -79,7 +79,7 @@ public class Soup implements iSoup {
 			try {
 				mBlockGrid.setBlock(iBlock.getPos(), iBlock);
 			} catch (ExOutOfGrid e) {
-				e.printStackTrace();
+				//TODO e.printStackTrace();
 			}
 		}
 		mIdvm.detectCollisions();
@@ -90,14 +90,14 @@ public class Soup implements iSoup {
 					mBlockGrid.setBlock(iBlock.getPos(), null);
 				}
 			} catch (ExOutOfGrid e) {
-				e.printStackTrace();
+				//TODO e.printStackTrace();
 			}
 		}
 		for (iBlock iBlock : mIdvm.getUsedBlocks()) {
 			try {
 				mBlockGrid.setBlock(iBlock.getPos(), iBlock);
 			} catch (ExOutOfGrid e) {
-				e.printStackTrace();
+				//TODO e.printStackTrace();
 			}
 		}
 	}
