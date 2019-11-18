@@ -9,6 +9,8 @@ import soup.idvm.IdvmState;
 import datatypes.Direction;
 import datatypes.Pos;
 
+
+//TODO 1 IMPL Corossover
 public class Genome implements Cloneable {
 	private static final int cMaxSequence = 48;
 	private GeneInt mHunger = new GeneInt(0, 100, 50);
