@@ -81,7 +81,15 @@ public class GenomeTest {
 		assertNotEquals(lFirstProbability, lIdleSequence.get(1).mPossibleDirection);
 	}
 	@Test
-	public void cloneWorksCorrect() {
-		
+	public void cloneWorksCorrect() throws CloneNotSupportedException {
+		cut.forceMutation();
+		Genome lCopy = (Genome) cut.clone();
+		Genome lAlteredCopy = (Genome) cut.clone();
+		lAlteredCopy.forceMutation();
+		cut.cellGrow.get(5).setPosition(new Pos(10,10));
+		lAlteredCopy.cellGrow.get(5).setPosition(new Pos(10,10));
+		lCopy.cellGrow.get(5).setPosition(new Pos(10,10));
+		assertEquals(lCopy.cellGrow.get(5), cut.cellGrow.get(5));
+		assertNotEquals(lAlteredCopy.cellGrow.get(5), cut.cellGrow.get(5));
 	}
 }

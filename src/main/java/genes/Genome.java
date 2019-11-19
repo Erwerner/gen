@@ -88,7 +88,6 @@ public class Genome implements Cloneable {
 		mHunger.setValue(pInt);
 	}
 
-	// TODO 1 TEST clone
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		Genome lClone = new Genome();

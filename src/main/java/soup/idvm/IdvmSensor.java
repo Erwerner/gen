@@ -60,7 +60,7 @@ public class IdvmSensor {
 		return false;
 	}
 
-	// TODO 2 IMPL detect range depends on sensors
+	// TODO 3 IMPL detect range depends on sensors
 	public HashMap<Pos, Sensor> getDetectedPos(ArrayList<iBlock> pSensors) {
 		HashMap<Pos, Sensor> lDetectedPos = new HashMap<Pos, Sensor>();
 		for (iBlock iCell : pSensors) {
