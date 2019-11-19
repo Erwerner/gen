@@ -1,4 +1,4 @@
-package soup.idvm;
+package soup.block;
 
 import genes.iGene;
 import globals.Global;
@@ -6,8 +6,6 @@ import globals.Global;
 import java.util.Random;
 
 import lombok.Data;
-import soup.block.Block;
-import soup.block.BlockType;
 import datatypes.Pos;
 
 @Data

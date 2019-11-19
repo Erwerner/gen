@@ -11,6 +11,7 @@ import soup.block.Block;
 import soup.block.BlockType;
 import soup.block.Enemy;
 import soup.block.Food;
+import soup.block.IdvmCell;
 import soup.block.iBlock;
 import soup.block.iBlockGrid;
 import datatypes.Direction;
@@ -184,7 +185,7 @@ public class Idvm extends Block implements iIdvm {
 
 	public void setBlockGrid(iBlockGrid pBlockGrid) {
 		mBlockGrid = pBlockGrid;
-		mMoveCalculation = new MoveCalculation(mBlockGrid);
+		mMoveCalculation = new IdvmMoveCalculation(mBlockGrid);
 		mIdvmSensor = new IdvmSensor(mBlockGrid);
 	}
 

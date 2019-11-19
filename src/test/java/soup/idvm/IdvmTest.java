@@ -21,6 +21,7 @@ import soup.block.BlockGrid;
 import soup.block.BlockType;
 import soup.block.Enemy;
 import soup.block.Food;
+import soup.block.IdvmCell;
 import soup.block.iBlock;
 import soup.block.iBlockGrid;
 import datatypes.Direction;

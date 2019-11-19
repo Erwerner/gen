@@ -1,3 +1,4 @@
+package execution;
 import genes.Genome;
 import ui.console.monitor.ModelMonitorIdvm;
 
@@ -40,7 +41,7 @@ public class runBestOfX {
 		Genome lGenomeBest = lGenomeGeneration;
 
 		int lStepBest = 0;
-		for (int i = 0; i < 200; i++) {
+		for (int i = 0; i < 25; i++) {
 			// System.out.println("");
 			// System.out.print("Gen " + pIdxGeneration + ": Run Genome #" + i);
 			Genome lGenome;

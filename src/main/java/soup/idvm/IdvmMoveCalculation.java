@@ -16,12 +16,12 @@ import exceptions.ExWrongDirection;
 import exceptions.ExWrongState;
 import genes.MoveProbability;
 
-public class MoveCalculation implements iIdvmMoveCalculation {
+public class IdvmMoveCalculation implements iIdvmMoveCalculation {
 
 	private iBlockGrid mBlockGrid;
 	private Direction mCurrentDirection = Direction.UP;
 
-	public MoveCalculation(iBlockGrid pBlockGrid) {
+	public IdvmMoveCalculation(iBlockGrid pBlockGrid) {
 		super();
 		mBlockGrid = pBlockGrid;
 	}

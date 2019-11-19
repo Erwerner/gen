@@ -10,6 +10,7 @@ import org.junit.Test;
 import datatypes.Pos;
 
 import soup.block.BlockType;
+import soup.block.IdvmCell;
 
 public class IdvmCellTest {
 	IdvmCell cut;

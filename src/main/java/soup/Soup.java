@@ -11,6 +11,7 @@ import soup.block.iBlock;
 import soup.block.iBlockGrid;
 import soup.idvm.iIdvm;
 import datatypes.Pos;
+import devutils.Measure;
 import exceptions.ExOutOfGrid;
 import globals.Constants;
 
