@@ -58,8 +58,10 @@ public class IdvmTest {
 					.getPosOnIdvm()));
 		}
 		ArrayList<MoveProbability> lIdlelMoveProbability = new ArrayList<MoveProbability>();
-		lIdlelMoveProbability.add(new MoveProbability(0, 0, 1, 0, 0, 0));
-		lIdlelMoveProbability.add(new MoveProbability(0, 1, 0, 0, 0, 0));
+		lIdlelMoveProbability.add(new MoveProbability().setDirection(
+				Direction.LEFT, 1));
+		lIdlelMoveProbability.add(new MoveProbability().setDirection(
+				Direction.DOWN, 1));
 		mGenome.movementSequences.put(IdvmState.IDLE, lIdlelMoveProbability);
 		mGenome.movementSequences.put(IdvmState.FOOD, lIdlelMoveProbability);
 
@@ -164,44 +166,28 @@ public class IdvmTest {
 	@Test
 	public void getsHungry() {
 		/*
-		mGenome.setHunger(Idvm.cMaxEnergy - 10);
-		cut = new Idvm(mGenome);
-		cut.setBlockGrid(mBlockGrid);
-		cut.setPosition(new Pos(cStartPosX, cStartPosY));
-		assertFalse(cut.isHungry());
-		for (int i = 0; i <= Idvm.cMaxEnergy - mGenome.getHunger() - 1; i = i + 1) {
-			cut.step();
-			cut.step();
-		}
-		assertFalse(cut.isHungry());
-		cut.step();
-		cut.step();
-		assertTrue(cut.isHungry());
-		*/
+		 * mGenome.setHunger(Idvm.cMaxEnergy - 10); cut = new Idvm(mGenome);
+		 * cut.setBlockGrid(mBlockGrid); cut.setPosition(new Pos(cStartPosX,
+		 * cStartPosY)); assertFalse(cut.isHungry()); for (int i = 0; i <=
+		 * Idvm.cMaxEnergy - mGenome.getHunger() - 1; i = i + 1) { cut.step();
+		 * cut.step(); } assertFalse(cut.isHungry()); cut.step(); cut.step();
+		 * assertTrue(cut.isHungry());
+		 */
 	}
 
 	@Test
 	public void aferEatNoHunger() {
 		/*
-		mGenome.setHunger(Idvm.cMaxEnergy - 10);
-		cut = new Idvm(mGenome);
-		cut.setBlockGrid(mBlockGrid);
-		cut.setPosition(new Pos(cStartPosX, cStartPosY));
-		assertFalse(cut.isHungry());
-		for (int i = 0; i <= Idvm.cMaxEnergy - mGenome.getHunger() - 1; i = i + 1) {
-			cut.step();
-			cut.step();
-		}
-		assertFalse(cut.isHungry());
-		cut.step();
-		cut.step();
-		assertTrue(cut.isHungry());
-
-		Food lFood = new Food();
-		lFood.setPosition(new Pos(20, 20));
-		cut.interactWithFood(lFood);
-		assertFalse(cut.isHungry());
-		*/
+		 * mGenome.setHunger(Idvm.cMaxEnergy - 10); cut = new Idvm(mGenome);
+		 * cut.setBlockGrid(mBlockGrid); cut.setPosition(new Pos(cStartPosX,
+		 * cStartPosY)); assertFalse(cut.isHungry()); for (int i = 0; i <=
+		 * Idvm.cMaxEnergy - mGenome.getHunger() - 1; i = i + 1) { cut.step();
+		 * cut.step(); } assertFalse(cut.isHungry()); cut.step(); cut.step();
+		 * assertTrue(cut.isHungry());
+		 * 
+		 * Food lFood = new Food(); lFood.setPosition(new Pos(20, 20));
+		 * cut.interactWithFood(lFood); assertFalse(cut.isHungry());
+		 */
 	}
 
 	@Test

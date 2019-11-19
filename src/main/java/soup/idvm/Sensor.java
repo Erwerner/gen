@@ -3,7 +3,7 @@ package soup.idvm;
 import soup.block.Block;
 import soup.block.BlockType;
 
-//TODO delete
+//TODO 9 delete
 public class Sensor extends Block{
 
 	public Sensor() {

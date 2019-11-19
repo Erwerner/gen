@@ -10,6 +10,7 @@ import soup.block.IdvmCell;
 import soup.idvm.Idvm;
 import soup.idvm.IdvmState;
 import soup.idvm.iIdvm;
+import datatypes.Direction;
 import datatypes.Pos;
 
 public class TestMock {
@@ -25,11 +26,14 @@ public class TestMock {
 
 		lGenome = new Genome();
 		for (IdvmCell iCell : lCellGrow) {
-			lGenome.cellGrow.add(new IdvmCell(iCell.getBlockType(), iCell.getPosOnIdvm()));
+			lGenome.cellGrow.add(new IdvmCell(iCell.getBlockType(), iCell
+					.getPosOnIdvm()));
 		}
 		ArrayList<MoveProbability> lIdlelMoveProbability = new ArrayList<MoveProbability>();
-		lIdlelMoveProbability.add(new MoveProbability(0, 0, 1, 0, 0, 0));
-		lIdlelMoveProbability.add(new MoveProbability(0, 1, 0, 0, 0, 0));
+		lIdlelMoveProbability.add(new MoveProbability().setDirection(
+				Direction.LEFT, 1));
+		lIdlelMoveProbability.add(new MoveProbability().setDirection(
+				Direction.DOWN, 1));
 		lGenome.movementSequences.put(IdvmState.IDLE, lIdlelMoveProbability);
 		lGenome.movementSequences.put(IdvmState.FOOD, lIdlelMoveProbability);
 

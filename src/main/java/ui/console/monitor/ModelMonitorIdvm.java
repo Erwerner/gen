@@ -27,12 +27,13 @@ public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 
 	public void run() {
 		Genome mGenome = initializeGenome();
-		runGenome(mGenome);
+		
+			runGenome((Genome) mGenome.forceMutation());
 
 	}
 
 	public static Genome initializeGenome() {
-		Genome lGenome  = new Genome();
+		Genome lGenome = new Genome();
 		IdvmCell[] mCellGrow = new IdvmCell[7];
 		mCellGrow[0] = new IdvmCell(BlockType.LIFE, new Pos(0, 0));
 		mCellGrow[1] = new IdvmCell(BlockType.SENSOR, new Pos(1, 0));
@@ -46,46 +47,54 @@ public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 					.getPosOnIdvm()));
 		}
 		ArrayList<MoveProbability> lIdlelMoveProbability = new ArrayList<MoveProbability>();
-		lIdlelMoveProbability.add(new MoveProbability(1, 0, 0, 5, 0, 0)
+		lIdlelMoveProbability.add(new MoveProbability()
 				.setDirection(Direction.DOWN, 1)
 				.setDirection(Direction.RIGHT, 5)
 				.setDirection(Direction.CURRENT, 10)
 				.setDirection(Direction.CURRENT_OPPOSITE, 1));
-		lIdlelMoveProbability.add(new MoveProbability(4, 0, 2, 1, 1, 0)
+		lIdlelMoveProbability.add(new MoveProbability()
 				.setDirection(Direction.UP, 4).setDirection(Direction.LEFT, 2)
 				.setDirection(Direction.RIGHT, 1)
 				.setDirection(Direction.NOTHING, 1));
-		lIdlelMoveProbability.add(new MoveProbability(0, 1, 0, 1, 1, 0));
-		lIdlelMoveProbability.add(new MoveProbability(1, 0, 0, 1, 1, 0));
-		lIdlelMoveProbability.add(new MoveProbability(0, 2, 1, 0, 1, 0));
+		lIdlelMoveProbability.add(new MoveProbability()
+				.setDirection(Direction.DOWN, 1)
+				.setDirection(Direction.RIGHT, 1)
+				.setDirection(Direction.NOTHING, 1));
+		lIdlelMoveProbability.add(new MoveProbability()
+				.setDirection(Direction.UP, 1).setDirection(Direction.RIGHT, 1)
+				.setDirection(Direction.NOTHING, 1));
+		lIdlelMoveProbability.add(new MoveProbability()
+				.setDirection(Direction.DOWN, 1)
+				.setDirection(Direction.LEFT, 2)
+				.setDirection(Direction.NOTHING, 1));
 		lGenome.movementSequences.put(IdvmState.IDLE, lIdlelMoveProbability);
 		ArrayList<MoveProbability> lFoodMoveProbability = new ArrayList<MoveProbability>();
-		lFoodMoveProbability.add(new MoveProbability(0, 0, 0, 0, 0, 0)
-				.setDirection(Direction.TARGET, 1));
-		lFoodMoveProbability.add(new MoveProbability(0, 0, 0, 0, 0, 0)
-				.setDirection(Direction.TARGET, 1));
-		lFoodMoveProbability.add(new MoveProbability(0, 0, 0, 0, 0, 0)
-				.setDirection(Direction.TARGET, 1));
-		lFoodMoveProbability.add(new MoveProbability(0, 0, 0, 0, 0, 0)
-				.setDirection(Direction.TARGET, 1));
-		lFoodMoveProbability.add(new MoveProbability(0, 0, 0, 0, 0, 0)
-				.setDirection(Direction.TARGET, 1));
+		lFoodMoveProbability.add(new MoveProbability().setDirection(
+				Direction.TARGET, 1));
+		lFoodMoveProbability.add(new MoveProbability().setDirection(
+				Direction.TARGET, 1));
+		lFoodMoveProbability.add(new MoveProbability().setDirection(
+				Direction.TARGET, 1));
+		lFoodMoveProbability.add(new MoveProbability().setDirection(
+				Direction.TARGET, 1));
+		lFoodMoveProbability.add(new MoveProbability().setDirection(
+				Direction.TARGET, 1));
 		lGenome.movementSequences.put(IdvmState.FOOD, lFoodMoveProbability);
 		ArrayList<MoveProbability> lEnemyMoveProbability = new ArrayList<MoveProbability>();
-		lEnemyMoveProbability.add(new MoveProbability(0, 0, 0, 0, 0, 0)
-				.setDirection(Direction.TARGET_OPPOSITE, 1));
-		lEnemyMoveProbability.add(new MoveProbability(0, 0, 0, 0, 0, 0)
-				.setDirection(Direction.TARGET_OPPOSITE, 1));
-		lEnemyMoveProbability.add(new MoveProbability(0, 0, 0, 0, 0, 0)
-				.setDirection(Direction.TARGET_OPPOSITE, 1));
-		lEnemyMoveProbability.add(new MoveProbability(0, 0, 0, 0, 0, 0)
-				.setDirection(Direction.TARGET_OPPOSITE, 1));
-		lEnemyMoveProbability.add(new MoveProbability(0, 0, 0, 0, 0, 0)
-				.setDirection(Direction.TARGET_OPPOSITE, 1));
+		lEnemyMoveProbability.add(new MoveProbability().setDirection(
+				Direction.TARGET_OPPOSITE, 1));
+		lEnemyMoveProbability.add(new MoveProbability().setDirection(
+				Direction.TARGET_OPPOSITE, 1));
+		lEnemyMoveProbability.add(new MoveProbability().setDirection(
+				Direction.TARGET_OPPOSITE, 1));
+		lEnemyMoveProbability.add(new MoveProbability().setDirection(
+				Direction.TARGET_OPPOSITE, 1));
+		lEnemyMoveProbability.add(new MoveProbability().setDirection(
+				Direction.TARGET_OPPOSITE, 1));
 		lGenome.movementSequences.put(IdvmState.ENEMY, lEnemyMoveProbability);
 
 		lGenome.setHunger(50);
-		
+
 		return lGenome;
 	}
 
