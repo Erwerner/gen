@@ -1,4 +1,4 @@
-package exceptions;
+package globals.exceptions;
 
 import datatypes.Direction;
 

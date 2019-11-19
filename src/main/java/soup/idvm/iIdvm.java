@@ -3,11 +3,11 @@ package soup.idvm;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import mvc.present.iPresentIdvm;
 import soup.block.Enemy;
 import soup.block.Food;
 import soup.block.iBlock;
 import soup.block.iBlockGrid;
+import ui.presenter.iPresentIdvm;
 import datatypes.Pos;
 
 public interface iIdvm extends iBlock, iPresentIdvm {

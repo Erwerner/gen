@@ -1,8 +1,8 @@
 package soup.block;
 
-import datatypes.Constants;
 import datatypes.Pos;
-import exceptions.ExOutOfGrid;
+import globals.Constants;
+import globals.exceptions.ExOutOfGrid;
 import soup.idvm.iIdvm;
 
 public class BlockGrid implements iBlockGrid {

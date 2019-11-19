@@ -13,14 +13,15 @@ import soup.block.BlockGrid;
 import soup.block.BlockType;
 import soup.block.Enemy;
 import soup.block.Food;
+import soup.block.IdvmCell;
 import soup.block.iBlock;
 import soup.block.iBlockGrid;
 import utils.TestMock;
-import datatypes.Constants;
 import datatypes.Direction;
 import datatypes.Pos;
-import exceptions.ExOutOfGrid;
 import genes.MoveProbability;
+import globals.Constants;
+import globals.exceptions.ExOutOfGrid;
 
 public class MoveCalculationTest {
 	iIdvmMoveCalculation cut;
@@ -34,7 +35,7 @@ public class MoveCalculationTest {
 		mIdvmBlocks.add(new IdvmCell(BlockType.LIFE, new Pos(1, 0)));
 		mIdvmBlocks.add(new IdvmCell(BlockType.LIFE, new Pos(1, 1)));
 
-		cut = new MoveCalculation(mBlockGrid);
+		cut = new IdvmMoveCalculation(mBlockGrid);
 	}
 
 	@Test

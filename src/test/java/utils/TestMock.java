@@ -6,8 +6,8 @@ import genes.MoveProbability;
 import java.util.ArrayList;
 
 import soup.block.BlockType;
+import soup.block.IdvmCell;
 import soup.idvm.Idvm;
-import soup.idvm.IdvmCell;
 import soup.idvm.IdvmState;
 import soup.idvm.iIdvm;
 import datatypes.Pos;

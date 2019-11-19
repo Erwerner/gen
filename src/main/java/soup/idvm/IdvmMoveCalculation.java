@@ -9,19 +9,20 @@ import soup.block.iBlock;
 import soup.block.iBlockGrid;
 import datatypes.Direction;
 import datatypes.Pos;
-import exceptions.ExFailedDetection;
-import exceptions.ExOutOfGrid;
-import exceptions.ExWrongBlockType;
-import exceptions.ExWrongDirection;
-import exceptions.ExWrongState;
 import genes.MoveProbability;
+import globals.exceptions.ExFailedDetection;
+import globals.exceptions.ExOutOfGrid;
+import globals.exceptions.ExWrongBlockType;
+import globals.exceptions.ExWrongDirection;
+import globals.exceptions.ExWrongState;
 
-public class MoveCalculation implements iIdvmMoveCalculation {
+public class IdvmMoveCalculation implements iIdvmMoveCalculation {
 
 	private iBlockGrid mBlockGrid;
 	private Direction mCurrentDirection = Direction.UP;
+	private Direction mCalculatedDirection = Direction.UP;
 
-	public MoveCalculation(iBlockGrid pBlockGrid) {
+	public IdvmMoveCalculation(iBlockGrid pBlockGrid) {
 		super();
 		mBlockGrid = pBlockGrid;
 	}
@@ -62,9 +63,11 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 
 		switch (pState) {
 		case FOOD:
+		case FOOD_HUNGER:
 			lSearchBlock = BlockType.FOOD;
 			break;
 		case ENEMY:
+		case ENEMY_HUNGER:
 			lSearchBlock = BlockType.ENEMY;
 			break;
 		default:
@@ -77,9 +80,8 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 				lGridBlock = mBlockGrid.getBlock(iPos.getKey());
 				if (lGridBlock != null
 						&& lGridBlock.getBlockType() == lSearchBlock) {
-					Direction lDircetion;
 					Pos lSensorPos = iPos.getValue().getPos();
-					lDircetion = lSensorPos.getDircetionTo(iPos.getKey());
+					Direction lDircetion = lSensorPos.getDircetionTo(iPos.getKey());
 					return lDircetion;
 				}
 			} catch (ExOutOfGrid e) {
@@ -109,9 +111,10 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 			HashMap<IdvmState, ArrayList<MoveProbability>> pMovementSequences,
 			IdvmState lState, Direction pTargetDirection) {
 		ArrayList<MoveProbability> lSequence = pMovementSequences.get(lState);
-		Direction lSequenceDirection = lSequence.get(0).getDirection();
+		//TODO FIX can be empty
+		mCalculatedDirection = lSequence.get(0).getDirection();
 		Direction lNewDirection = null;
-		switch (lSequenceDirection) {
+		switch (mCalculatedDirection) {
 		case CURRENT:
 			return mCurrentDirection;
 		case CURRENT_OPPOSITE:
@@ -136,7 +139,7 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 			lNewDirection = pTargetDirection.site2();
 			break;
 		default:
-			lNewDirection = lSequenceDirection;
+			lNewDirection = mCalculatedDirection;
 			break;
 		}
 		setCurrentDirection(lNewDirection);
@@ -156,6 +159,10 @@ public class MoveCalculation implements iIdvmMoveCalculation {
 			throw new ExWrongDirection(pDirection);
 		}
 		mCurrentDirection = pDirection;
+	}
+	
+	public Direction getCalculatedDirection(){
+		return mCalculatedDirection;
 	}
 
 }

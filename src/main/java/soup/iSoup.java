@@ -1,6 +1,6 @@
 package soup;
 
-import mvc.present.iPresentSoup;
+import ui.presenter.iPresentSoup;
 
 public interface iSoup extends iPresentSoup {
 

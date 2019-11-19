@@ -2,7 +2,6 @@ package soup;
 
 import java.util.ArrayList;
 
-import mvc.present.iPresentSoup;
 import soup.block.BlockGrid;
 import soup.block.BlockType;
 import soup.block.Enemy;
@@ -10,9 +9,11 @@ import soup.block.Food;
 import soup.block.iBlock;
 import soup.block.iBlockGrid;
 import soup.idvm.iIdvm;
-import datatypes.Constants;
+import ui.presenter.iPresentSoup;
 import datatypes.Pos;
-import exceptions.ExOutOfGrid;
+import devutils.Measure;
+import globals.Constants;
+import globals.exceptions.ExOutOfGrid;
 
 public class Soup implements iSoup {
 	private iIdvm mIdvm;
@@ -25,8 +26,8 @@ public class Soup implements iSoup {
 		mIdvm.setBlockGrid(mBlockGrid);
 		initFoodBlocks();
 		initEnemyBlocks();
-		mBlockGrid.addInitialIdvm(mIdvm);
 		clearSurroundingsOfIdvm();
+		mBlockGrid.addInitialIdvm(mIdvm);
 	}
 
 	private void initEnemyBlocks() {
@@ -40,21 +41,19 @@ public class Soup implements iSoup {
 	}
 
 	private void clearSurroundingsOfIdvm() {
-		Pos lIdvmMidPos = mIdvm.getPos();
 		ArrayList<Pos> lIdvmPosList = new ArrayList<Pos>();
 
 		for (iBlock iBlock : mIdvm.getUsedBlocks()) {
 			lIdvmPosList.add(iBlock.getPos());
 		}
 
-		for (int x = lIdvmMidPos.x - 1; x <= lIdvmMidPos.x + 2; x++) {
-			for (int y = lIdvmMidPos.y - 1; y <= lIdvmMidPos.y + 2; y++) {
-				if (!lIdvmPosList.contains(new Pos(x, y)))
-					try {
-						mBlockGrid.setBlock(new Pos(x, y), null);
-					} catch (ExOutOfGrid e) {
-						e.printStackTrace();
-					}
+		for (int x = Constants.soupSize / 2 - 2; x <= Constants.soupSize / 2 + 3; x++) {
+			for (int y = Constants.soupSize / 2 - 2; y <= Constants.soupSize / 2 + 3; y++) {
+				try {
+					mBlockGrid.setBlock(new Pos(x, y), null);
+				} catch (ExOutOfGrid e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -79,7 +78,6 @@ public class Soup implements iSoup {
 			try {
 				mBlockGrid.setBlock(iBlock.getPos(), iBlock);
 			} catch (ExOutOfGrid e) {
-				e.printStackTrace();
 			}
 		}
 		mIdvm.detectCollisions();
@@ -90,14 +88,14 @@ public class Soup implements iSoup {
 					mBlockGrid.setBlock(iBlock.getPos(), null);
 				}
 			} catch (ExOutOfGrid e) {
-				e.printStackTrace();
+				// TODO e.printStackTrace();
 			}
 		}
 		for (iBlock iBlock : mIdvm.getUsedBlocks()) {
 			try {
 				mBlockGrid.setBlock(iBlock.getPos(), iBlock);
 			} catch (ExOutOfGrid e) {
-				e.printStackTrace();
+				// TODO e.printStackTrace();
 			}
 		}
 	}
@@ -111,5 +109,11 @@ public class Soup implements iSoup {
 
 	public iPresentSoup getPresenter() {
 		return this;
+	}
+
+	public void executeIdvm() {
+		//TODO 2 messure runtime
+		while (mIdvm.isAlive())
+			step();
 	}
 }

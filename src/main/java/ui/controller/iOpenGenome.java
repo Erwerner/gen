@@ -1,4 +1,4 @@
-package mvc.controller;
+package ui.controller;
 
 import genes.Genome;
 

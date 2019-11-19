@@ -6,8 +6,8 @@ import java.util.HashMap;
 import soup.block.iBlock;
 import datatypes.Direction;
 import datatypes.Pos;
-import exceptions.ExOutOfGrid;
 import genes.MoveProbability;
+import globals.exceptions.ExOutOfGrid;
 
 public interface iIdvmMoveCalculation {
 	public Pos calcPosFromDirection(Direction pDirection, Pos pIdvmPos,
@@ -23,5 +23,7 @@ public interface iIdvmMoveCalculation {
 	Direction calcMovingDirection(
 			HashMap<IdvmState, ArrayList<MoveProbability>> pMovementSequences,
 			IdvmState pLState, Direction pTargetDirection);
+
+	Direction getCalculatedDirection();
 
 }
