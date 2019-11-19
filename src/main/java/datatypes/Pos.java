@@ -2,9 +2,9 @@ package datatypes;
 
 import java.util.ArrayList;
 
-import exceptions.ExOutOfGrid;
-import exceptions.ExWrongDirection;
 import globals.Constants;
+import globals.exceptions.ExOutOfGrid;
+import globals.exceptions.ExWrongDirection;
 
 public class Pos {
 	public int x;

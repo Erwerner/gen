@@ -8,7 +8,7 @@ import soup.block.BlockType;
 import soup.block.iBlock;
 import soup.block.iBlockGrid;
 import datatypes.Pos;
-import exceptions.ExOutOfGrid;
+import globals.exceptions.ExOutOfGrid;
 
 //TODO 3 Test Class
 public class IdvmSensor {
@@ -21,26 +21,11 @@ public class IdvmSensor {
 	}
 
 	public IdvmState getState(HashMap<Pos, Sensor> pDetectedPos) {
-		IdvmState lState = IdvmState.IDLE;
 		if (detectSurroundingBlockType(BlockType.ENEMY, pDetectedPos))
-			lState = IdvmState.ENEMY;
+			return IdvmState.ENEMY;
 		if (detectSurroundingBlockType(BlockType.FOOD, pDetectedPos))
-			lState = IdvmState.FOOD;
-		// TODO hungry
-		// if (isHungry()) {
-		// switch (lState) {
-		// case FOOD:
-		// lState = IdvmState.FOOD_HUNGER;
-		// break;
-		// case ENEMY:
-		// lState = IdvmState.ENEMY_HUNGER;
-		// break;
-		//
-		// default:
-		// break;
-		// }
-		// }
-		return lState;
+			return IdvmState.FOOD;
+		return IdvmState.IDLE;
 
 	}
 
@@ -64,8 +49,8 @@ public class IdvmSensor {
 	public HashMap<Pos, Sensor> getDetectedPos(ArrayList<iBlock> pSensors) {
 		HashMap<Pos, Sensor> lDetectedPos = new HashMap<Pos, Sensor>();
 		for (iBlock iCell : pSensors) {
-			for (int x = -4; x <= 4; x++) {
-				for (int y = -4; y <= 4; y++) {
+			for (int x = -3; x <= 3; x++) {
+				for (int y = -3; y <= 3; y++) {
 					int lCellX = iCell.getPos().x;
 					int lCellY = iCell.getPos().y;
 					lDetectedPos.put(new Pos(lCellX + x, lCellY + y),

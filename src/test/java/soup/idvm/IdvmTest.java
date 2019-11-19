@@ -8,6 +8,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import genes.Genome;
 import genes.MoveProbability;
+import globals.exceptions.ExOutOfGrid;
+import globals.exceptions.ExWrongState;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,8 +28,6 @@ import soup.block.iBlock;
 import soup.block.iBlockGrid;
 import datatypes.Direction;
 import datatypes.Pos;
-import exceptions.ExOutOfGrid;
-import exceptions.ExWrongState;
 
 public class IdvmTest {
 	private static final int cStartPosX = 50;

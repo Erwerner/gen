@@ -1,6 +1,6 @@
 package datatypes;
 
-import exceptions.ExWrongDirection;
+import globals.exceptions.ExWrongDirection;
 
 public enum Direction {
 	UP, DOWN, LEFT, RIGHT, 

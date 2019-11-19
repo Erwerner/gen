@@ -1,14 +1,20 @@
 package ui.console.monitor;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
+import datatypes.Direction;
 import datatypes.Pos;
-import exceptions.ExOutOfGrid;
-import mvc.Model;
-import mvc.View;
-import mvc.present.iPresentIdvm;
-import mvc.present.iPresentSoup;
+import globals.exceptions.ExOutOfGrid;
+import globals.exceptions.ExWrongState;
 import soup.block.iBlock;
+import soup.idvm.IdvmState;
+import soup.idvm.Sensor;
+import ui.mvc.Model;
+import ui.mvc.View;
+import ui.presenter.iPresentIdvm;
+import ui.presenter.iPresentSoup;
 
 public class ViewConsoleMonitorIdvm extends View {
 	public static final String ANSI_RESET = "\u001B[0m";
@@ -38,16 +44,18 @@ public class ViewConsoleMonitorIdvm extends View {
 	}
 
 	private void printGrid() {
-		Pos lIdvMidPos = mIdvm.getPos();
-		for (int y = lIdvMidPos.y - cViewSize; y < lIdvMidPos.y + cViewSize; y++) {
+		Pos lIdvPos = mIdvm.getPos();
+		HashMap<Pos, Sensor> lDetectedPos = mIdvm.getDetectedPos();
+		for (int y = lIdvPos.y - cViewSize; y < lIdvPos.y + cViewSize; y++) {
 			String lGridLine = "";
-			for (int x = lIdvMidPos.x - cViewSize; x < lIdvMidPos.x + cViewSize*2; x++) {
+			for (int x = lIdvPos.x - cViewSize; x < lIdvPos.x + cViewSize * 2; x++) {
 				String lBlockChar;
 				try {
-					new Pos(x, y).isInGrid();
-					lBlockChar = getCharForBlock(y, x);
+					Pos lCurrentPos = new Pos(x, y);
+					lCurrentPos.isInGrid();
+					lBlockChar = getCharForBlock(lCurrentPos, lDetectedPos);
 				} catch (ExOutOfGrid e) {
-					lBlockChar = "+";
+					lBlockChar = "█";
 				}
 				lGridLine = lGridLine + lBlockChar;
 			}
@@ -55,15 +63,38 @@ public class ViewConsoleMonitorIdvm extends View {
 		}
 	}
 
-	private String getCharForBlock(int y, int x) throws ExOutOfGrid {
-		String lBlockChar;
-		iBlock lBlock = mSoup.getBlock(new Pos(x, y));
+	private String getCharForBlock(Pos pPos, HashMap<Pos, Sensor> pDetectedPos)
+			throws ExOutOfGrid {
+		String lBlockChar = " ";
+		iBlock lBlock = mSoup.getBlock(pPos);
 		if (lBlock != null) {
 			lBlockChar = getPixel(lBlock);
 		} else {
-			lBlockChar = " ";
+			//if (mIdvm.getStepCount() % 3 == 0)
+				for (Entry<Pos, Sensor> iDetectedPos : pDetectedPos.entrySet())
+					if (iDetectedPos.getKey().equals(pPos))
+						return getSensorChar();
 		}
 		return lBlockChar;
+	}
+
+	private String getSensorChar() {
+		String lSensorChar = ".";
+		if (mIdvm.getState() == IdvmState.IDLE)
+			return lSensorChar;
+		switch (mIdvm.getCalculatedDirection()) {
+		case TARGET:
+			lSensorChar = "•";
+			break;
+		case TARGET_OPPOSITE:
+			lSensorChar = "!";
+			break;
+		case TARGET_SITE1:
+		case TARGET_SITE2:
+			lSensorChar = "~";
+			break;
+		}
+		return lSensorChar;
 	}
 
 	private String getPixel(iBlock pBlock) {
@@ -73,7 +104,7 @@ public class ViewConsoleMonitorIdvm extends View {
 		case ENEMY:
 			return "Σ";
 		case LIFE:
-			return "█";
+			return "❤";
 		case SENSOR:
 			return "╬";
 		case MOVE:
@@ -91,7 +122,7 @@ public class ViewConsoleMonitorIdvm extends View {
 		System.out.print(" State: " + mIdvm.getState());
 		System.out.print(" Pos: " + mIdvm.getPos());
 		System.out.println();
-		for(int x = 1; x<=mIdvm.getEnergyCount();x++)
+		for (int x = 1; x <= mIdvm.getEnergyCount(); x++)
 			System.out.print("*");
 		System.out.println();
 	}

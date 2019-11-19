@@ -2,7 +2,7 @@ package soup.block;
 
 import soup.idvm.iIdvm;
 import datatypes.Pos;
-import exceptions.ExOutOfGrid;
+import globals.exceptions.ExOutOfGrid;
 
 public interface iBlockGrid {
 

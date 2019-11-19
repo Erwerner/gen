@@ -19,9 +19,9 @@ import soup.block.iBlockGrid;
 import utils.TestMock;
 import datatypes.Direction;
 import datatypes.Pos;
-import exceptions.ExOutOfGrid;
 import genes.MoveProbability;
 import globals.Constants;
+import globals.exceptions.ExOutOfGrid;
 
 public class MoveCalculationTest {
 	iIdvmMoveCalculation cut;

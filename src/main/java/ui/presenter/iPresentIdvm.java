@@ -1,4 +1,4 @@
-package mvc.present;
+package ui.presenter;
 
 import java.util.HashMap;
 
@@ -25,4 +25,6 @@ public interface iPresentIdvm {
 	Pos getPos();
 
 	int getEnergyCount();
+
+	Direction getCalculatedDirection();
 }

@@ -2,13 +2,10 @@ package ui.console.monitor;
 
 import genes.Genome;
 import genes.MoveProbability;
+import globals.exceptions.ExWrontPresenterType;
 
 import java.util.ArrayList;
 
-import mvc.Model;
-import mvc.controller.iControllRunSoup;
-import mvc.present.iPresentIdvm;
-import mvc.present.iPresentSoup;
 import soup.Soup;
 import soup.iSoup;
 import soup.block.BlockType;
@@ -16,9 +13,12 @@ import soup.block.IdvmCell;
 import soup.idvm.Idvm;
 import soup.idvm.IdvmState;
 import soup.idvm.iIdvm;
+import ui.controller.iControllRunSoup;
+import ui.mvc.Model;
+import ui.presenter.iPresentIdvm;
+import ui.presenter.iPresentSoup;
 import datatypes.Direction;
 import datatypes.Pos;
-import exceptions.ExWrontPresenterType;
 
 public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 

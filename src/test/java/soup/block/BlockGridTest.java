@@ -9,7 +9,7 @@ import soup.idvm.iIdvm;
 import utils.TestMock;
 
 import datatypes.Pos;
-import exceptions.ExOutOfGrid;
+import globals.exceptions.ExOutOfGrid;
 
 public class BlockGridTest {
 	BlockGrid cut;

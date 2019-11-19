@@ -14,8 +14,8 @@ import soup.idvm.iIdvm;
 import utils.TestMock;
 import datatypes.Direction;
 import datatypes.Pos;
-import exceptions.ExOutOfGrid;
 import globals.Constants;
+import globals.exceptions.ExOutOfGrid;
 
 public class SoupTest {
 	Soup cut;

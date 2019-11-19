@@ -2,6 +2,7 @@ package soup.idvm;
 
 import genes.Genome;
 import genes.MoveProbability;
+import globals.exceptions.ExOutOfGrid;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +17,6 @@ import soup.block.iBlock;
 import soup.block.iBlockGrid;
 import datatypes.Direction;
 import datatypes.Pos;
-import exceptions.ExOutOfGrid;
 
 public class Idvm extends Block implements iIdvm {
 
@@ -32,6 +32,7 @@ public class Idvm extends Block implements iIdvm {
 	private int mEnergy = cMaxEnergy / 2;
 	private iIdvmMoveCalculation mMoveCalculation;
 	private IdvmSensor mIdvmSensor;
+	private Direction mCurrentDirection;
 
 	public Idvm(Genome pGenome) {
 		super(BlockType.IDVM);
@@ -154,6 +155,7 @@ public class Idvm extends Block implements iIdvm {
 			for (int i = 0; i < 10; i++) {
 				try {
 					Pos lNewPos = mMoveCalculation.getMovingPosition(this, mMovementSequences);
+					mCurrentDirection = mPos.getDircetionTo(lNewPos);
 					setPosition(lNewPos);
 					// mEnergy--;
 					break;
@@ -227,5 +229,9 @@ public class Idvm extends Block implements iIdvm {
 
 	public int getEnergyCount() {
 		return mEnergy;
+	}
+
+	public Direction getCalculatedDirection() {
+		return mMoveCalculation.getCalculatedDirection();
 	}
 }

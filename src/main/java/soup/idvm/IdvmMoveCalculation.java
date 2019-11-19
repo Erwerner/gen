@@ -9,17 +9,18 @@ import soup.block.iBlock;
 import soup.block.iBlockGrid;
 import datatypes.Direction;
 import datatypes.Pos;
-import exceptions.ExFailedDetection;
-import exceptions.ExOutOfGrid;
-import exceptions.ExWrongBlockType;
-import exceptions.ExWrongDirection;
-import exceptions.ExWrongState;
 import genes.MoveProbability;
+import globals.exceptions.ExFailedDetection;
+import globals.exceptions.ExOutOfGrid;
+import globals.exceptions.ExWrongBlockType;
+import globals.exceptions.ExWrongDirection;
+import globals.exceptions.ExWrongState;
 
 public class IdvmMoveCalculation implements iIdvmMoveCalculation {
 
 	private iBlockGrid mBlockGrid;
 	private Direction mCurrentDirection = Direction.UP;
+	private Direction mCalculatedDirection = Direction.UP;
 
 	public IdvmMoveCalculation(iBlockGrid pBlockGrid) {
 		super();
@@ -111,9 +112,9 @@ public class IdvmMoveCalculation implements iIdvmMoveCalculation {
 			IdvmState lState, Direction pTargetDirection) {
 		ArrayList<MoveProbability> lSequence = pMovementSequences.get(lState);
 		//TODO FIX can be empty
-		Direction lSequenceDirection = lSequence.get(0).getDirection();
+		mCalculatedDirection = lSequence.get(0).getDirection();
 		Direction lNewDirection = null;
-		switch (lSequenceDirection) {
+		switch (mCalculatedDirection) {
 		case CURRENT:
 			return mCurrentDirection;
 		case CURRENT_OPPOSITE:
@@ -138,7 +139,7 @@ public class IdvmMoveCalculation implements iIdvmMoveCalculation {
 			lNewDirection = pTargetDirection.site2();
 			break;
 		default:
-			lNewDirection = lSequenceDirection;
+			lNewDirection = mCalculatedDirection;
 			break;
 		}
 		setCurrentDirection(lNewDirection);
@@ -158,6 +159,10 @@ public class IdvmMoveCalculation implements iIdvmMoveCalculation {
 			throw new ExWrongDirection(pDirection);
 		}
 		mCurrentDirection = pDirection;
+	}
+	
+	public Direction getCalculatedDirection(){
+		return mCalculatedDirection;
 	}
 
 }

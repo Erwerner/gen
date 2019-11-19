@@ -2,7 +2,6 @@ package soup;
 
 import java.util.ArrayList;
 
-import mvc.present.iPresentSoup;
 import soup.block.BlockGrid;
 import soup.block.BlockType;
 import soup.block.Enemy;
@@ -10,10 +9,11 @@ import soup.block.Food;
 import soup.block.iBlock;
 import soup.block.iBlockGrid;
 import soup.idvm.iIdvm;
+import ui.presenter.iPresentSoup;
 import datatypes.Pos;
 import devutils.Measure;
-import exceptions.ExOutOfGrid;
 import globals.Constants;
+import globals.exceptions.ExOutOfGrid;
 
 public class Soup implements iSoup {
 	private iIdvm mIdvm;

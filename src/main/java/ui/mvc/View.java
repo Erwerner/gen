@@ -1,4 +1,4 @@
-package mvc;
+package ui.mvc;
 
 public abstract class View implements iObserver { 
 

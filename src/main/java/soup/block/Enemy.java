@@ -4,7 +4,7 @@ import java.util.Random;
 
 import datatypes.Direction;
 import datatypes.Pos;
-import exceptions.ExOutOfGrid;
+import globals.exceptions.ExOutOfGrid;
 
 public class Enemy extends Block {
 	Direction mCurrentDirection;
