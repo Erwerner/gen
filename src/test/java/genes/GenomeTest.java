@@ -38,7 +38,8 @@ public class GenomeTest {
 	@Test
 	public void mutationDoesntSetNullSequences() {
 		cut.forceMutation();
-		ArrayList<MoveProbability> lIdleSequence = cut.movementSequences.get(IdvmState.IDLE);
+		ArrayList<MoveProbability> lIdleSequence = cut.movementSequences
+				.get(IdvmState.IDLE);
 		cut.naturalMutation();
 		for (MoveProbability iMovement : lIdleSequence)
 			assertNotNull(iMovement);
@@ -48,7 +49,8 @@ public class GenomeTest {
 	public void nullSequencesBecomePrevious() {
 		cut.mMutationRate = 0.0;
 		cut.forceMutation();
-		ArrayList<MoveProbability> lIdleSequence = cut.movementSequences.get(IdvmState.IDLE);
+		ArrayList<MoveProbability> lIdleSequence = cut.movementSequences
+				.get(IdvmState.IDLE);
 		assertNotNull(lIdleSequence.get(0).mPossibleDirection);
 		assertNotNull(lIdleSequence.get(1).mPossibleDirection);
 		lIdleSequence.get(1).mPossibleDirection = null;
@@ -61,7 +63,8 @@ public class GenomeTest {
 	public void followingSequencesHaveSameContent() {
 		cut.mMutationRate = 0.0;
 		cut.forceMutation();
-		ArrayList<MoveProbability> lIdleSequence = cut.movementSequences.get(IdvmState.IDLE);
+		ArrayList<MoveProbability> lIdleSequence = cut.movementSequences
+				.get(IdvmState.IDLE);
 		ArrayList<Decisions> lFirstProbability = lIdleSequence.get(0).mPossibleDirection;
 		assertNotNull(lFirstProbability);
 		assertNotNull(lIdleSequence.get(1).mPossibleDirection);
@@ -69,29 +72,51 @@ public class GenomeTest {
 		cut.naturalMutation();
 		assertEquals(lFirstProbability, lIdleSequence.get(1).mPossibleDirection);
 	}
+
 	@Test
 	public void followingSequencesAreNotSameInstance() {
 		cut.mMutationRate = 0.0;
 		cut.forceMutation();
-		ArrayList<MoveProbability> lIdleSequence = cut.movementSequences.get(IdvmState.IDLE);
+		ArrayList<MoveProbability> lIdleSequence = cut.movementSequences
+				.get(IdvmState.IDLE);
 		ArrayList<Decisions> lFirstProbability = lIdleSequence.get(0).mPossibleDirection;
 		assertNotNull(lFirstProbability);
 		assertNotNull(lIdleSequence.get(1).mPossibleDirection);
 		lIdleSequence.get(1).mPossibleDirection = null;
 		cut.naturalMutation();
 		lFirstProbability.clear();
-		assertNotEquals(lFirstProbability, lIdleSequence.get(1).mPossibleDirection);
+		assertNotEquals(lFirstProbability,
+				lIdleSequence.get(1).mPossibleDirection);
 	}
+
 	@Test
-	public void cloneWorksCorrect() throws CloneNotSupportedException {
+	public void cloneWorksCorrectForCellGrow()
+			throws CloneNotSupportedException {
 		cut.forceMutation();
 		Genome lCopy = (Genome) cut.clone();
 		Genome lAlteredCopy = (Genome) cut.clone();
 		lAlteredCopy.forceMutation();
-		cut.cellGrow.get(5).setPosition(new Pos(10,10));
-		lAlteredCopy.cellGrow.get(5).setPosition(new Pos(10,10));
-		lCopy.cellGrow.get(5).setPosition(new Pos(10,10));
+		cut.cellGrow.get(5).setPosition(new Pos(10, 10));
+		lAlteredCopy.cellGrow.get(5).setPosition(new Pos(10, 10));
+		lCopy.cellGrow.get(5).setPosition(new Pos(10, 10));
 		assertEquals(lCopy.cellGrow.get(5), cut.cellGrow.get(5));
 		assertNotEquals(lAlteredCopy.cellGrow.get(5), cut.cellGrow.get(5));
+	}
+
+	@Test
+	public void cloneWorksCorrectForSequences()
+			throws CloneNotSupportedException {
+		cut.forceMutation();
+		Genome lCopy = (Genome) cut.clone();
+		Genome lAlteredCopy = (Genome) cut.clone();
+		lAlteredCopy.forceMutation();
+		ArrayList<Decisions> lActMovement = cut.movementSequences
+				.get(IdvmState.IDLE).get(1).mPossibleDirection;
+		ArrayList<Decisions>  lCopyMovement = lCopy.movementSequences.get(
+				IdvmState.IDLE).get(1).mPossibleDirection;
+		ArrayList<Decisions>  lAlteredCopyMovement = lAlteredCopy.movementSequences
+				.get(IdvmState.IDLE).get(1).mPossibleDirection;
+		assertEquals(lCopyMovement, lActMovement);
+		assertNotEquals(lAlteredCopyMovement, lActMovement);
 	}
 }

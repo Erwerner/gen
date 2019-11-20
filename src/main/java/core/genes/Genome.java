@@ -47,12 +47,14 @@ public class Genome implements Cloneable {
 		for (int i = 0; i < 4; i++)
 			setInitialCell(i, i / 2, i % 2);
 
-		for (Entry<IdvmState, ArrayList<MoveProbability>> iMoveSequence : movementSequences.entrySet()) {
+		for (Entry<IdvmState, ArrayList<MoveProbability>> iMoveSequence : movementSequences
+				.entrySet()) {
 			ArrayList<Decisions> lLastPossible = new ArrayList<Decisions>();
 			lLastPossible.add(Decisions.UP);
 			for (MoveProbability iProbability : iMoveSequence.getValue()) {
 				if (iProbability.mPossibleDirection == null) {
-					iProbability.mPossibleDirection = (ArrayList<Decisions>) lLastPossible.clone();
+					iProbability.mPossibleDirection = (ArrayList<Decisions>) lLastPossible
+							.clone();
 				} else {
 					lLastPossible = iProbability.mPossibleDirection;
 				}
@@ -71,7 +73,8 @@ public class Genome implements Cloneable {
 		for (iGene iGene : cellGrow) {
 			lGenes.add(iGene);
 		}
-		for (ArrayList<MoveProbability> iMoveProbability : movementSequences.values()) {
+		for (ArrayList<MoveProbability> iMoveProbability : movementSequences
+				.values()) {
 			for (iGene iGene : iMoveProbability) {
 				lGenes.add(iGene);
 			}
@@ -87,27 +90,20 @@ public class Genome implements Cloneable {
 		mHunger.setValue(pInt);
 	}
 
-	// TODO 2 check all clone methods are used
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		Genome lClone = new Genome();
 
 		lClone.setHunger(mHunger.getValue());
 
-		for (IdvmCell iCell : cellGrow) {
-			lClone.cellGrow
-					.add(new IdvmCell(iCell.getBlockType(), new Pos(iCell.getPosOnIdvm().x, iCell.getPosOnIdvm().y)));
-		}
+		for (IdvmCell iCell : cellGrow)
+			lClone.cellGrow.add((IdvmCell) iCell.clone());
 
 		for (IdvmState iState : IdvmState.values()) {
 			ArrayList<MoveProbability> lMovements = new ArrayList<MoveProbability>();
 			for (MoveProbability iMovement : movementSequences.get(iState)) {
-				MoveProbability lNewMovePorobability = (MoveProbability) iMovement.clone();
-				/*
-				 * MoveProbability lNewMovePorobability = new MoveProbability();
-				 * lNewMovePorobability.mPossibleDirection = (ArrayList<Decisions>)
-				 * iMovement.mPossibleDirection .clone();
-				 */
+				MoveProbability lNewMovePorobability = (MoveProbability) iMovement
+						.clone();
 				lMovements.add(lNewMovePorobability);
 			}
 			lClone.movementSequences.put(iState, lMovements);

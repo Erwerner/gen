@@ -64,6 +64,8 @@ public class SoupTest {
 			cut.step();
 			mIdvm.setPosition(iPos.getPosFromDirection(Decisions.RIGHT));
 			cut.step();
+			mIdvm.setPosition(iPos.getPosFromDirection(Decisions.RIGHT));
+			cut.step();
 			assertNull(cut.getBlock(iPos));
 			return;
 		}
