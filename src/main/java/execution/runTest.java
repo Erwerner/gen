@@ -1,10 +1,10 @@
 package execution;
 
+import core.genes.Genome;
+import core.soup.Soup;
+import core.soup.idvm.Idvm;
 import devutils.Measure;
-import genes.Genome;
-import globals.Global;
-import soup.Soup;
-import soup.idvm.Idvm;
+import globals.Helpers;
 
 public class runTest {
 
@@ -13,7 +13,7 @@ public class runTest {
 		Soup mSoup = new Soup(mIdvm);
 
 		for (int x = 0; x < 20; x++)
-			System.out.println(Global.rndIntRange(-1, 4));
+			System.out.println(Helpers.rndIntRange(-1, 4));
 
 		System.out.println("Start");
 		Measure.startTimeMeasuring();

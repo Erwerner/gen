@@ -6,10 +6,6 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import genes.Genome;
-import genes.MoveProbability;
-import globals.exceptions.ExOutOfGrid;
-import globals.exceptions.ExWrongState;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,15 +15,23 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import soup.block.BlockGrid;
-import soup.block.BlockType;
-import soup.block.Enemy;
-import soup.block.Food;
-import soup.block.IdvmCell;
-import soup.block.iBlock;
-import soup.block.iBlockGrid;
-import datatypes.Direction;
-import datatypes.Pos;
+import core.datatypes.Decisions;
+import core.datatypes.Pos;
+import core.exceptions.PosIsOutOfGrid;
+import core.exceptions.WrongState;
+import core.genes.Genome;
+import core.genes.MoveProbability;
+import core.soup.block.BlockGrid;
+import core.soup.block.BlockType;
+import core.soup.block.Enemy;
+import core.soup.block.Food;
+import core.soup.block.IdvmCell;
+import core.soup.block.iBlock;
+import core.soup.block.iBlockGrid;
+import core.soup.idvm.Idvm;
+import core.soup.idvm.IdvmState;
+import core.soup.idvm.Sensor;
+import core.soup.idvm.iIdvm;
 
 public class IdvmTest {
 	private static final int cStartPosX = 50;
@@ -59,9 +63,9 @@ public class IdvmTest {
 		}
 		ArrayList<MoveProbability> lIdlelMoveProbability = new ArrayList<MoveProbability>();
 		lIdlelMoveProbability.add(new MoveProbability().setDirection(
-				Direction.LEFT, 1));
+				Decisions.LEFT, 1));
 		lIdlelMoveProbability.add(new MoveProbability().setDirection(
-				Direction.DOWN, 1));
+				Decisions.DOWN, 1));
 		mGenome.movementSequences.put(IdvmState.IDLE, lIdlelMoveProbability);
 		mGenome.movementSequences.put(IdvmState.FOOD, lIdlelMoveProbability);
 
@@ -134,7 +138,7 @@ public class IdvmTest {
 
 			assertHasGrowCellOnPosDiff(false, 0, 0, 0);
 			assertNull(mBlockGrid.getBlock(new Pos(cStartPosX, cStartPosY)));
-		} catch (ExOutOfGrid e) {
+		} catch (PosIsOutOfGrid e) {
 			fail();
 		}
 	}
@@ -238,7 +242,7 @@ public class IdvmTest {
 			// IdvmCell lGrowCell = mCellGrow[lIdxKillCell];
 			Pos lSoupPos = getSoupPosFromGrowCell(lIdxKillCell);
 			assertNull(mBlockGrid.getBlock(new Pos(lSoupPos.x, lSoupPos.y)));
-		} catch (ExOutOfGrid e) {
+		} catch (PosIsOutOfGrid e) {
 			fail();
 		}
 	}
@@ -328,24 +332,24 @@ public class IdvmTest {
 	}
 
 	@Test
-	public void stateIsFOODWhenFoodIsDetected() throws ExOutOfGrid {
+	public void stateIsFOODWhenFoodIsDetected() throws PosIsOutOfGrid {
 		assertHasCell(true, BlockType.SENSOR, 1, 0, cStartPosX + 1, cStartPosY);
 		mBlockGrid
 				.setBlock(new Pos(cStartPosX + 2, cStartPosY - 1), new Food());
 		assertEquals(IdvmState.FOOD, cut.getState());
 	}
 
-	@Test(expected = ExWrongState.class)
+	@Test(expected = WrongState.class)
 	public void targetIsNull() {
 		assertNull(cut.getTargetDirection());
 	}
 
 	@Test
-	public void targetIsRight() throws ExOutOfGrid {
+	public void targetIsRight() throws PosIsOutOfGrid {
 		assertHasCell(true, BlockType.SENSOR, 1, 0, cStartPosX + 1, cStartPosY);
 		mBlockGrid.setBlock(new Pos(cStartPosX + 2, cStartPosY), new Food());
 		assertEquals(IdvmState.FOOD, cut.getState());
-		assertEquals(Direction.RIGHT, cut.getTargetDirection());
+		assertEquals(Decisions.RIGHT, cut.getTargetDirection());
 	}
 
 	@Test

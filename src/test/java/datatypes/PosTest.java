@@ -6,8 +6,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import globals.Constants;
-import globals.exceptions.ExOutOfGrid;
+import core.datatypes.Decisions;
+import core.datatypes.Pos;
+import core.exceptions.PosIsOutOfGrid;
+import globals.Config;
 
 public class PosTest {
 	private static final int cStartY = 20;
@@ -23,52 +25,52 @@ public class PosTest {
 	}
 
 	@Test
-	public void returnsUpPos() throws ExOutOfGrid {
-		Pos lActPos = cut.getPosFromDirection(Direction.UP);
+	public void returnsUpPos() throws PosIsOutOfGrid {
+		Pos lActPos = cut.getPosFromDirection(Decisions.UP);
 		assertEquals(cStartX, lActPos.x);
 		assertEquals(cStartY-1, lActPos.y);
 	}
 	@Test
-	public void returnsDownPos() throws ExOutOfGrid {
-		Pos lActPos = cut.getPosFromDirection(Direction.DOWN);
+	public void returnsDownPos() throws PosIsOutOfGrid {
+		Pos lActPos = cut.getPosFromDirection(Decisions.DOWN);
 		assertEquals(cStartX, lActPos.x);
 		assertEquals(cStartY+1, lActPos.y);
 	}
 	@Test
-	public void returnsLeftPos() throws ExOutOfGrid {
-		Pos lActPos = cut.getPosFromDirection(Direction.LEFT);
+	public void returnsLeftPos() throws PosIsOutOfGrid {
+		Pos lActPos = cut.getPosFromDirection(Decisions.LEFT);
 		assertEquals(cStartX-1, lActPos.x);
 		assertEquals(cStartY, lActPos.y);
 	}
 	@Test
-	public void returnsRightPos() throws ExOutOfGrid {
-		Pos lActPos = cut.getPosFromDirection(Direction.RIGHT);
+	public void returnsRightPos() throws PosIsOutOfGrid {
+		Pos lActPos = cut.getPosFromDirection(Decisions.RIGHT);
 		assertEquals(cStartX+1, lActPos.x);
 		assertEquals(cStartY, lActPos.y);
 	}
-	@Test(expected = ExOutOfGrid.class)
-	public void stopsAtBorderLeft() throws ExOutOfGrid{
+	@Test(expected = PosIsOutOfGrid.class)
+	public void stopsAtBorderLeft() throws PosIsOutOfGrid{
 		cut = new Pos(0,cStartY);
-		cut.getPosFromDirection(Direction.LEFT);
+		cut.getPosFromDirection(Decisions.LEFT);
 	}
-	@Test(expected = ExOutOfGrid.class)
-	public void stopsAtBorderRight() throws ExOutOfGrid{
-		cut = new Pos(Constants.soupSize-1,cStartY);
-		Pos lActPos = cut.getPosFromDirection(Direction.RIGHT);
+	@Test(expected = PosIsOutOfGrid.class)
+	public void stopsAtBorderRight() throws PosIsOutOfGrid{
+		cut = new Pos(Config.soupSize-1,cStartY);
+		Pos lActPos = cut.getPosFromDirection(Decisions.RIGHT);
 		assertEquals(cut.x, lActPos.x);
 		assertEquals(cut.y, lActPos.y);
 	}
-	@Test(expected = ExOutOfGrid.class)
-	public void stopsAtBorderUp() throws ExOutOfGrid{
+	@Test(expected = PosIsOutOfGrid.class)
+	public void stopsAtBorderUp() throws PosIsOutOfGrid{
 		cut = new Pos(cStartX,0);
-		Pos lActPos = cut.getPosFromDirection(Direction.UP);
+		Pos lActPos = cut.getPosFromDirection(Decisions.UP);
 		assertEquals(cut.x, lActPos.x);
 		assertEquals(cut.y, lActPos.y);
 	}
-	@Test(expected = ExOutOfGrid.class)
-	public void stopsAtBorderDown() throws ExOutOfGrid{
-		cut = new Pos(cStartX,Constants.soupSize-1);
-		Pos lActPos = cut.getPosFromDirection(Direction.DOWN);
+	@Test(expected = PosIsOutOfGrid.class)
+	public void stopsAtBorderDown() throws PosIsOutOfGrid{
+		cut = new Pos(cStartX,Config.soupSize-1);
+		Pos lActPos = cut.getPosFromDirection(Decisions.DOWN);
 		assertEquals(cut.x, lActPos.x);
 		assertEquals(cut.y, lActPos.y);
 	}

@@ -9,19 +9,23 @@ import java.util.HashMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import soup.block.BlockGrid;
-import soup.block.BlockType;
-import soup.block.Enemy;
-import soup.block.Food;
-import soup.block.IdvmCell;
-import soup.block.iBlock;
-import soup.block.iBlockGrid;
+import core.datatypes.Decisions;
+import core.datatypes.Pos;
+import core.exceptions.PosIsOutOfGrid;
+import core.genes.MoveProbability;
+import core.soup.block.BlockGrid;
+import core.soup.block.BlockType;
+import core.soup.block.Enemy;
+import core.soup.block.Food;
+import core.soup.block.IdvmCell;
+import core.soup.block.iBlock;
+import core.soup.block.iBlockGrid;
+import core.soup.idvm.IdvmMoveCalculation;
+import core.soup.idvm.IdvmState;
+import core.soup.idvm.iIdvm;
+import core.soup.idvm.iIdvmMoveCalculation;
 import utils.TestMock;
-import datatypes.Direction;
-import datatypes.Pos;
-import genes.MoveProbability;
-import globals.Constants;
-import globals.exceptions.ExOutOfGrid;
+import globals.Config;
 
 public class MoveCalculationTest {
 	iIdvmMoveCalculation cut;
@@ -39,20 +43,20 @@ public class MoveCalculationTest {
 	}
 
 	@Test
-	public void returnsMovePos() throws ExOutOfGrid {
-		Pos lMovePos = cut.calcPosFromDirection(Direction.UP,
-				getIdvmPos(Constants.soupSize / 2, Constants.soupSize / 2),
+	public void returnsMovePos() throws PosIsOutOfGrid {
+		Pos lMovePos = cut.calcPosFromDirection(Decisions.UP,
+				getIdvmPos(Config.soupSize / 2, Config.soupSize / 2),
 				mIdvmBlocks);
 		assertNotNull(lMovePos);
 	}
 
 	@Test
-	public void returnsPosUP() throws ExOutOfGrid {
-		Pos lMovePos = cut.calcPosFromDirection(Direction.UP,
-				getIdvmPos(Constants.soupSize / 2, Constants.soupSize / 2),
+	public void returnsPosUP() throws PosIsOutOfGrid {
+		Pos lMovePos = cut.calcPosFromDirection(Decisions.UP,
+				getIdvmPos(Config.soupSize / 2, Config.soupSize / 2),
 				mIdvmBlocks);
 		assertEquals(
-				new Pos(Constants.soupSize / 2, Constants.soupSize / 2 - 1),
+				new Pos(Config.soupSize / 2, Config.soupSize / 2 - 1),
 				lMovePos);
 	}
 
@@ -65,114 +69,114 @@ public class MoveCalculationTest {
 		return lNewPos;
 	}
 
-	@Test(expected = ExOutOfGrid.class)
-	public void noMovementAtTopBorder() throws ExOutOfGrid {
-		Pos lStartPos = getIdvmPos(Constants.soupSize / 2, 0);
-		cut.calcPosFromDirection(Direction.UP, lStartPos, mIdvmBlocks);
+	@Test(expected = PosIsOutOfGrid.class)
+	public void noMovementAtTopBorder() throws PosIsOutOfGrid {
+		Pos lStartPos = getIdvmPos(Config.soupSize / 2, 0);
+		cut.calcPosFromDirection(Decisions.UP, lStartPos, mIdvmBlocks);
 	}
 
-	@Test(expected = ExOutOfGrid.class)
-	public void noMovementAtBottomBorder() throws ExOutOfGrid {
-		Pos lStartPos = getIdvmPos(Constants.soupSize / 2,
-				Constants.soupSize - 1);
-		cut.calcPosFromDirection(Direction.DOWN, lStartPos, mIdvmBlocks);
+	@Test(expected = PosIsOutOfGrid.class)
+	public void noMovementAtBottomBorder() throws PosIsOutOfGrid {
+		Pos lStartPos = getIdvmPos(Config.soupSize / 2,
+				Config.soupSize - 1);
+		cut.calcPosFromDirection(Decisions.DOWN, lStartPos, mIdvmBlocks);
 	}
 
 	@Test
 	public void calculateDirectionCurrent() {
 		HashMap<IdvmState, ArrayList<MoveProbability>> lMovementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
 		ArrayList<MoveProbability> lMovementList = new ArrayList<MoveProbability>();
-		lMovementList.add(new MoveProbability().setDirection(Direction.CURRENT, 1));
+		lMovementList.add(new MoveProbability().setDirection(Decisions.CURRENT, 1));
 		lMovementSequences.put(IdvmState.IDLE, lMovementList);
-		Direction lAct = cut.calcMovingDirection(lMovementSequences,
-				IdvmState.IDLE, Direction.RIGHT);
-		assertEquals(Direction.UP, lAct);
+		Decisions lAct = cut.calcMovingDirection(lMovementSequences,
+				IdvmState.IDLE, Decisions.RIGHT);
+		assertEquals(Decisions.UP, lAct);
 	}
 
 	@Test
 	public void calculateDirectionTarget() {
 		HashMap<IdvmState, ArrayList<MoveProbability>> lMovementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
 		ArrayList<MoveProbability> lMovementList = new ArrayList<MoveProbability>();
-		lMovementList.add(new MoveProbability().setDirection(Direction.TARGET, 1));
+		lMovementList.add(new MoveProbability().setDirection(Decisions.TARGET, 1));
 		lMovementSequences.put(IdvmState.IDLE, lMovementList);
-		Direction lAct = cut.calcMovingDirection(lMovementSequences,
-				IdvmState.IDLE, Direction.RIGHT);
-		assertEquals(Direction.RIGHT, lAct);
+		Decisions lAct = cut.calcMovingDirection(lMovementSequences,
+				IdvmState.IDLE, Decisions.RIGHT);
+		assertEquals(Decisions.RIGHT, lAct);
 	}
 
 	@Test
 	public void calculateDirectionTargetOpposite() {
 		HashMap<IdvmState, ArrayList<MoveProbability>> lMovementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
 		ArrayList<MoveProbability> lMovementList = new ArrayList<MoveProbability>();
-		lMovementList.add(new MoveProbability().setDirection(Direction.TARGET_OPPOSITE, 1));
+		lMovementList.add(new MoveProbability().setDirection(Decisions.TARGET_OPPOSITE, 1));
 		lMovementSequences.put(IdvmState.IDLE, lMovementList);
-		Direction lAct = cut.calcMovingDirection(lMovementSequences,
-				IdvmState.IDLE, Direction.RIGHT);
-		assertEquals(Direction.LEFT, lAct);
+		Decisions lAct = cut.calcMovingDirection(lMovementSequences,
+				IdvmState.IDLE, Decisions.RIGHT);
+		assertEquals(Decisions.LEFT, lAct);
 	}
 
 	@Test
 	public void calculateDirectionTargetSite2() {
 		HashMap<IdvmState, ArrayList<MoveProbability>> lMovementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
 		ArrayList<MoveProbability> lMovementList = new ArrayList<MoveProbability>();
-		lMovementList.add(new MoveProbability().setDirection(Direction.TARGET_SITE2, 1));
+		lMovementList.add(new MoveProbability().setDirection(Decisions.TARGET_SITE2, 1));
 		lMovementSequences.put(IdvmState.IDLE, lMovementList);
-		Direction lAct = cut.calcMovingDirection(lMovementSequences,
-				IdvmState.IDLE, Direction.RIGHT);
-		assertEquals(Direction.DOWN, lAct);
+		Decisions lAct = cut.calcMovingDirection(lMovementSequences,
+				IdvmState.IDLE, Decisions.RIGHT);
+		assertEquals(Decisions.DOWN, lAct);
 	}
 
 	@Test
 	public void calculateDirectionCurrentSite1() {
 		HashMap<IdvmState, ArrayList<MoveProbability>> lMovementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
 		ArrayList<MoveProbability> lMovementList = new ArrayList<MoveProbability>();
-		lMovementList.add(new MoveProbability().setDirection(Direction.CURRENT_SITE1, 1));
+		lMovementList.add(new MoveProbability().setDirection(Decisions.CURRENT_SITE1, 1));
 		lMovementSequences.put(IdvmState.IDLE, lMovementList);
-		Direction lAct = cut.calcMovingDirection(lMovementSequences,
-				IdvmState.IDLE, Direction.RIGHT);
-		assertEquals(Direction.LEFT, lAct);
+		Decisions lAct = cut.calcMovingDirection(lMovementSequences,
+				IdvmState.IDLE, Decisions.RIGHT);
+		assertEquals(Decisions.LEFT, lAct);
 	}
 
 	@Test
-	public void idvmMovesToFood() throws ExOutOfGrid {
+	public void idvmMovesToFood() throws PosIsOutOfGrid {
 		Pos lFoodPos = new Pos(10, 10);
 		mBlockGrid.setBlock(lFoodPos, new Food());
 
 		HashMap<IdvmState, ArrayList<MoveProbability>> lMovementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
 		ArrayList<MoveProbability> lMoveList = new ArrayList<MoveProbability>();
-		lMoveList.add(new MoveProbability().setDirection(Direction.TARGET, 1));
+		lMoveList.add(new MoveProbability().setDirection(Decisions.TARGET, 1));
 		lMovementSequences.put(IdvmState.FOOD, lMoveList);
 		iIdvm lIdvm = TestMock.getIdvmMock();
 
 		lIdvm.setBlockGrid(mBlockGrid);
-		Pos lIdvmPos = lFoodPos.getPosFromDirection(Direction.LEFT)
-				.getPosFromDirection(Direction.LEFT);
+		Pos lIdvmPos = lFoodPos.getPosFromDirection(Decisions.LEFT)
+				.getPosFromDirection(Decisions.LEFT);
 		lIdvm.setPosition(lIdvmPos);
 
 		Pos lAct = cut.getMovingPosition(lIdvm, lMovementSequences);
 
-		assertEquals(lIdvmPos.getPosFromDirection(Direction.RIGHT), lAct);
+		assertEquals(lIdvmPos.getPosFromDirection(Decisions.RIGHT), lAct);
 	}
 
 	@Test
-	public void idvmMovesAwayFromEnemy() throws ExOutOfGrid {
+	public void idvmMovesAwayFromEnemy() throws PosIsOutOfGrid {
 		Pos lEnemyPos = new Pos(10, 10);
 		mBlockGrid.setBlock(lEnemyPos, new Enemy());
 
 		HashMap<IdvmState, ArrayList<MoveProbability>> lMovementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
 		ArrayList<MoveProbability> lMoveList = new ArrayList<MoveProbability>();
 		lMoveList.add(new MoveProbability().setDirection(
-				Direction.TARGET_OPPOSITE, 1));
+				Decisions.TARGET_OPPOSITE, 1));
 		lMovementSequences.put(IdvmState.ENEMY, lMoveList);
 		iIdvm lIdvm = TestMock.getIdvmMock();
 
 		lIdvm.setBlockGrid(mBlockGrid);
-		Pos lIdvmPos = lEnemyPos.getPosFromDirection(Direction.LEFT)
-				.getPosFromDirection(Direction.LEFT);
+		Pos lIdvmPos = lEnemyPos.getPosFromDirection(Decisions.LEFT)
+				.getPosFromDirection(Decisions.LEFT);
 		lIdvm.setPosition(lIdvmPos);
 
 		Pos lAct = cut.getMovingPosition(lIdvm, lMovementSequences);
 
-		assertEquals(lIdvmPos.getPosFromDirection(Direction.LEFT), lAct);
+		assertEquals(lIdvmPos.getPosFromDirection(Decisions.LEFT), lAct);
 	}
 }

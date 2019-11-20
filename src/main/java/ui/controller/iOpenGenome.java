@@ -1,6 +1,6 @@
 package ui.controller;
 
-import genes.Genome;
+import core.genes.Genome;
 
 public interface iOpenGenome {
 	public void open(Genome genome);

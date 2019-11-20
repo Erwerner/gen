@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import datatypes.Direction;
-import datatypes.Pos;
-import globals.exceptions.ExOutOfGrid;
-import globals.exceptions.ExWrongState;
-import soup.block.iBlock;
-import soup.idvm.IdvmState;
-import soup.idvm.Sensor;
+import core.datatypes.Decisions;
+import core.datatypes.Pos;
+import core.exceptions.PosIsOutOfGrid;
+import core.exceptions.WrongState;
+import core.soup.block.iBlock;
+import core.soup.idvm.IdvmState;
+import core.soup.idvm.Sensor;
 import ui.mvc.Model;
 import ui.mvc.View;
 import ui.presenter.iPresentIdvm;
@@ -54,7 +54,7 @@ public class ViewConsoleMonitorIdvm extends View {
 					Pos lCurrentPos = new Pos(x, y);
 					lCurrentPos.isInGrid();
 					lBlockChar = getCharForBlock(lCurrentPos, lDetectedPos);
-				} catch (ExOutOfGrid e) {
+				} catch (PosIsOutOfGrid e) {
 					lBlockChar = "█";
 				}
 				lGridLine = lGridLine + lBlockChar;
@@ -64,7 +64,7 @@ public class ViewConsoleMonitorIdvm extends View {
 	}
 
 	private String getCharForBlock(Pos pPos, HashMap<Pos, Sensor> pDetectedPos)
-			throws ExOutOfGrid {
+			throws PosIsOutOfGrid {
 		String lBlockChar = " ";
 		iBlock lBlock = mSoup.getBlock(pPos);
 		if (lBlock != null) {

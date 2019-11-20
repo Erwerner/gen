@@ -1,10 +1,10 @@
 package ui.presenter;
 
-import soup.block.iBlock;
-import datatypes.Pos;
-import globals.exceptions.ExOutOfGrid;
+import core.datatypes.Pos;
+import core.exceptions.PosIsOutOfGrid;
+import core.soup.block.iBlock;
 
 public interface iPresentSoup {
 	iPresentSoup getPresenter();
-	iBlock getBlock(Pos pos) throws ExOutOfGrid; 
+	iBlock getBlock(Pos pos) throws PosIsOutOfGrid; 
 }
