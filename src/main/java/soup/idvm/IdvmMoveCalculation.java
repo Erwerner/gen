@@ -1,5 +1,12 @@
 package soup.idvm;
 
+import genes.MoveProbability;
+import globals.exceptions.ExFailedDetection;
+import globals.exceptions.ExOutOfGrid;
+import globals.exceptions.ExWrongBlockType;
+import globals.exceptions.ExWrongDirection;
+import globals.exceptions.ExWrongState;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -9,12 +16,6 @@ import soup.block.iBlock;
 import soup.block.iBlockGrid;
 import datatypes.Direction;
 import datatypes.Pos;
-import genes.MoveProbability;
-import globals.exceptions.ExFailedDetection;
-import globals.exceptions.ExOutOfGrid;
-import globals.exceptions.ExWrongBlockType;
-import globals.exceptions.ExWrongDirection;
-import globals.exceptions.ExWrongState;
 
 public class IdvmMoveCalculation implements iIdvmMoveCalculation {
 
@@ -81,7 +82,8 @@ public class IdvmMoveCalculation implements iIdvmMoveCalculation {
 				if (lGridBlock != null
 						&& lGridBlock.getBlockType() == lSearchBlock) {
 					Pos lSensorPos = iPos.getValue().getPos();
-					Direction lDircetion = lSensorPos.getDircetionTo(iPos.getKey());
+					Direction lDircetion = lSensorPos.getDircetionTo(iPos
+							.getKey());
 					return lDircetion;
 				}
 			} catch (ExOutOfGrid e) {
@@ -111,8 +113,12 @@ public class IdvmMoveCalculation implements iIdvmMoveCalculation {
 			HashMap<IdvmState, ArrayList<MoveProbability>> pMovementSequences,
 			IdvmState lState, Direction pTargetDirection) {
 		ArrayList<MoveProbability> lSequence = pMovementSequences.get(lState);
-		//TODO FIX can be empty
+		// TODO FIX can be empty
+		try{
 		mCalculatedDirection = lSequence.get(0).getDirection();
+		} catch(Throwable e){
+			e.printStackTrace();
+		}
 		Direction lNewDirection = null;
 		switch (mCalculatedDirection) {
 		case CURRENT:
@@ -160,8 +166,8 @@ public class IdvmMoveCalculation implements iIdvmMoveCalculation {
 		}
 		mCurrentDirection = pDirection;
 	}
-	
-	public Direction getCalculatedDirection(){
+
+	public Direction getCalculatedDirection() {
 		return mCalculatedDirection;
 	}
 

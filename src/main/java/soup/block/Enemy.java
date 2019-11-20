@@ -4,6 +4,7 @@ import java.util.Random;
 
 import datatypes.Direction;
 import datatypes.Pos;
+import globals.Global;
 import globals.exceptions.ExOutOfGrid;
 
 public class Enemy extends Block {
@@ -32,15 +33,14 @@ public class Enemy extends Block {
 	}
 
 	private void setDirection() {
-		if (new Random().nextInt(15) == 1)
+		if (Global.rndInt(15) == 1)
 			setRandomDirection();
 	}
 
 	private void setRandomDirection() {
 		Direction[] lDirections = { Direction.UP, Direction.DOWN,
 				Direction.LEFT, Direction.RIGHT, };
-		int rnd = new Random().nextInt(lDirections.length);
-		mCurrentDirection = lDirections[rnd];
+		mCurrentDirection = (Direction) Global.rndArrayEntry(lDirections);
 	}
 
 }

@@ -17,14 +17,15 @@ public class Measure {
 	public static void finishTimeMeasureEntry(String pStep) {
 		if (!Debug.debugOn)
 			return;
-		mEntries.add((System.nanoTime() - mLastMeasure)+ " - " + pStep);
 		mLastMeasure = System.nanoTime();
+		if (pStep != "!")
+			mEntries.add((System.nanoTime() - mLastMeasure) + " - " + pStep);
 	}
 
 	public static void showTimeMeasuring() {
 		if (!Debug.debugOn)
 			return;
-		for(String iEntry : mEntries)
+		for (String iEntry : mEntries)
 			System.out.println(iEntry);
 	}
 }

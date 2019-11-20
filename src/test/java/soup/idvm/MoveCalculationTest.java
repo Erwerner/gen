@@ -82,9 +82,7 @@ public class MoveCalculationTest {
 	public void calculateDirectionCurrent() {
 		HashMap<IdvmState, ArrayList<MoveProbability>> lMovementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
 		ArrayList<MoveProbability> lMovementList = new ArrayList<MoveProbability>();
-		ArrayList<Direction> lMovements = new ArrayList<Direction>();
-		lMovements.add(Direction.CURRENT);
-		lMovementList.add(new MoveProbability(lMovements));
+		lMovementList.add(new MoveProbability().setDirection(Direction.CURRENT, 1));
 		lMovementSequences.put(IdvmState.IDLE, lMovementList);
 		Direction lAct = cut.calcMovingDirection(lMovementSequences,
 				IdvmState.IDLE, Direction.RIGHT);
@@ -95,9 +93,7 @@ public class MoveCalculationTest {
 	public void calculateDirectionTarget() {
 		HashMap<IdvmState, ArrayList<MoveProbability>> lMovementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
 		ArrayList<MoveProbability> lMovementList = new ArrayList<MoveProbability>();
-		ArrayList<Direction> lMovements = new ArrayList<Direction>();
-		lMovements.add(Direction.TARGET);
-		lMovementList.add(new MoveProbability(lMovements));
+		lMovementList.add(new MoveProbability().setDirection(Direction.TARGET, 1));
 		lMovementSequences.put(IdvmState.IDLE, lMovementList);
 		Direction lAct = cut.calcMovingDirection(lMovementSequences,
 				IdvmState.IDLE, Direction.RIGHT);
@@ -108,9 +104,7 @@ public class MoveCalculationTest {
 	public void calculateDirectionTargetOpposite() {
 		HashMap<IdvmState, ArrayList<MoveProbability>> lMovementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
 		ArrayList<MoveProbability> lMovementList = new ArrayList<MoveProbability>();
-		ArrayList<Direction> lMovements = new ArrayList<Direction>();
-		lMovements.add(Direction.TARGET_OPPOSITE);
-		lMovementList.add(new MoveProbability(lMovements));
+		lMovementList.add(new MoveProbability().setDirection(Direction.TARGET_OPPOSITE, 1));
 		lMovementSequences.put(IdvmState.IDLE, lMovementList);
 		Direction lAct = cut.calcMovingDirection(lMovementSequences,
 				IdvmState.IDLE, Direction.RIGHT);
@@ -121,9 +115,7 @@ public class MoveCalculationTest {
 	public void calculateDirectionTargetSite2() {
 		HashMap<IdvmState, ArrayList<MoveProbability>> lMovementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
 		ArrayList<MoveProbability> lMovementList = new ArrayList<MoveProbability>();
-		ArrayList<Direction> lMovements = new ArrayList<Direction>();
-		lMovements.add(Direction.TARGET_SITE2);
-		lMovementList.add(new MoveProbability(lMovements));
+		lMovementList.add(new MoveProbability().setDirection(Direction.TARGET_SITE2, 1));
 		lMovementSequences.put(IdvmState.IDLE, lMovementList);
 		Direction lAct = cut.calcMovingDirection(lMovementSequences,
 				IdvmState.IDLE, Direction.RIGHT);
@@ -134,9 +126,7 @@ public class MoveCalculationTest {
 	public void calculateDirectionCurrentSite1() {
 		HashMap<IdvmState, ArrayList<MoveProbability>> lMovementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
 		ArrayList<MoveProbability> lMovementList = new ArrayList<MoveProbability>();
-		ArrayList<Direction> lMovements = new ArrayList<Direction>();
-		lMovements.add(Direction.CURRENT_SITE1);
-		lMovementList.add(new MoveProbability(lMovements));
+		lMovementList.add(new MoveProbability().setDirection(Direction.CURRENT_SITE1, 1));
 		lMovementSequences.put(IdvmState.IDLE, lMovementList);
 		Direction lAct = cut.calcMovingDirection(lMovementSequences,
 				IdvmState.IDLE, Direction.RIGHT);
@@ -150,8 +140,7 @@ public class MoveCalculationTest {
 
 		HashMap<IdvmState, ArrayList<MoveProbability>> lMovementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
 		ArrayList<MoveProbability> lMoveList = new ArrayList<MoveProbability>();
-		lMoveList.add(new MoveProbability(0, 0, 0, 0, 0, 0).setDirection(
-				Direction.TARGET, 1));
+		lMoveList.add(new MoveProbability().setDirection(Direction.TARGET, 1));
 		lMovementSequences.put(IdvmState.FOOD, lMoveList);
 		iIdvm lIdvm = TestMock.getIdvmMock();
 
@@ -172,7 +161,7 @@ public class MoveCalculationTest {
 
 		HashMap<IdvmState, ArrayList<MoveProbability>> lMovementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
 		ArrayList<MoveProbability> lMoveList = new ArrayList<MoveProbability>();
-		lMoveList.add(new MoveProbability(0, 0, 0, 0, 0, 0).setDirection(
+		lMoveList.add(new MoveProbability().setDirection(
 				Direction.TARGET_OPPOSITE, 1));
 		lMovementSequences.put(IdvmState.ENEMY, lMoveList);
 		iIdvm lIdvm = TestMock.getIdvmMock();

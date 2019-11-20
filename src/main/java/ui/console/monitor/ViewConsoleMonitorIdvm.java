@@ -70,7 +70,7 @@ public class ViewConsoleMonitorIdvm extends View {
 		if (lBlock != null) {
 			lBlockChar = getPixel(lBlock);
 		} else {
-			//if (mIdvm.getStepCount() % 3 == 0)
+			if (mIdvm.getStepCount() % 2 == 0)
 				for (Entry<Pos, Sensor> iDetectedPos : pDetectedPos.entrySet())
 					if (iDetectedPos.getKey().equals(pPos))
 						return getSensorChar();

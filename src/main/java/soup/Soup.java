@@ -88,22 +88,20 @@ public class Soup implements iSoup {
 					mBlockGrid.setBlock(iBlock.getPos(), null);
 				}
 			} catch (ExOutOfGrid e) {
-				// TODO e.printStackTrace();
 			}
 		}
 		for (iBlock iBlock : mIdvm.getUsedBlocks()) {
 			try {
 				mBlockGrid.setBlock(iBlock.getPos(), iBlock);
 			} catch (ExOutOfGrid e) {
-				// TODO e.printStackTrace();
 			}
 		}
 	}
 
 	public void step() {
-		mIdvm.step();
 		for (iBlock iBlock : mAllBlocks)
 			iBlock.step();
+		mIdvm.step();
 		refreshBlocks();
 	}
 
@@ -112,7 +110,6 @@ public class Soup implements iSoup {
 	}
 
 	public void executeIdvm() {
-		//TODO 2 messure runtime
 		while (mIdvm.isAlive())
 			step();
 	}

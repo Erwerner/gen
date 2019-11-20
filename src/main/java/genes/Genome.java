@@ -48,12 +48,14 @@ public class Genome implements Cloneable {
 		for (int i = 0; i < 4; i++)
 			setInitialCell(i, i / 2, i % 2);
 
-		for (Entry<IdvmState, ArrayList<MoveProbability>> iMoveSequence : movementSequences.entrySet()) {
+		for (Entry<IdvmState, ArrayList<MoveProbability>> iMoveSequence : movementSequences
+				.entrySet()) {
 			ArrayList<Direction> lLastPossible = new ArrayList<Direction>();
 			lLastPossible.add(Direction.UP);
 			for (MoveProbability iProbability : iMoveSequence.getValue()) {
 				if (iProbability.mPossibleDirection == null) {
-					iProbability.mPossibleDirection = (ArrayList<Direction>) lLastPossible.clone();
+					iProbability.mPossibleDirection = (ArrayList<Direction>) lLastPossible
+							.clone();
 				} else {
 					lLastPossible = iProbability.mPossibleDirection;
 				}
@@ -72,7 +74,8 @@ public class Genome implements Cloneable {
 		for (iGene iGene : cellGrow) {
 			lGenes.add(iGene);
 		}
-		for (ArrayList<MoveProbability> iMoveProbability : movementSequences.values()) {
+		for (ArrayList<MoveProbability> iMoveProbability : movementSequences
+				.values()) {
 			for (iGene iGene : iMoveProbability) {
 				lGenes.add(iGene);
 			}
@@ -95,14 +98,17 @@ public class Genome implements Cloneable {
 		lClone.setHunger(getHunger());
 
 		for (IdvmCell iCell : cellGrow) {
-			lClone.cellGrow
-					.add(new IdvmCell(iCell.getBlockType(), new Pos(iCell.getPosOnIdvm().x, iCell.getPosOnIdvm().y)));
+			lClone.cellGrow.add(new IdvmCell(iCell.getBlockType(), new Pos(
+					iCell.getPosOnIdvm().x, iCell.getPosOnIdvm().y)));
 		}
 
 		for (IdvmState iState : IdvmState.values()) {
 			ArrayList<MoveProbability> lMovements = new ArrayList<MoveProbability>();
 			for (MoveProbability iMovement : movementSequences.get(iState)) {
-				lMovements = (ArrayList<MoveProbability>) iMovement.mPossibleDirection.clone();
+				MoveProbability lNewMovePorobability = new MoveProbability();
+				lNewMovePorobability.mPossibleDirection = (ArrayList<Direction>) iMovement.mPossibleDirection
+						.clone();
+				lMovements.add(lNewMovePorobability);
 			}
 			lClone.movementSequences.put(iState, lMovements);
 		}
