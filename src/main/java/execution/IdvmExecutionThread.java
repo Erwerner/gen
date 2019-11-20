@@ -1,8 +1,8 @@
 package execution;
-import genes.Genome;
-import soup.Soup;
-import soup.idvm.Idvm;
-import soup.idvm.iIdvm;
+import core.genes.Genome;
+import core.soup.Soup;
+import core.soup.idvm.Idvm;
+import core.soup.idvm.iIdvm;
 
 public class IdvmExecutionThread implements Runnable {
 

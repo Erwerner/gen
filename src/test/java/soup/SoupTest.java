@@ -8,14 +8,15 @@ import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 
-import soup.block.BlockType;
-import soup.block.iBlock;
-import soup.idvm.iIdvm;
+import core.datatypes.Decisions;
+import core.datatypes.Pos;
+import core.exceptions.PosIsOutOfGrid;
+import core.soup.Soup;
+import core.soup.block.BlockType;
+import core.soup.block.iBlock;
+import core.soup.idvm.iIdvm;
 import utils.TestMock;
-import datatypes.Direction;
-import datatypes.Pos;
-import globals.Constants;
-import globals.exceptions.ExOutOfGrid;
+import globals.Config;
 
 public class SoupTest {
 	Soup cut;
@@ -35,33 +36,33 @@ public class SoupTest {
 			lMidBlock = cut.getBlock(lMidPos);
 			assertNotNull(lMidBlock);
 			assertEquals(BlockType.LIFE, lMidBlock.getBlockType());
-		} catch (ExOutOfGrid e) {
+		} catch (PosIsOutOfGrid e) {
 			fail();
 		}
 	}
 
 	@Test
-	public void gridHasBlocks() throws ExOutOfGrid {
+	public void gridHasBlocks() throws PosIsOutOfGrid {
 		int lCount = 0;
-		for (int x = 0; x < Constants.soupSize; x++) {
-			for (int y = 0; y < Constants.soupSize; y++) {
+		for (int x = 0; x < Config.soupSize; x++) {
+			for (int y = 0; y < Config.soupSize; y++) {
 				iBlock lBlock = cut.getBlock(new Pos(x, y));
 				if (lBlock != null)
 					lCount++;
 			}
 		}
-		assertEquals(Constants.foodSupply + Constants.enemySupply + 4, lCount);
+		assertEquals(Config.foodSupply + Config.enemySupply + 4, lCount);
 	}
 
 	@Test
-	public void foodGetsNullAfterInteraction() throws ExOutOfGrid {
+	public void foodGetsNullAfterInteraction() throws PosIsOutOfGrid {
 		for (Pos iPos : Pos.getAllGridPos()) {
 			iBlock lBlock = cut.getBlock(iPos);
 			if (lBlock == null || lBlock.getBlockType() != BlockType.FOOD)
 				continue;
 			mIdvm.setPosition(iPos);
 			cut.step();
-			mIdvm.setPosition(iPos.getPosFromDirection(Direction.RIGHT));
+			mIdvm.setPosition(iPos.getPosFromDirection(Decisions.RIGHT));
 			cut.step();
 			assertNull(cut.getBlock(iPos));
 			return;

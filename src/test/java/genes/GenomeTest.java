@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-import datatypes.Direction;
-import datatypes.Pos;
-import soup.idvm.IdvmState;
+import core.datatypes.Decisions;
+import core.datatypes.Pos;
+import core.genes.Genome;
+import core.genes.MoveProbability;
+import core.soup.idvm.IdvmState;
 
 public class GenomeTest {
 	Genome cut = new Genome();
@@ -60,7 +62,7 @@ public class GenomeTest {
 		cut.mMutationRate = 0.0;
 		cut.forceMutation();
 		ArrayList<MoveProbability> lIdleSequence = cut.movementSequences.get(IdvmState.IDLE);
-		ArrayList<Direction> lFirstProbability = lIdleSequence.get(0).mPossibleDirection;
+		ArrayList<Decisions> lFirstProbability = lIdleSequence.get(0).mPossibleDirection;
 		assertNotNull(lFirstProbability);
 		assertNotNull(lIdleSequence.get(1).mPossibleDirection);
 		lIdleSequence.get(1).mPossibleDirection = null;
@@ -72,7 +74,7 @@ public class GenomeTest {
 		cut.mMutationRate = 0.0;
 		cut.forceMutation();
 		ArrayList<MoveProbability> lIdleSequence = cut.movementSequences.get(IdvmState.IDLE);
-		ArrayList<Direction> lFirstProbability = lIdleSequence.get(0).mPossibleDirection;
+		ArrayList<Decisions> lFirstProbability = lIdleSequence.get(0).mPossibleDirection;
 		assertNotNull(lFirstProbability);
 		assertNotNull(lIdleSequence.get(1).mPossibleDirection);
 		lIdleSequence.get(1).mPossibleDirection = null;

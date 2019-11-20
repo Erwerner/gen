@@ -5,11 +5,14 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import soup.idvm.iIdvm;
+import core.datatypes.Pos;
+import core.exceptions.PosIsOutOfGrid;
+import core.soup.block.BlockGrid;
+import core.soup.block.BlockType;
+import core.soup.block.Food;
+import core.soup.block.iBlock;
+import core.soup.idvm.iIdvm;
 import utils.TestMock;
-
-import datatypes.Pos;
-import globals.exceptions.ExOutOfGrid;
 
 public class BlockGridTest {
 	BlockGrid cut;
@@ -20,7 +23,7 @@ public class BlockGridTest {
 	}
 
 	@Test
-	public void initialGridHasNoBlocks() throws ExOutOfGrid {
+	public void initialGridHasNoBlocks() throws PosIsOutOfGrid {
 		for (Pos iPos : Pos.getAllGridPos()) {
 			if (cut.getBlock(iPos) != null)
 				fail();
@@ -28,7 +31,7 @@ public class BlockGridTest {
 	}
 
 	@Test
-	public void setRandomSetsBlock() throws ExOutOfGrid {
+	public void setRandomSetsBlock() throws PosIsOutOfGrid {
 		cut.setRandomBlock(new Food());
 		for (Pos iPos : Pos.getAllGridPos()) {
 			if (cut.getBlock(iPos) != null)
@@ -38,7 +41,7 @@ public class BlockGridTest {
 	}
 
 	@Test
-	public void setRandomSetsTwoBlock() throws ExOutOfGrid {
+	public void setRandomSetsTwoBlock() throws PosIsOutOfGrid {
 		cut.setRandomBlock(new Food());
 		cut.setRandomBlock(new Food());
 		int lCount = 0;
@@ -50,7 +53,7 @@ public class BlockGridTest {
 	}
 
 	@Test
-	public void initIdvmSetsFourBlocks() throws ExOutOfGrid {
+	public void initIdvmSetsFourBlocks() throws PosIsOutOfGrid {
 		iIdvm lIdvm = TestMock.getIdvmMock();
 		cut.addInitialIdvm(lIdvm);
 		int lCount = 0;
@@ -62,7 +65,7 @@ public class BlockGridTest {
 	}
 	
 	@Test
-	public void idvmInitAtMidPos() throws ExOutOfGrid {
+	public void idvmInitAtMidPos() throws PosIsOutOfGrid {
 		iIdvm lIdvm = TestMock.getIdvmMock();
 		cut.addInitialIdvm(lIdvm);
 		Pos lMidPos = lIdvm.getPos();

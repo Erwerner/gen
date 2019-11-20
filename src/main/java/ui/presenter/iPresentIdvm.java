@@ -2,17 +2,16 @@ package ui.presenter;
 
 import java.util.HashMap;
 
-import datatypes.Direction;
-import datatypes.Pos;
-
-import soup.idvm.IdvmState;
-import soup.idvm.Sensor;
+import core.datatypes.Decisions;
+import core.datatypes.Pos;
+import core.soup.idvm.IdvmState;
+import core.soup.idvm.Sensor;
 
 public interface iPresentIdvm {
 
 	HashMap<Pos, Sensor> getDetectedPos();
 
-	Direction getTargetDirection();
+	Decisions getTargetDirection();
 
 	int getStepCount();
 
@@ -26,5 +25,5 @@ public interface iPresentIdvm {
 
 	int getEnergyCount();
 
-	Direction getCalculatedDirection();
+	Decisions getCalculatedDirection();
 }

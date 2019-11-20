@@ -1,17 +1,16 @@
 package utils;
 
-import genes.Genome;
-import genes.MoveProbability;
-
 import java.util.ArrayList;
 
-import soup.block.BlockType;
-import soup.block.IdvmCell;
-import soup.idvm.Idvm;
-import soup.idvm.IdvmState;
-import soup.idvm.iIdvm;
-import datatypes.Direction;
-import datatypes.Pos;
+import core.datatypes.Decisions;
+import core.datatypes.Pos;
+import core.genes.Genome;
+import core.genes.MoveProbability;
+import core.soup.block.BlockType;
+import core.soup.block.IdvmCell;
+import core.soup.idvm.Idvm;
+import core.soup.idvm.IdvmState;
+import core.soup.idvm.iIdvm;
 
 public class TestMock {
 	public static iIdvm getIdvmMock() {
@@ -31,9 +30,9 @@ public class TestMock {
 		}
 		ArrayList<MoveProbability> lIdlelMoveProbability = new ArrayList<MoveProbability>();
 		lIdlelMoveProbability.add(new MoveProbability().setDirection(
-				Direction.LEFT, 1));
+				Decisions.LEFT, 1));
 		lIdlelMoveProbability.add(new MoveProbability().setDirection(
-				Direction.DOWN, 1));
+				Decisions.DOWN, 1));
 		lGenome.movementSequences.put(IdvmState.IDLE, lIdlelMoveProbability);
 		lGenome.movementSequences.put(IdvmState.FOOD, lIdlelMoveProbability);
 

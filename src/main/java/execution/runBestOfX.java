@@ -1,5 +1,5 @@
 package execution;
-import genes.Genome;
+import core.genes.Genome;
 import ui.console.monitor.ModelMonitorIdvm;
 
 public class runBestOfX {

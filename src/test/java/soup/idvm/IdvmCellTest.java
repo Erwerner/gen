@@ -7,10 +7,9 @@ import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 
-import datatypes.Pos;
-
-import soup.block.BlockType;
-import soup.block.IdvmCell;
+import core.datatypes.Pos;
+import core.soup.block.BlockType;
+import core.soup.block.IdvmCell;
 
 public class IdvmCellTest {
 	IdvmCell cut;
