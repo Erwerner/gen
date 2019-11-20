@@ -26,7 +26,7 @@ public class Pos {
 		return this.x == other.x && this.y == other.y;
 	}
 
-	//TODO Direction Type
+	//TODO 2 REF Direction Type
 	public Pos getPosFromDirection(Decisions pDirection) throws PosIsOutOfGrid {
 		Pos lNewPos;
 		switch (pDirection) {

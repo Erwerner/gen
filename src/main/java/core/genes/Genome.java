@@ -10,10 +10,9 @@ import core.soup.block.BlockType;
 import core.soup.block.IdvmCell;
 import core.soup.idvm.Idvm;
 import core.soup.idvm.IdvmState;
+import globals.Config;
 
-//TODO 2 IMPL Corossover
 public class Genome implements Cloneable {
-	private static final int cMaxSequence = 48;
 	private GeneInt mHunger = new GeneInt(0, Idvm.cMaxEnergy, 50);
 	// TODO IMPL make mutation rate a gene
 	public Double mMutationRate = 0.02;
@@ -23,7 +22,7 @@ public class Genome implements Cloneable {
 
 	public Genome forceMutation() {
 		ArrayList<MoveProbability> lInitialMoveProbability = new ArrayList<MoveProbability>();
-		for (int i = 0; i < 48; i++) {
+		for (int i = 0; i < Config.cMaxSequence; i++) {
 			cellGrow.add((new IdvmCell(BlockType.NOTHING, new Pos(0, 0))));
 			lInitialMoveProbability.add(new MoveProbability());
 		}
