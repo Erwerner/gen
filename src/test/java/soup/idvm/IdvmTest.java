@@ -233,7 +233,7 @@ public class IdvmTest {
 		try {
 			int lIdxKillCell = 2;
 			assertHasGrowCellOnPosDiff(true, lIdxKillCell, 0, 0);
-			Enemy lEnemy = new Enemy();
+			Enemy lEnemy = new Enemy(mBlockGrid);
 			Pos lPos = getSoupPosFromGrowCell(lIdxKillCell);
 			lEnemy.setPosition(lPos);
 			cut.interactWithEnemy(lEnemy);

@@ -15,19 +15,18 @@ public class runCrossover {
 
 	public static void main(String[] args) throws CloneNotSupportedException, InterruptedException {
 		System.out.println("Init");
+		Genome lBestOfLastGeneration = new Genome().forceMutation();
 		ArrayList<Idvm> lPopulation = new ArrayList<Idvm>();
 		lPopulation = initializePopulation();
-		int lGeneration = 0;
+		int iGeneration=0;
 		while (true) {
-			lPopulation = runPopulation(lPopulation);
+			if(iGeneration<12)lBestOfLastGeneration=null;
+			lPopulation = runPopulation(lPopulation, lBestOfLastGeneration);
 			ArrayList<Idvm> lFittestIdvm = evaluateFitness(lPopulation);
 			checkFitness(lFittestIdvm);
-			if (lGeneration > 9 && lGeneration % 3 == 0) {
-				ModelMonitorIdvm lMonitor = new ModelMonitorIdvm();
-				lMonitor.runGenome((Genome) lFittestIdvm.get(lFittestIdvm.size() - 1).getGenomeOrigin().clone());
-			}
+			lBestOfLastGeneration = (Genome) lFittestIdvm.get(lFittestIdvm.size() - 1).getGenomeOrigin().clone();
 			lPopulation = getOffsprings(lFittestIdvm);
-			lGeneration++;
+			iGeneration++;
 		}
 	}
 
@@ -35,9 +34,9 @@ public class runCrossover {
 		ArrayList<Idvm> lOffsprings = new ArrayList<Idvm>();
 		ArrayList<Idvm> lParents = new ArrayList<Idvm>();
 		for (int iIdvmIdx = pFittestIdvm.size() - 1; iIdvmIdx >= 0; iIdvmIdx--) {
-			for(int iCopy = 0 ; iCopy<cTopFittest;iCopy++) {
+			for (int iCopy = 0; iCopy < cTopFittest; iCopy++) {
 				lParents.add(pFittestIdvm.get(iIdvmIdx));
-				lParents.add(pFittestIdvm.get(iIdvmIdx));				
+				lParents.add(pFittestIdvm.get(iIdvmIdx));
 			}
 		}
 		while (!lParents.isEmpty()) {
@@ -97,7 +96,7 @@ public class runCrossover {
 		return lFittestIdvm;
 	}
 
-	private static ArrayList<Idvm> runPopulation(ArrayList<Idvm> pPopulation)
+	private static ArrayList<Idvm> runPopulation(ArrayList<Idvm> pPopulation, Genome pBestOfLastGeneration)
 			throws CloneNotSupportedException, InterruptedException {
 		ArrayList<Idvm> lExecutedPopulation = new ArrayList<Idvm>();
 		ArrayList<IdvmExecutionThread> mIdvmExecutionThread = new ArrayList<IdvmExecutionThread>();
@@ -109,6 +108,9 @@ public class runCrossover {
 			mThreads.add(lThread);
 			mIdvmExecutionThread.add(lIdvmRunner);
 		}
+		ModelMonitorIdvm lMonitor = new ModelMonitorIdvm();
+		if(pBestOfLastGeneration!=null)
+		lMonitor.runGenome(pBestOfLastGeneration);
 		for (Thread iThread : mThreads) {
 			iThread.join();
 		}
@@ -120,7 +122,7 @@ public class runCrossover {
 
 	private static ArrayList<Idvm> initializePopulation() {
 		ArrayList<Idvm> lPopulation = new ArrayList<Idvm>();
-		for (int iIdvmCount = 0; iIdvmCount < 4000; iIdvmCount++) {
+		for (int iIdvmCount = 0; iIdvmCount < 8000; iIdvmCount++) {
 			lPopulation.add(new Idvm(new Genome().forceMutation()));
 		}
 		return lPopulation;

@@ -32,7 +32,7 @@ public class Soup implements iSoup {
 	private void initEnemyBlocks() {
 		Enemy[] lEnemyList = new Enemy[Config.enemySupply];
 		for (int i = 0; i < Config.enemySupply; i++)
-			lEnemyList[i] = new Enemy();
+			lEnemyList[i] = new Enemy(mBlockGrid);
 		for (iBlock iEnemyBlock : lEnemyList) {
 			mBlockGrid.setRandomBlock(iEnemyBlock);
 			mAllBlocks.add(iEnemyBlock);

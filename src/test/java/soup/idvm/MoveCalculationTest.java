@@ -161,7 +161,7 @@ public class MoveCalculationTest {
 	@Test
 	public void idvmMovesAwayFromEnemy() throws PosIsOutOfGrid {
 		Pos lEnemyPos = new Pos(10, 10);
-		mBlockGrid.setBlock(lEnemyPos, new Enemy());
+		mBlockGrid.setBlock(lEnemyPos, new Enemy(mBlockGrid));
 
 		HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> lMovementSequences = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
 		ArrayList<MoveDecisionsProbability> lMoveList = new ArrayList<MoveDecisionsProbability>();
