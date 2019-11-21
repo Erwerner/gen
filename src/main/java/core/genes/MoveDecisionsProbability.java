@@ -1,12 +1,9 @@
 package core.genes;
 
-import globals.Helpers;
-
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Random;
 
 import core.datatypes.Decisions;
+import globals.Helpers;
 
 public class MoveDecisionsProbability implements iGene {
 	// TODO REF make private
@@ -39,17 +36,17 @@ public class MoveDecisionsProbability implements iGene {
 			mPossibleDecisions = new ArrayList<Decisions>();
 		// Remove random decision
 		for (int i = 0; i < 1; i++) {
-			Decisions lRndDirection = (Decisions) Helpers.rndArrayEntry(Decisions.values());
-			while (mPossibleDecisions.contains(lRndDirection)) {
-				mPossibleDecisions.remove(lRndDirection);
+			// Decisions lRndDecision =
+			// mPossibleDecisions.get(Helpers.rndInt(mPossibleDecisions.size()-1));
+			Decisions lRndDecision = (Decisions) Helpers.rndArrayEntry(Decisions.values());
+			while (mPossibleDecisions.contains(lRndDecision)) {
+				mPossibleDecisions.remove(lRndDecision);
 			}
 		}
 		// Add random decision
-		for (int i = 0; i < 1; i++) {
-			Decisions lRndDecision = (Decisions) Helpers.rndArrayEntry(Decisions.values());
-			for (int j = 1; j <= Helpers.rndIntRange(1, 9); j++)
-				mPossibleDecisions.add(lRndDecision);
-		}
+		Decisions lRndDecision = (Decisions) Helpers.rndArrayEntry(Decisions.values());
+		for (int j = 1; j <= Helpers.rndIntRange(1, 9); j++)
+			mPossibleDecisions.add(lRndDecision);
 	}
 
 	@Override

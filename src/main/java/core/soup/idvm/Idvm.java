@@ -26,7 +26,7 @@ public class Idvm extends Block implements iIdvm {
 	private int mHunger;
 	private iBlockGrid mBlockGrid;
 	private int mStepCount;
-	private int mEnergy = Config.cMaxEnergy;
+	private int mEnergy = Config.cFoodEnergy;
 	private iIdvmMoveCalculation mMoveCalculation;
 	private IdvmSensor mIdvmSensor;
 
@@ -132,8 +132,10 @@ public class Idvm extends Block implements iIdvm {
 
 	public void step() {
 		mStepCount++;
-		for (iBlock iCount : getUsedBlocks(BlockType.LIFE))
+		for (iBlock iCount : getUsedBlocks(BlockType.LIFE)) {
 			mEnergy--;
+			mEnergy--;			
+		}
 		move();
 	}
 
@@ -154,7 +156,9 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	public void interactWithFood(Food pFood) {
-		mEnergy = Config.cMaxEnergy;
+		mEnergy = mEnergy + Config.cFoodEnergy;
+		if(mEnergy>Config.cMaxEnergy)
+			mEnergy = Config.cMaxEnergy;
 		grow();
 		popAllSequences();
 	}

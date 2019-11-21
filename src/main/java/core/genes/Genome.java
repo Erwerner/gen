@@ -15,7 +15,7 @@ import globals.Config;
 public class Genome implements Cloneable {
 	private GeneInt mHunger = new GeneInt(0, Config.cMaxEnergy, 50);
 	// TODO IMPL make mutation rate a gene
-	public Double mMutationRate = 0.08;
+	public Double mMutationRate = 0.005;
 	// TODO REF make this private
 	public ArrayList<IdvmCell> cellGrow = new ArrayList<IdvmCell>();
 	public HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> moveSequencesForState = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();

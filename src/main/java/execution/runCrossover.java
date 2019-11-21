@@ -11,7 +11,7 @@ import ui.console.monitor.ModelMonitorIdvm;
 
 public class runCrossover {
 	static ArrayList<Thread> mThreads = new ArrayList<Thread>();
-	private static final int cTopFittest = 4;
+	private static final int cTopFittest = 16;
 
 	public static void main(String[] args) throws CloneNotSupportedException, InterruptedException {
 		System.out.println("Init");
@@ -22,7 +22,7 @@ public class runCrossover {
 			lPopulation = runPopulation(lPopulation);
 			ArrayList<Idvm> lFittestIdvm = evaluateFitness(lPopulation);
 			checkFitness(lFittestIdvm);
-			if (lGeneration > 9 && lGeneration % 30 == 0) {
+			if (lGeneration > 9 && lGeneration % 3 == 0) {
 				ModelMonitorIdvm lMonitor = new ModelMonitorIdvm();
 				lMonitor.runGenome((Genome) lFittestIdvm.get(lFittestIdvm.size() - 1).getGenomeOrigin().clone());
 			}
@@ -120,7 +120,7 @@ public class runCrossover {
 
 	private static ArrayList<Idvm> initializePopulation() {
 		ArrayList<Idvm> lPopulation = new ArrayList<Idvm>();
-		for (int iIdvmCount = 0; iIdvmCount < 400; iIdvmCount++) {
+		for (int iIdvmCount = 0; iIdvmCount < 4000; iIdvmCount++) {
 			lPopulation.add(new Idvm(new Genome().forceMutation()));
 		}
 		return lPopulation;

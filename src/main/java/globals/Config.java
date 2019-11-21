@@ -1,9 +1,11 @@
 package globals;
 
 public class Config {
-	public static final int soupSize = 200;
-	public static final int foodSupply = 150;
-	public static final int enemySupply = 40;
-	public static final int cMaxSequence = 48;
-	public static final int cMaxEnergy = 500;
+	private static final int cSoupFctor = 1;
+	public static final int soupSize = 100 * cSoupFctor;
+	public static final int foodSupply = 40 * cSoupFctor;
+	public static final int enemySupply = 20 * cSoupFctor;
+	public static final int cMaxSequence = 12;
+	public static final int cMaxEnergy = 900;
+	public static final int cFoodEnergy = 300;
 }
