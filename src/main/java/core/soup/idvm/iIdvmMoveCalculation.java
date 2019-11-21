@@ -6,9 +6,10 @@ import java.util.HashMap;
 import core.datatypes.Decisions;
 import core.datatypes.Pos;
 import core.exceptions.PosIsOutOfGrid;
-import core.genes.MoveProbability;
+import core.genes.MoveDecisionsProbability;
 import core.soup.block.iBlock;
 
+//TOTO REF delete interface
 public interface iIdvmMoveCalculation {
 	public Pos calcPosFromDirection(Decisions pDirection, Pos pIdvmPos,
 			ArrayList<iBlock> pIdvmBlocks) throws PosIsOutOfGrid;
@@ -17,11 +18,11 @@ public interface iIdvmMoveCalculation {
 			HashMap<Pos, Sensor> pDetectedPos);
 
 	public Pos getMovingPosition(iIdvm pIdvm,
-			HashMap<IdvmState, ArrayList<MoveProbability>> pMovementSequences)
+			HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> pMovementSequences)
 			throws PosIsOutOfGrid;
 
 	Decisions calcMovingDirection(
-			HashMap<IdvmState, ArrayList<MoveProbability>> pMovementSequences,
+			HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> pMovementSequences,
 			IdvmState pLState, Decisions pTargetDirection);
 
 	Decisions getCalculatedDirection();

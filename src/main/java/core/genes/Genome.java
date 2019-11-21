@@ -18,19 +18,23 @@ public class Genome implements Cloneable {
 	public Double mMutationRate = 0.02;
 	// TODO REF make this private
 	public ArrayList<IdvmCell> cellGrow = new ArrayList<IdvmCell>();
-	public HashMap<IdvmState, ArrayList<MoveProbability>> movementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
+	public HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> moveSequencesForState = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
 
 	public Genome forceMutation() {
-		ArrayList<MoveProbability> lInitialMoveProbability = new ArrayList<MoveProbability>();
-		for (int i = 0; i < Config.cMaxSequence; i++) {
-			cellGrow.add((new IdvmCell(BlockType.NOTHING, new Pos(0, 0))));
-			lInitialMoveProbability.add(new MoveProbability());
-		}
-		for (IdvmState iState : IdvmState.values()) {
-			movementSequences.put(iState, lInitialMoveProbability);
-		}
+		initSequences();
 		mutate(1.0);
 		return this;
+	}
+
+	private void initSequences() {
+		ArrayList<MoveDecisionsProbability> lInitialMoveProbability = new ArrayList<MoveDecisionsProbability>();
+		for (int i = 0; i < Config.cMaxSequence; i++) {
+			cellGrow.add((new IdvmCell(BlockType.NOTHING, new Pos(0, 0))));
+			lInitialMoveProbability.add(new MoveDecisionsProbability());
+		}
+		for (IdvmState iState : IdvmState.values()) {
+			moveSequencesForState.put(iState, lInitialMoveProbability);
+		}
 	}
 
 	public void naturalMutation() {
@@ -45,24 +49,25 @@ public class Genome implements Cloneable {
 			iGene.mutate(pMutationRate);
 
 		for (int i = 0; i < 4; i++)
-			setInitialCell(i, i / 2, i % 2);
+			setInitialCellToCenterPos(i, i / 2, i % 2);
 
-		for (Entry<IdvmState, ArrayList<MoveProbability>> iMoveSequence : movementSequences
+		for (Entry<IdvmState, ArrayList<MoveDecisionsProbability>> iStateMoveSequence : moveSequencesForState
 				.entrySet()) {
-			ArrayList<Decisions> lLastPossible = new ArrayList<Decisions>();
-			lLastPossible.add(Decisions.UP);
-			for (MoveProbability iProbability : iMoveSequence.getValue()) {
-				if (iProbability.mPossibleDirection == null) {
-					iProbability.mPossibleDirection = (ArrayList<Decisions>) lLastPossible
+			ArrayList<Decisions> lLastPossibleDecisions = new ArrayList<Decisions>();
+			lLastPossibleDecisions.add(Decisions.UP);
+			for (MoveDecisionsProbability iProbability : iStateMoveSequence.getValue()) {
+				if (iProbability.mPossibleDecisions == null) {
+				//Repeat last probability
+					iProbability.mPossibleDecisions = (ArrayList<Decisions>) lLastPossibleDecisions
 							.clone();
 				} else {
-					lLastPossible = iProbability.mPossibleDirection;
+					lLastPossibleDecisions = iProbability.mPossibleDecisions;
 				}
 			}
 		}
 	}
 
-	private void setInitialCell(int pIdx, int pX, int pY) {
+	private void setInitialCellToCenterPos(int pIdx, int pX, int pY) {
 		BlockType lCellType = cellGrow.get(pIdx).getBlockType();
 		cellGrow.set(pIdx, new IdvmCell(lCellType, new Pos(pX, pY)));
 	}
@@ -73,7 +78,7 @@ public class Genome implements Cloneable {
 		for (iGene iGene : cellGrow) {
 			lGenes.add(iGene);
 		}
-		for (ArrayList<MoveProbability> iMoveProbability : movementSequences
+		for (ArrayList<MoveDecisionsProbability> iMoveProbability : moveSequencesForState
 				.values()) {
 			for (iGene iGene : iMoveProbability) {
 				lGenes.add(iGene);
@@ -100,13 +105,13 @@ public class Genome implements Cloneable {
 			lClone.cellGrow.add((IdvmCell) iCell.clone());
 
 		for (IdvmState iState : IdvmState.values()) {
-			ArrayList<MoveProbability> lMovements = new ArrayList<MoveProbability>();
-			for (MoveProbability iMovement : movementSequences.get(iState)) {
-				MoveProbability lNewMovePorobability = (MoveProbability) iMovement
+			ArrayList<MoveDecisionsProbability> lNewSequence = new ArrayList<MoveDecisionsProbability>();
+			for (MoveDecisionsProbability iOriginProbability : moveSequencesForState.get(iState)) {
+				MoveDecisionsProbability lNewMovePorobability = (MoveDecisionsProbability) iOriginProbability
 						.clone();
-				lMovements.add(lNewMovePorobability);
+				lNewSequence.add(lNewMovePorobability);
 			}
-			lClone.movementSequences.put(iState, lMovements);
+			lClone.moveSequencesForState.put(iState, lNewSequence);
 		}
 		return lClone;
 	}

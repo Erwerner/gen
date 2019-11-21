@@ -31,14 +31,13 @@ public class Crossover {
 		Genome lSecondGenome = choseRndGenome();
 		while (lFirstGenome == lSecondGenome)
 			lSecondGenome = choseRndGenome();
-		int lCrossoverNumber = Helpers.rndInt(Config.cMaxSequence - 2);
+		int lCrossoverNumber = Helpers.rndIntRange(1, Config.cMaxSequence - 2);
 		for (int iSequenceNumber = 0; iSequenceNumber < Config.cMaxSequence; iSequenceNumber++) {
 			Genome lCurrentGenome = lFirstGenome;
 			if (iSequenceNumber >= lCrossoverNumber)
 				lCurrentGenome = lSecondGenome;
 
-			mNewGenome.cellGrow.set(iSequenceNumber,(IdvmCell) lCurrentGenome.cellGrow.get(
-					iSequenceNumber).clone());
+			mNewGenome.cellGrow.set(iSequenceNumber, (IdvmCell) lCurrentGenome.cellGrow.get(iSequenceNumber).clone());
 		}
 	}
 
@@ -49,15 +48,15 @@ public class Crossover {
 			Genome lSecondGenome = choseRndGenome();
 			while (lFirstGenome == lSecondGenome)
 				lSecondGenome = choseRndGenome();
-			int lCrossoverNumber = Helpers.rndInt(Config.cMaxSequence - 2);
+			int lCrossoverNumber = Helpers.rndIntRange(1, Config.cMaxSequence - 2);
 			for (int iSequenceNumber = 0; iSequenceNumber < Config.cMaxSequence; iSequenceNumber++) {
 				Genome lCurrentGenome = lFirstGenome;
 				if (iSequenceNumber >= lCrossoverNumber)
 					lCurrentGenome = lSecondGenome;
 
-				MoveProbability lOriginMovement = (MoveProbability) lCurrentGenome.movementSequences
+				MoveDecisionsProbability lOriginMovement = (MoveDecisionsProbability) lCurrentGenome.moveSequencesForState
 						.get(iState).get(iSequenceNumber).clone();
-				mNewGenome.movementSequences.get(iState).set(iSequenceNumber,lOriginMovement);
+				mNewGenome.moveSequencesForState.get(iState).set(iSequenceNumber, lOriginMovement);
 			}
 		}
 	}

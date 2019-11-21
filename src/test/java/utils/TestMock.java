@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import core.datatypes.Decisions;
 import core.datatypes.Pos;
 import core.genes.Genome;
-import core.genes.MoveProbability;
+import core.genes.MoveDecisionsProbability;
 import core.soup.block.BlockType;
 import core.soup.block.IdvmCell;
 import core.soup.idvm.Idvm;
@@ -28,13 +28,13 @@ public class TestMock {
 			lGenome.cellGrow.add(new IdvmCell(iCell.getBlockType(), iCell
 					.getPosOnIdvm()));
 		}
-		ArrayList<MoveProbability> lIdlelMoveProbability = new ArrayList<MoveProbability>();
-		lIdlelMoveProbability.add(new MoveProbability().setDirection(
+		ArrayList<MoveDecisionsProbability> lIdlelMoveProbability = new ArrayList<MoveDecisionsProbability>();
+		lIdlelMoveProbability.add(new MoveDecisionsProbability().appendDecision(
 				Decisions.LEFT, 1));
-		lIdlelMoveProbability.add(new MoveProbability().setDirection(
+		lIdlelMoveProbability.add(new MoveDecisionsProbability().appendDecision(
 				Decisions.DOWN, 1));
-		lGenome.movementSequences.put(IdvmState.IDLE, lIdlelMoveProbability);
-		lGenome.movementSequences.put(IdvmState.FOOD, lIdlelMoveProbability);
+		lGenome.moveSequencesForState.put(IdvmState.IDLE, lIdlelMoveProbability);
+		lGenome.moveSequencesForState.put(IdvmState.FOOD, lIdlelMoveProbability);
 
 		lGenome.setHunger(50);
 		return new Idvm(lGenome);

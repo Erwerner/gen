@@ -8,7 +8,7 @@ import core.datatypes.Decisions;
 import core.datatypes.Pos;
 import core.exceptions.PosIsOutOfGrid;
 import core.genes.Genome;
-import core.genes.MoveProbability;
+import core.genes.MoveDecisionsProbability;
 import core.soup.block.Block;
 import core.soup.block.BlockType;
 import core.soup.block.Enemy;
@@ -24,7 +24,7 @@ public class Idvm extends Block implements iIdvm {
 	@SuppressWarnings("unused")
 	private Genome mGenomeOrigin;
 	private IdvmCell[][] mCellGrid = new IdvmCell[4][4];
-	private HashMap<IdvmState, ArrayList<MoveProbability>> mMovementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
+	private HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> mMovementSequences = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
 	private ArrayList<IdvmCell> mCellGrow;
 	private int mHunger;
 	private iBlockGrid mBlockGrid;
@@ -45,14 +45,14 @@ public class Idvm extends Block implements iIdvm {
 		grow();
 		grow();
 
-		for (IdvmState iState : pGenome.movementSequences.keySet()) {
+		for (IdvmState iState : pGenome.moveSequencesForState.keySet()) {
 			addaptMovementSequence(iState, pGenome);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	private void addaptMovementSequence(IdvmState pState, Genome pGenome) {
-		ArrayList<MoveProbability> lMoveProbability = (ArrayList<MoveProbability>) pGenome.movementSequences
+		ArrayList<MoveDecisionsProbability> lMoveProbability = (ArrayList<MoveDecisionsProbability>) pGenome.moveSequencesForState
 				.get(pState).clone();
 		mMovementSequences.put(pState, lMoveProbability);
 	}
@@ -158,7 +158,7 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	private void popAllSequences() {
-		for (Entry<IdvmState, ArrayList<MoveProbability>> iSequence : mMovementSequences
+		for (Entry<IdvmState, ArrayList<MoveDecisionsProbability>> iSequence : mMovementSequences
 				.entrySet()) {
 			try {
 				iSequence.getValue().remove(0);
@@ -191,7 +191,7 @@ public class Idvm extends Block implements iIdvm {
 		return mStepCount;
 	}
 
-	// TODO REF Class Cell Grid
+	// TODO REF Class Block Grid
 	public void detectCollisions() {
 		for (iBlock iBlock : getUsedBlocks()) {
 			Pos iPos = iBlock.getPos();

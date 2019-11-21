@@ -10,6 +10,7 @@ import core.soup.block.iBlock;
 import core.soup.block.iBlockGrid;
 import ui.presenter.iPresentIdvm;
 
+// TOTO REF delete interface
 public interface iIdvm extends iBlock, iPresentIdvm {
 
 	ArrayList<iBlock> getUsedBlocks();

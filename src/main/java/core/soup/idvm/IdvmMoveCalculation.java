@@ -11,7 +11,7 @@ import core.exceptions.PosIsOutOfGrid;
 import core.exceptions.WrongBlockType;
 import core.exceptions.WrongDecision;
 import core.exceptions.WrongState;
-import core.genes.MoveProbability;
+import core.genes.MoveDecisionsProbability;
 import core.soup.block.BlockType;
 import core.soup.block.iBlock;
 import core.soup.block.iBlockGrid;
@@ -92,7 +92,7 @@ public class IdvmMoveCalculation implements iIdvmMoveCalculation {
 	}
 
 	public Pos getMovingPosition(iIdvm pIdvm,
-			HashMap<IdvmState, ArrayList<MoveProbability>> pMovementSequences)
+			HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> pMovementSequences)
 			throws PosIsOutOfGrid {
 		Decisions lTargetDirection = mCurrentDirection;
 		IdvmState lState = pIdvm.getState();
@@ -109,12 +109,12 @@ public class IdvmMoveCalculation implements iIdvmMoveCalculation {
 	}
 
 	public Decisions calcMovingDirection(
-			HashMap<IdvmState, ArrayList<MoveProbability>> pMovementSequences,
+			HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> pMovementSequences,
 			IdvmState lState, Decisions pTargetDirection) {
-		ArrayList<MoveProbability> lSequence = pMovementSequences.get(lState);
+		ArrayList<MoveDecisionsProbability> lSequence = pMovementSequences.get(lState);
 		// TODO FIX can be empty
 		try{
-		mCalculatedDirection = lSequence.get(0).getDirection();
+		mCalculatedDirection = lSequence.get(0).getDecision();
 		} catch(Throwable e){
 			e.printStackTrace();
 		}
