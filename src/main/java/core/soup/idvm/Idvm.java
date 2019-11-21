@@ -16,18 +16,17 @@ import core.soup.block.Food;
 import core.soup.block.IdvmCell;
 import core.soup.block.iBlock;
 import core.soup.block.iBlockGrid;
+import globals.Config;
 
 public class Idvm extends Block implements iIdvm {
-
-	public static final int cMaxEnergy = 300;
-	private Genome mGenomeOrigin;
+	Genome mGenomeOrigin;
 	private IdvmCell[][] mCellGrid = new IdvmCell[4][4];
 	private HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> mMovementSequences = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
 	private ArrayList<IdvmCell> mCellGrow;
 	private int mHunger;
 	private iBlockGrid mBlockGrid;
 	private int mStepCount;
-	private int mEnergy = cMaxEnergy / 2;
+	private int mEnergy = Config.cMaxEnergy;
 	private iIdvmMoveCalculation mMoveCalculation;
 	private IdvmSensor mIdvmSensor;
 
@@ -144,6 +143,8 @@ public class Idvm extends Block implements iIdvm {
 			for (int i = 0; i < 10; i++) {
 				try {
 					Pos lNewPos = mMoveCalculation.getMovingPosition(this, mMovementSequences);
+					if (lNewPos != mPos)
+						mEnergy--;
 					setPosition(lNewPos);
 					break;
 				} catch (PosIsOutOfGrid e) {
@@ -153,7 +154,7 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	public void interactWithFood(Food pFood) {
-		mEnergy = cMaxEnergy;
+		mEnergy = Config.cMaxEnergy;
 		grow();
 		popAllSequences();
 	}
@@ -173,7 +174,7 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	public IdvmState getState() {
-		return mIdvmSensor.getState(getDetectedPos());
+		return mIdvmSensor.getState(getDetectedPos(), isHungry());
 	}
 
 	public HashMap<Pos, Sensor> getDetectedPos() {
@@ -201,8 +202,6 @@ public class Idvm extends Block implements iIdvm {
 				if (lGridBlock != null) {
 					switch (lGridBlock.getBlockType()) {
 					case FOOD:
-						if (iBlock.getBlockType() != BlockType.SENSOR)
-							break;
 						interactWithFood((Food) lGridBlock);
 						lGridBlock.setNull();
 						break;
