@@ -37,7 +37,8 @@ public class Crossover {
 			if (iSequenceNumber >= lCrossoverNumber)
 				lCurrentGenome = lSecondGenome;
 
-			mNewGenome.cellGrow.set(iSequenceNumber, (IdvmCell) lCurrentGenome.cellGrow.get(iSequenceNumber).clone());
+			iGene lClonedCell = lCurrentGenome.cellGrow.get(iSequenceNumber).clone();
+			mNewGenome.cellGrow.set(iSequenceNumber, (IdvmCell) lClonedCell);
 		}
 	}
 

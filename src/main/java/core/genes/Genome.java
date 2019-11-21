@@ -26,9 +26,14 @@ public class Genome implements Cloneable {
 		return this;
 	}
 
+	public Genome() {
+	}
+
 	private void initSequences() {
+		cellGrow = new ArrayList<IdvmCell>();
+		moveSequencesForState = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
 		ArrayList<MoveDecisionsProbability> lInitialMoveProbability = new ArrayList<MoveDecisionsProbability>();
-		for (int i = 0; i < Config.cMaxSequence; i++) {
+		for (int i = 0; i <= Config.cMaxSequence; i++) {
 			cellGrow.add((new IdvmCell(BlockType.NOTHING, new Pos(0, 0))));
 			lInitialMoveProbability.add(new MoveDecisionsProbability());
 		}

@@ -16,12 +16,10 @@ import core.soup.block.Food;
 import core.soup.block.IdvmCell;
 import core.soup.block.iBlock;
 import core.soup.block.iBlockGrid;
-import devutils.Measure;
 
 public class Idvm extends Block implements iIdvm {
 
 	public static final int cMaxEnergy = 300;
-	@SuppressWarnings("unused")
 	private Genome mGenomeOrigin;
 	private IdvmCell[][] mCellGrid = new IdvmCell[4][4];
 	private HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> mMovementSequences = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
@@ -36,7 +34,11 @@ public class Idvm extends Block implements iIdvm {
 	public Idvm(Genome pGenome) {
 		super(BlockType.IDVM);
 		mPos = new Pos(0, 0);
-		mGenomeOrigin = pGenome;
+		try {
+			mGenomeOrigin = (Genome) pGenome.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException();
+		}
 		mCellGrow = pGenome.cellGrow;
 		mHunger = pGenome.getHunger().getValue();
 
@@ -141,8 +143,7 @@ public class Idvm extends Block implements iIdvm {
 		for (iBlock iCount : getUsedBlocks(BlockType.MOVE)) {
 			for (int i = 0; i < 10; i++) {
 				try {
-					Pos lNewPos = mMoveCalculation.getMovingPosition(this,
-							mMovementSequences);
+					Pos lNewPos = mMoveCalculation.getMovingPosition(this, mMovementSequences);
 					setPosition(lNewPos);
 					break;
 				} catch (PosIsOutOfGrid e) {
@@ -158,8 +159,7 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	private void popAllSequences() {
-		for (Entry<IdvmState, ArrayList<MoveDecisionsProbability>> iSequence : mMovementSequences
-				.entrySet()) {
+		for (Entry<IdvmState, ArrayList<MoveDecisionsProbability>> iSequence : mMovementSequences.entrySet()) {
 			try {
 				iSequence.getValue().remove(0);
 			} catch (RuntimeException e) {
@@ -219,8 +219,7 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	public Decisions getTargetDirection() {
-		return mMoveCalculation
-				.getTargetDirection(getState(), getDetectedPos());
+		return mMoveCalculation.getTargetDirection(getState(), getDetectedPos());
 	}
 
 	public int getEnergyCount() {
@@ -229,5 +228,9 @@ public class Idvm extends Block implements iIdvm {
 
 	public Decisions getCalculatedDirection() {
 		return mMoveCalculation.getCalculatedDirection();
+	}
+
+	public Genome getGenomeOrigin() {
+		return mGenomeOrigin;
 	}
 }
