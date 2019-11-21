@@ -84,7 +84,7 @@ public class ViewConsoleMonitorIdvm extends View {
 			return lSensorChar;
 		switch (mIdvm.getCalculatedDirection()) {
 		case TARGET:
-			lSensorChar = "•";
+			lSensorChar = "+";
 			break;
 		case TARGET_OPPOSITE:
 			lSensorChar = "!";

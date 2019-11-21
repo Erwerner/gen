@@ -20,7 +20,7 @@ import core.datatypes.Pos;
 import core.exceptions.PosIsOutOfGrid;
 import core.exceptions.WrongState;
 import core.genes.Genome;
-import core.genes.MoveProbability;
+import core.genes.MoveDecisionsProbability;
 import core.soup.block.BlockGrid;
 import core.soup.block.BlockType;
 import core.soup.block.Enemy;
@@ -61,13 +61,13 @@ public class IdvmTest {
 			mGenome.cellGrow.add(new IdvmCell(iCell.getBlockType(), iCell
 					.getPosOnIdvm()));
 		}
-		ArrayList<MoveProbability> lIdlelMoveProbability = new ArrayList<MoveProbability>();
-		lIdlelMoveProbability.add(new MoveProbability().setDirection(
+		ArrayList<MoveDecisionsProbability> lIdlelMoveProbability = new ArrayList<MoveDecisionsProbability>();
+		lIdlelMoveProbability.add(new MoveDecisionsProbability().appendDecision(
 				Decisions.LEFT, 1));
-		lIdlelMoveProbability.add(new MoveProbability().setDirection(
+		lIdlelMoveProbability.add(new MoveDecisionsProbability().appendDecision(
 				Decisions.DOWN, 1));
-		mGenome.movementSequences.put(IdvmState.IDLE, lIdlelMoveProbability);
-		mGenome.movementSequences.put(IdvmState.FOOD, lIdlelMoveProbability);
+		mGenome.moveSequencesForState.put(IdvmState.IDLE, lIdlelMoveProbability);
+		mGenome.moveSequencesForState.put(IdvmState.FOOD, lIdlelMoveProbability);
 
 		mGenome.setHunger(50);
 
@@ -233,7 +233,7 @@ public class IdvmTest {
 		try {
 			int lIdxKillCell = 2;
 			assertHasGrowCellOnPosDiff(true, lIdxKillCell, 0, 0);
-			Enemy lEnemy = new Enemy();
+			Enemy lEnemy = new Enemy(mBlockGrid);
 			Pos lPos = getSoupPosFromGrowCell(lIdxKillCell);
 			lEnemy.setPosition(lPos);
 			cut.interactWithEnemy(lEnemy);
@@ -306,7 +306,7 @@ public class IdvmTest {
 		cut.interactWithFood(new Food());
 		cut.step();
 		assertPosition(cStartPosX - 1, cStartPosY + 1, cut.getPos());
-		assertEquals(2, mGenome.movementSequences.get(IdvmState.IDLE).size());
+		assertEquals(2, mGenome.moveSequencesForState.get(IdvmState.IDLE).size());
 	}
 
 	@Test

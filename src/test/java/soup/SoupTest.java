@@ -42,25 +42,14 @@ public class SoupTest {
 	}
 
 	@Test
-	public void gridHasBlocks() throws PosIsOutOfGrid {
-		int lCount = 0;
-		for (int x = 0; x < Config.soupSize; x++) {
-			for (int y = 0; y < Config.soupSize; y++) {
-				iBlock lBlock = cut.getBlock(new Pos(x, y));
-				if (lBlock != null)
-					lCount++;
-			}
-		}
-		assertEquals(Config.foodSupply + Config.enemySupply + 4, lCount);
-	}
-
-	@Test
 	public void foodGetsNullAfterInteraction() throws PosIsOutOfGrid {
 		for (Pos iPos : Pos.getAllGridPos()) {
 			iBlock lBlock = cut.getBlock(iPos);
 			if (lBlock == null || lBlock.getBlockType() != BlockType.FOOD)
 				continue;
 			mIdvm.setPosition(iPos);
+			cut.step();
+			mIdvm.setPosition(iPos.getPosFromDirection(Decisions.RIGHT));
 			cut.step();
 			mIdvm.setPosition(iPos.getPosFromDirection(Decisions.RIGHT));
 			cut.step();

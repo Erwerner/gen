@@ -8,7 +8,7 @@ import core.datatypes.Decisions;
 import core.datatypes.Pos;
 import core.exceptions.PosIsOutOfGrid;
 import core.genes.Genome;
-import core.genes.MoveProbability;
+import core.genes.MoveDecisionsProbability;
 import core.soup.block.Block;
 import core.soup.block.BlockType;
 import core.soup.block.Enemy;
@@ -16,27 +16,28 @@ import core.soup.block.Food;
 import core.soup.block.IdvmCell;
 import core.soup.block.iBlock;
 import core.soup.block.iBlockGrid;
-import devutils.Measure;
+import globals.Config;
 
 public class Idvm extends Block implements iIdvm {
-
-	public static final int cMaxEnergy = 300;
-	@SuppressWarnings("unused")
-	private Genome mGenomeOrigin;
+	Genome mGenomeOrigin;
 	private IdvmCell[][] mCellGrid = new IdvmCell[4][4];
-	private HashMap<IdvmState, ArrayList<MoveProbability>> mMovementSequences = new HashMap<IdvmState, ArrayList<MoveProbability>>();
+	private HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> mMovementSequences = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
 	private ArrayList<IdvmCell> mCellGrow;
 	private int mHunger;
 	private iBlockGrid mBlockGrid;
 	private int mStepCount;
-	private int mEnergy = cMaxEnergy / 2;
+	private int mEnergy = Config.cFoodEnergy;
 	private iIdvmMoveCalculation mMoveCalculation;
 	private IdvmSensor mIdvmSensor;
 
 	public Idvm(Genome pGenome) {
 		super(BlockType.IDVM);
 		mPos = new Pos(0, 0);
-		mGenomeOrigin = pGenome;
+		try {
+			mGenomeOrigin = (Genome) pGenome.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException();
+		}
 		mCellGrow = pGenome.cellGrow;
 		mHunger = pGenome.getHunger().getValue();
 
@@ -45,14 +46,14 @@ public class Idvm extends Block implements iIdvm {
 		grow();
 		grow();
 
-		for (IdvmState iState : pGenome.movementSequences.keySet()) {
+		for (IdvmState iState : pGenome.moveSequencesForState.keySet()) {
 			addaptMovementSequence(iState, pGenome);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	private void addaptMovementSequence(IdvmState pState, Genome pGenome) {
-		ArrayList<MoveProbability> lMoveProbability = (ArrayList<MoveProbability>) pGenome.movementSequences
+		ArrayList<MoveDecisionsProbability> lMoveProbability = (ArrayList<MoveDecisionsProbability>) pGenome.moveSequencesForState
 				.get(pState).clone();
 		mMovementSequences.put(pState, lMoveProbability);
 	}
@@ -131,8 +132,10 @@ public class Idvm extends Block implements iIdvm {
 
 	public void step() {
 		mStepCount++;
-		for (iBlock iCount : getUsedBlocks(BlockType.LIFE))
+		for (iBlock iCount : getUsedBlocks(BlockType.LIFE)) {
 			mEnergy--;
+			mEnergy--;			
+		}
 		move();
 	}
 
@@ -141,8 +144,9 @@ public class Idvm extends Block implements iIdvm {
 		for (iBlock iCount : getUsedBlocks(BlockType.MOVE)) {
 			for (int i = 0; i < 10; i++) {
 				try {
-					Pos lNewPos = mMoveCalculation.getMovingPosition(this,
-							mMovementSequences);
+					Pos lNewPos = mMoveCalculation.getMovingPosition(this, mMovementSequences);
+					if (lNewPos != mPos)
+						mEnergy--;
 					setPosition(lNewPos);
 					break;
 				} catch (PosIsOutOfGrid e) {
@@ -152,14 +156,15 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	public void interactWithFood(Food pFood) {
-		mEnergy = cMaxEnergy;
+		mEnergy = mEnergy + Config.cFoodEnergy;
+		if(mEnergy>Config.cMaxEnergy)
+			mEnergy = Config.cMaxEnergy;
 		grow();
 		popAllSequences();
 	}
 
 	private void popAllSequences() {
-		for (Entry<IdvmState, ArrayList<MoveProbability>> iSequence : mMovementSequences
-				.entrySet()) {
+		for (Entry<IdvmState, ArrayList<MoveDecisionsProbability>> iSequence : mMovementSequences.entrySet()) {
 			try {
 				iSequence.getValue().remove(0);
 			} catch (RuntimeException e) {
@@ -173,7 +178,7 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	public IdvmState getState() {
-		return mIdvmSensor.getState(getDetectedPos());
+		return mIdvmSensor.getState(getDetectedPos(), isHungry());
 	}
 
 	public HashMap<Pos, Sensor> getDetectedPos() {
@@ -191,7 +196,7 @@ public class Idvm extends Block implements iIdvm {
 		return mStepCount;
 	}
 
-	// TODO REF Class Cell Grid
+	// TODO REF Class Block Grid
 	public void detectCollisions() {
 		for (iBlock iBlock : getUsedBlocks()) {
 			Pos iPos = iBlock.getPos();
@@ -201,8 +206,6 @@ public class Idvm extends Block implements iIdvm {
 				if (lGridBlock != null) {
 					switch (lGridBlock.getBlockType()) {
 					case FOOD:
-						if (iBlock.getBlockType() != BlockType.SENSOR)
-							break;
 						interactWithFood((Food) lGridBlock);
 						lGridBlock.setNull();
 						break;
@@ -219,8 +222,7 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	public Decisions getTargetDirection() {
-		return mMoveCalculation
-				.getTargetDirection(getState(), getDetectedPos());
+		return mMoveCalculation.getTargetDirection(getState(), getDetectedPos());
 	}
 
 	public int getEnergyCount() {
@@ -229,5 +231,9 @@ public class Idvm extends Block implements iIdvm {
 
 	public Decisions getCalculatedDirection() {
 		return mMoveCalculation.getCalculatedDirection();
+	}
+
+	public Genome getGenomeOrigin() {
+		return mGenomeOrigin;
 	}
 }

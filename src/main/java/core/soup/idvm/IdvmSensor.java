@@ -20,25 +20,32 @@ public class IdvmSensor {
 		mBlockGrid = pBlockGrid;
 	}
 
+	// REF move ti Idvm
 	// TODO IMPL dynamic target order
-	public IdvmState getState(HashMap<Pos, Sensor> pDetectedPos) {
+	public IdvmState getState(HashMap<Pos, Sensor> pDetectedPos, boolean pIsHungry) {
 		if (detectSurroundingBlockType(BlockType.ENEMY, pDetectedPos))
-			return IdvmState.ENEMY;
+			if (pIsHungry) {
+				return IdvmState.ENEMY_HUNGER;
+			} else {
+				return IdvmState.ENEMY;
+			}
 		if (detectSurroundingBlockType(BlockType.FOOD, pDetectedPos))
-			return IdvmState.FOOD;
+			if (pIsHungry) {
+				return IdvmState.FOOD_HUNGER;
+			} else {
+				return IdvmState.FOOD;
+			}
 		return IdvmState.IDLE;
 
 	}
 
-	private boolean detectSurroundingBlockType(BlockType pBlockType,
-			HashMap<Pos, Sensor> pDetectedPos) {
+	private boolean detectSurroundingBlockType(BlockType pBlockType, HashMap<Pos, Sensor> pDetectedPos) {
 		for (Entry<Pos, Sensor> iPos : pDetectedPos.entrySet()) {
 			Pos lPos = iPos.getKey();
 			try {
 				lPos.isInGrid();
 				iBlock lGridBlock = mBlockGrid.getBlock(lPos);
-				if (lGridBlock != null
-						&& lGridBlock.getBlockType() == pBlockType)
+				if (lGridBlock != null && lGridBlock.getBlockType() == pBlockType)
 					return true;
 			} catch (PosIsOutOfGrid e) {
 			}
@@ -46,7 +53,6 @@ public class IdvmSensor {
 		return false;
 	}
 
-	// TODO 5 IMPL detect range depends on sensors
 	public HashMap<Pos, Sensor> getDetectedPos(ArrayList<iBlock> pSensors) {
 		HashMap<Pos, Sensor> lDetectedPos = new HashMap<Pos, Sensor>();
 		for (iBlock iCell : pSensors) {

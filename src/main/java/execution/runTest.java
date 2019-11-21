@@ -12,9 +12,6 @@ public class runTest {
 		Idvm mIdvm = new Idvm(initializeGenome());
 		Soup mSoup = new Soup(mIdvm);
 
-		for (int x = 0; x < 20; x++)
-			System.out.println(Helpers.rndIntRange(-1, 4));
-
 		System.out.println("Start");
 		Measure.startTimeMeasuring();
 		while (mIdvm.isAlive()) {

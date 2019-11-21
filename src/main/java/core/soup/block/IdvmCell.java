@@ -18,6 +18,7 @@ public class IdvmCell extends Block implements iGene {
 		super(BlockType.CELL);
 		mBlockType = pCellType;
 		mPosOnIdvm = pPos;
+		mPos = new Pos(0,0);
 	}
 
 	public BlockType getBlockType() {

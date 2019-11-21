@@ -9,10 +9,12 @@ import globals.Helpers;
 
 public class Enemy extends Block {
 	Decisions mCurrentDirection;
+	private iBlockGrid mBlockGrid;
 
-	public Enemy() {
+	public Enemy(iBlockGrid pBlockGrid) {
 		super(BlockType.ENEMY);
 		setRandomDirection();
+		mBlockGrid = pBlockGrid;
 	}
 
 	public void step() {
@@ -23,7 +25,13 @@ public class Enemy extends Block {
 	private void move() {
 		while (true)
 			try {
-				Pos lNewPos = mPos.getPosFromDirection(mCurrentDirection);
+				Pos lNewPos;
+				Pos lDetectIdvmPos = detectIdvmPos();
+				if (lDetectIdvmPos != null) {
+					lNewPos = lDetectIdvmPos;
+				} else {
+					lNewPos = mPos.getPosFromDirection(mCurrentDirection);
+				}
 				setPosition(lNewPos);
 				break;
 			} catch (PosIsOutOfGrid e) {
@@ -32,14 +40,40 @@ public class Enemy extends Block {
 			}
 	}
 
+	private Pos detectIdvmPos() {
+		for (int x = -1; x <= 1; x++)
+			for (int y = -1; y <= 1; y++) {
+				if (x == 0 || y == 0) {
+					Pos lDetectPos = new Pos(mPos.x + x, mPos.y + y);
+					try {
+						iBlock lDetectedBlock;
+						lDetectedBlock = mBlockGrid.getBlock(lDetectPos);
+						if (lDetectedBlock == null)
+							continue;
+						switch (lDetectedBlock.getBlockType()) {
+						case DEFENCE:
+						case LIFE:
+						case SENSOR:
+						case MOVE:
+							return lDetectPos;
+						default:
+							break;
+						}
+					} catch (PosIsOutOfGrid e) {
+						// TODO Auto-generated cat
+					}
+				}
+			}
+		return null;
+	}
+
 	private void setDirection() {
 		if (Helpers.rndInt(15) == 1)
 			setRandomDirection();
 	}
 
 	private void setRandomDirection() {
-		Decisions[] lDirections = { Decisions.UP, Decisions.DOWN,
-				Decisions.LEFT, Decisions.RIGHT, };
+		Decisions[] lDirections = { Decisions.UP, Decisions.DOWN, Decisions.LEFT, Decisions.RIGHT, };
 		mCurrentDirection = (Decisions) Helpers.rndArrayEntry(lDirections);
 	}
 
