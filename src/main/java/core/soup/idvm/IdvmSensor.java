@@ -21,7 +21,8 @@ public class IdvmSensor {
 	}
 
 	// REF move ti Idvm
-	// TODO IMPL dynamic target order
+	// TODO 2 IMPL dynamic target order
+	// TODO 4 IMPL sensor range
 	public IdvmState getState(HashMap<Pos, Sensor> pDetectedPos, boolean pIsHungry) {
 		if (detectSurroundingBlockType(BlockType.ENEMY, pDetectedPos))
 			if (pIsHungry) {

@@ -25,9 +25,7 @@ public class MoveDecisionsProbability implements iGene {
 		return mPossibleDecisions.get(lRnd);
 	}
 
-	public void mutate(Double pMutationRate) {
-		if (!Helpers.checkChance(pMutationRate))
-			return;
+	public void mutate() {
 		if (!Helpers.checkChance(0.6)) {
 			mPossibleDecisions = null;
 			return;
@@ -36,8 +34,6 @@ public class MoveDecisionsProbability implements iGene {
 			mPossibleDecisions = new ArrayList<Decisions>();
 		// Remove random decision
 		for (int i = 0; i < 1; i++) {
-			// Decisions lRndDecision =
-			// mPossibleDecisions.get(Helpers.rndInt(mPossibleDecisions.size()-1));
 			Decisions lRndDecision = (Decisions) Helpers.rndArrayEntry(Decisions.values());
 			while (mPossibleDecisions.contains(lRndDecision)) {
 				mPossibleDecisions.remove(lRndDecision);

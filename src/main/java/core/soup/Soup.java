@@ -79,6 +79,7 @@ public class Soup implements iSoup {
 			} catch (PosIsOutOfGrid e) {
 			}
 		}
+		//REF move to BlockGrid
 		mIndividuum.detectCollisions();
 
 		for (iBlock iBlock : mAllBlocks) {

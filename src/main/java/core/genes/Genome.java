@@ -11,12 +11,13 @@ import core.soup.block.IdvmCell;
 import core.soup.idvm.Idvm;
 import core.soup.idvm.IdvmState;
 import globals.Config;
+import globals.Helpers;
 
 public class Genome implements Cloneable {
 	private GeneInt mHunger = new GeneInt(0, Config.cMaxEnergy, 50);
-	// TODO IMPL make mutation rate a gene
+	// TODO 3 IMPL make mutation rate a gene
 	public Double mMutationRate = 0.005;
-	// TODO REF make this private
+	// TODO 9 REF make this private
 	public ArrayList<IdvmCell> cellGrow = new ArrayList<IdvmCell>();
 	public HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> moveSequencesForState = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
 
@@ -50,8 +51,10 @@ public class Genome implements Cloneable {
 		ArrayList<iGene> lGenes;
 		lGenes = getGeneCollection();
 
+		//TODO REF check mutation rate here
 		for (iGene iGene : lGenes)
-			iGene.mutate(pMutationRate);
+			if (Helpers.checkChance(pMutationRate))
+			iGene.mutate();
 
 		for (int i = 0; i < 4; i++)
 			setInitialCellToCenterPos(i, i / 2, i % 2);

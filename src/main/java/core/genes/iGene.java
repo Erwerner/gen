@@ -2,6 +2,6 @@ package core.genes;
 
 public interface iGene {
 
-	void mutate(Double pMutationRate);
+	void mutate();
 	iGene clone() throws CloneNotSupportedException;
 }
