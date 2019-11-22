@@ -58,7 +58,7 @@ public class Idvm extends Block implements iIdvm {
 		mMovementSequences.put(pState, lMoveProbability);
 	}
 
-	// TODO 3 REF Class Cell Grid
+	// TODO 2 REF Class Cell Grid
 	private void grow() {
 		if (mCellGrow.size() == 0)
 			return;

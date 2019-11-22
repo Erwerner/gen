@@ -107,7 +107,8 @@ public class runCrossover {
 			IdvmExecutionThread lIdvmRunner = new IdvmExecutionThread((Genome) iIdvm.getGenomeOrigin().clone());
 			Thread lThread = new Thread(lIdvmRunner);
 			lThread.start();
-			//lThread.join();mThreads.add(lThread);
+			// lThread.join();
+			mThreads.add(lThread);
 			mIdvmExecutionThread.add(lIdvmRunner);
 		}
 		ModelMonitorIdvm lMonitor = new ModelMonitorIdvm();

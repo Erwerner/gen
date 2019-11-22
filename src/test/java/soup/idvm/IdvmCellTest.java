@@ -1,6 +1,6 @@
 package soup.idvm;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 
@@ -13,6 +13,7 @@ import core.soup.block.IdvmCell;
 
 public class IdvmCellTest {
 	IdvmCell cut;
+
 	@Before
 	public void setUp() throws Exception {
 	}
@@ -25,18 +26,17 @@ public class IdvmCellTest {
 	}
 
 	private void checkCutMutatedValid() {
-		BlockType[] lCellTypes = { BlockType.LIFE, BlockType.DEFENCE,
-				BlockType.MOVE, BlockType.SENSOR };
+		BlockType[] lCellTypes = { BlockType.LIFE, BlockType.DEFENCE, BlockType.MOVE, BlockType.SENSOR };
 		assertTrue(Arrays.asList(lCellTypes).contains(cut.getBlockType()));
 
-		assertTrue(cut.getPosOnIdvm().x<3);
-		assertTrue(cut.getPosOnIdvm().y<3);
-		assertTrue(cut.getPosOnIdvm().x>=-1);
-		assertTrue(cut.getPosOnIdvm().y>=-1);
+		assertTrue(cut.getPosOnIdvm().x < 3);
+		assertTrue(cut.getPosOnIdvm().y < 3);
+		assertTrue(cut.getPosOnIdvm().x >= -1);
+		assertTrue(cut.getPosOnIdvm().y >= -1);
 	}
 
 	private void initInvalidCut() {
-		cut = new IdvmCell(BlockType.NOTHING, new Pos(10,10));
+		cut = new IdvmCell(BlockType.NOTHING, new Pos(10, 10));
 	}
 
 }

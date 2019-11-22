@@ -1,6 +1,5 @@
 package globals;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class Helpers {

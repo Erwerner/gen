@@ -21,7 +21,6 @@ public class MoveDecisionsProbability implements iGene {
 
 	public Decisions getDecision() {
 		int lRnd = Helpers.rndInt(mPossibleDecisions.size() - 1);
-		// TODO FIX not empty
 		return mPossibleDecisions.get(lRnd);
 	}
 

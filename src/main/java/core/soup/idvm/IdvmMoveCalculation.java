@@ -27,8 +27,8 @@ public class IdvmMoveCalculation implements iIdvmMoveCalculation {
 		mBlockGrid = pBlockGrid;
 	}
 
-	public Pos calcPosFromDirection(Decisions pDirection, Pos pIdvmPos,
-			ArrayList<iBlock> pIdvmBlocks) throws PosIsOutOfGrid {
+	public Pos calcPosFromDirection(Decisions pDirection, Pos pIdvmPos, ArrayList<iBlock> pIdvmBlocks)
+			throws PosIsOutOfGrid {
 		Decisions lDirection = pDirection;
 		switch (pDirection) {
 		case UP:
@@ -45,8 +45,7 @@ public class IdvmMoveCalculation implements iIdvmMoveCalculation {
 		}
 
 		for (iBlock iBlock : pIdvmBlocks) {
-			Pos lPosFromDirection = iBlock.getPos().getPosFromDirection(
-					lDirection);
+			Pos lPosFromDirection = iBlock.getPos().getPosFromDirection(lDirection);
 			lPosFromDirection.isInGrid();
 		}
 
@@ -55,8 +54,7 @@ public class IdvmMoveCalculation implements iIdvmMoveCalculation {
 	}
 
 	// TODO REF Sensor Class
-	public Decisions getTargetDirection(IdvmState pState,
-			HashMap<Pos, Sensor> pDetectedPos) {
+	public Decisions getTargetDirection(IdvmState pState, HashMap<Pos, Sensor> pDetectedPos) {
 		BlockType lSearchBlock;
 		if (pDetectedPos == null)
 			throw new DetectionFailed();
@@ -78,11 +76,9 @@ public class IdvmMoveCalculation implements iIdvmMoveCalculation {
 			iBlock lGridBlock;
 			try {
 				lGridBlock = mBlockGrid.getBlock(iPos.getKey());
-				if (lGridBlock != null
-						&& lGridBlock.getBlockType() == lSearchBlock) {
+				if (lGridBlock != null && lGridBlock.getBlockType() == lSearchBlock) {
 					Pos lSensorPos = iPos.getValue().getPos();
-					Decisions lDircetion = lSensorPos.getDircetionTo(iPos
-							.getKey());
+					Decisions lDircetion = lSensorPos.getDircetionTo(iPos.getKey());
 					return lDircetion;
 				}
 			} catch (PosIsOutOfGrid e) {
@@ -92,30 +88,24 @@ public class IdvmMoveCalculation implements iIdvmMoveCalculation {
 	}
 
 	public Pos getMovingPosition(iIdvm pIdvm,
-			HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> pMovementSequences)
-			throws PosIsOutOfGrid {
+			HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> pMovementSequences) throws PosIsOutOfGrid {
 		Decisions lTargetDirection = mCurrentDirection;
 		IdvmState lState = pIdvm.getState();
 		if (lState != IdvmState.IDLE) {
-			lTargetDirection = getTargetDirection(lState,
-					pIdvm.getDetectedPos());
+			lTargetDirection = getTargetDirection(lState, pIdvm.getDetectedPos());
 		}
-		Decisions lDirection = calcMovingDirection(pMovementSequences, lState,
-				lTargetDirection);
+		Decisions lDirection = calcMovingDirection(pMovementSequences, lState, lTargetDirection);
 
-		Pos lNewPos = calcPosFromDirection(lDirection, pIdvm.getPos(),
-				pIdvm.getUsedBlocks());
+		Pos lNewPos = calcPosFromDirection(lDirection, pIdvm.getPos(), pIdvm.getUsedBlocks());
 		return lNewPos;
 	}
 
-	public Decisions calcMovingDirection(
-			HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> pMovementSequences,
+	public Decisions calcMovingDirection(HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> pMovementSequences,
 			IdvmState lState, Decisions pTargetDirection) {
 		ArrayList<MoveDecisionsProbability> lSequence = pMovementSequences.get(lState);
-		// TODO FIX can be empty
-		try{
-		mCalculatedDirection = lSequence.get(0).getDecision();
-		} catch(Throwable e){
+		try {
+			mCalculatedDirection = lSequence.get(0).getDecision();
+		} catch (Throwable e) {
 			e.printStackTrace();
 		}
 		Decisions lNewDirection = null;

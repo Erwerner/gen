@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import core.datatypes.Decisions;
 import core.datatypes.Pos;
 import core.exceptions.PosIsOutOfGrid;
-import core.exceptions.WrongState;
 import core.soup.block.iBlock;
 import core.soup.idvm.IdvmState;
 import core.soup.idvm.Sensor;
@@ -63,8 +61,7 @@ public class ViewConsoleMonitorIdvm extends View {
 		}
 	}
 
-	private String getCharForBlock(Pos pPos, HashMap<Pos, Sensor> pDetectedPos)
-			throws PosIsOutOfGrid {
+	private String getCharForBlock(Pos pPos, HashMap<Pos, Sensor> pDetectedPos) throws PosIsOutOfGrid {
 		String lBlockChar = " ";
 		iBlock lBlock = mSoup.getBlock(pPos);
 		if (lBlock != null) {
