@@ -113,6 +113,7 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	// TODO REF Class Cell Grid
+	//TODO 3 IMPL cell type connection
 	public ArrayList<iBlock> getUsedBlocks() {
 		ArrayList<iBlock> lBlocks = new ArrayList<iBlock>();
 		for (IdvmCell[] iRow : mCellGrid) {

@@ -9,19 +9,7 @@ import globals.Helpers;
 public class runTest {
 
 	public static void main(String[] args) throws InterruptedException {
-		Idvm mIdvm = new Idvm(initializeGenome());
-		Soup mSoup = new Soup(mIdvm);
-
-		System.out.println("Start");
-		Measure.startTimeMeasuring();
-		while (mIdvm.isAlive()) {
-			mSoup.step();
-		}
-		Measure.showTimeMeasuring();
-	}
-
-	public static Genome initializeGenome() {
-		Genome lGenome = new Genome();
-		return lGenome.forceMutation();
+		for(int i=0;i<100;i++)
+			System.out.println(Helpers.rndDouble(0.0, 1.0));
 	}
 }

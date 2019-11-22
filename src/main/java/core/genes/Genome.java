@@ -15,8 +15,8 @@ import globals.Helpers;
 
 public class Genome implements Cloneable {
 	private GeneInt mHunger = new GeneInt(0, Config.cMaxEnergy, 50);
-	// TODO 3 IMPL make mutation rate a gene
-	public Double mMutationRate = 0.005;
+	// TODO 0 IMPL make mutation rate a gene
+	public GeneDouble mMutationRate = new GeneDouble(0.0, 1.0, 0.005);
 	// TODO 9 REF make this private
 	public ArrayList<IdvmCell> cellGrow = new ArrayList<IdvmCell>();
 	public HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> moveSequencesForState = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
@@ -30,6 +30,7 @@ public class Genome implements Cloneable {
 	public Genome() {
 	}
 
+	//TODO 2 FIX for UT
 	private void initSequences() {
 		cellGrow = new ArrayList<IdvmCell>();
 		moveSequencesForState = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
@@ -44,17 +45,17 @@ public class Genome implements Cloneable {
 	}
 
 	public void naturalMutation() {
-		mutate(mMutationRate);
+		mutate(mMutationRate.getValue());
 	}
 
 	private void mutate(Double pMutationRate) {
 		ArrayList<iGene> lGenes;
 		lGenes = getGeneCollection();
 
-		//TODO REF check mutation rate here
+		// TODO REF check mutation rate here
 		for (iGene iGene : lGenes)
 			if (Helpers.checkChance(pMutationRate))
-			iGene.mutate();
+				iGene.mutate();
 
 		for (int i = 0; i < 4; i++)
 			setInitialCellToCenterPos(i, i / 2, i % 2);
@@ -65,9 +66,8 @@ public class Genome implements Cloneable {
 			lLastPossibleDecisions.add(Decisions.UP);
 			for (MoveDecisionsProbability iProbability : iStateMoveSequence.getValue()) {
 				if (iProbability.mPossibleDecisions == null) {
-				//Repeat last probability
-					iProbability.mPossibleDecisions = (ArrayList<Decisions>) lLastPossibleDecisions
-							.clone();
+					// Repeat last probability
+					iProbability.mPossibleDecisions = (ArrayList<Decisions>) lLastPossibleDecisions.clone();
 				} else {
 					lLastPossibleDecisions = iProbability.mPossibleDecisions;
 				}
@@ -83,11 +83,11 @@ public class Genome implements Cloneable {
 	private ArrayList<iGene> getGeneCollection() {
 		ArrayList<iGene> lGenes = new ArrayList<iGene>();
 		lGenes.add(mHunger);
+		lGenes.add(mMutationRate);
 		for (iGene iGene : cellGrow) {
 			lGenes.add(iGene);
 		}
-		for (ArrayList<MoveDecisionsProbability> iMoveProbability : moveSequencesForState
-				.values()) {
+		for (ArrayList<MoveDecisionsProbability> iMoveProbability : moveSequencesForState.values()) {
 			for (iGene iGene : iMoveProbability) {
 				lGenes.add(iGene);
 			}
@@ -115,8 +115,7 @@ public class Genome implements Cloneable {
 		for (IdvmState iState : IdvmState.values()) {
 			ArrayList<MoveDecisionsProbability> lNewSequence = new ArrayList<MoveDecisionsProbability>();
 			for (MoveDecisionsProbability iOriginProbability : moveSequencesForState.get(iState)) {
-				MoveDecisionsProbability lNewMovePorobability = (MoveDecisionsProbability) iOriginProbability
-						.clone();
+				MoveDecisionsProbability lNewMovePorobability = (MoveDecisionsProbability) iOriginProbability.clone();
 				lNewSequence.add(lNewMovePorobability);
 			}
 			lClone.moveSequencesForState.put(iState, lNewSequence);

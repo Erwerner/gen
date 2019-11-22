@@ -9,8 +9,7 @@ public class GeneInt implements iGene {
 	private int mValue;
 
 	public void mutate() {
-		int lRnd = ThreadLocalRandom.current().nextInt(pMin, pMax + 1);
-		mValue = lRnd;
+		mValue = ThreadLocalRandom.current().nextInt(pMin, pMax + 1);
 	}
 
 	public GeneInt(int pPMin, int pPMax, int pStartValue) {

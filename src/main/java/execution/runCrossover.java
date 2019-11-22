@@ -107,8 +107,7 @@ public class runCrossover {
 			IdvmExecutionThread lIdvmRunner = new IdvmExecutionThread((Genome) iIdvm.getGenomeOrigin().clone());
 			Thread lThread = new Thread(lIdvmRunner);
 			lThread.start();
-			lThread.join();//TODO 0 remove for parallelization
-			mThreads.add(lThread);
+			//lThread.join();mThreads.add(lThread);
 			mIdvmExecutionThread.add(lIdvmRunner);
 		}
 		ModelMonitorIdvm lMonitor = new ModelMonitorIdvm();
@@ -125,7 +124,7 @@ public class runCrossover {
 
 	private static ArrayList<Idvm> initializePopulation() {
 		ArrayList<Idvm> lPopulation = new ArrayList<Idvm>();
-		for (int iIdvmCount = 0; iIdvmCount < 8000; iIdvmCount++) {
+		for (int iIdvmCount = 0; iIdvmCount < 4000; iIdvmCount++) {
 			lPopulation.add(new Idvm(new Genome().forceMutation()));
 		}
 		return lPopulation;
