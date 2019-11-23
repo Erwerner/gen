@@ -21,10 +21,9 @@ import globals.Config;
 
 public class Idvm extends Block implements iIdvm {
 	Genome mGenomeOrigin;
-	private IdvmCell[][] mCellGrid = new IdvmCell[4][4];
+	Genome mGenomeUsing;
+	private IdvmCellGrid mCellGrid = new IdvmCellGrid();
 	private HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> mMovementSequences = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
-	private ArrayList<IdvmCell> mCellGrow;
-	private int mHunger;
 	private iBlockGrid mBlockGrid;
 	private int mStepCount;
 	private int mEnergy = Config.cMaxEnergy / 3;
@@ -33,22 +32,21 @@ public class Idvm extends Block implements iIdvm {
 
 	public Idvm(Genome pGenome) {
 		super(BlockType.IDVM);
-		mPos = new Pos(0, 0);
 		try {
+			mPos = new Pos(0, 0);
 			mGenomeOrigin = (Genome) pGenome.clone();
+			mGenomeUsing = (Genome) pGenome.clone();
+
+			grow();
+			grow();
+			grow();
+			grow();
+
+			for (IdvmState iState : pGenome.moveSequencesForState.keySet()) {
+				addaptMovementSequence(iState, pGenome);
+			}
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException();
-		}
-		mCellGrow = pGenome.cellGrow;
-		mHunger = pGenome.getHunger().getValue();
-
-		grow();
-		grow();
-		grow();
-		grow();
-
-		for (IdvmState iState : pGenome.moveSequencesForState.keySet()) {
-			addaptMovementSequence(iState, pGenome);
 		}
 	}
 
@@ -59,15 +57,13 @@ public class Idvm extends Block implements iIdvm {
 		mMovementSequences.put(pState, lMoveProbability);
 	}
 
-	// TODO 2 REF Class Cell Grid
 	private void grow() {
-		if (mCellGrow.size() == 0)
+		if (mGenomeUsing.cellGrow.size() == 0)
 			return;
-		IdvmCell lCell = mCellGrow.get(0);
-		mCellGrow.remove(0);
-		Pos lPos = lCell.getPosOnIdvm();
-		mCellGrid[lPos.x + 1][lPos.y + 1] = lCell;
-		refreshCellPos(lPos.x + 1, lPos.y + 1);
+		IdvmCell lCell = mGenomeUsing.cellGrow.get(0);
+		mGenomeUsing.cellGrow.remove(0);
+		mCellGrid.appendCell(lCell, mPos);
+		popAllSequences();
 	}
 
 	public boolean isAlive() {
@@ -82,54 +78,30 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	public Boolean isHungry() {
-		return mEnergy < mHunger;
+		return mEnergy < mGenomeUsing.getHunger().getValue();
 	}
 
 	public iBlock setPosition(Pos pPos) {
 		super.setPosition(pPos);
 		for (int x = 0; x <= 3; x++) {
 			for (int y = 0; y <= 3; y++) {
-				refreshCellPos(x, y);
+				mCellGrid.refreshCellPosOnGrid(x, y, mPos);
 			}
 		}
 		return this;
 	}
 
-	// TODO REF Class Cell Grid
-	private void refreshCellPos(int pCellX, int pCellY) {
-		IdvmCell lCell = mCellGrid[pCellX][pCellY];
-		if (lCell != null) {
-			Pos lNewPos = new Pos(mPos.x - 1 + pCellX, mPos.y - 1 + pCellY);
-			lCell.setPosition(lNewPos);
-		}
-	}
-
-	// TODO REF Class Cell Grid
 	public ArrayList<iBlock> getUsedBlocks(BlockType pBlockType) {
 		ArrayList<iBlock> lBlocks = new ArrayList<iBlock>();
-		for (iBlock iBlock : getUsedBlocks())
+		for (iBlock iBlock : mCellGrid.getGridBlocks())
 			if (iBlock.getBlockType() == pBlockType)
 				lBlocks.add(iBlock);
 		return lBlocks;
 	}
 
-	// TODO REF Class Cell Grid
 	// TODO 3 IMPL cell type connection
 	public ArrayList<iBlock> getUsedBlocks() {
-		ArrayList<iBlock> lBlocks = new ArrayList<iBlock>();
-		for (IdvmCell[] iRow : mCellGrid) {
-			for (iBlock iCell : iRow) {
-				if (iCell != null) {
-					lBlocks.add(iCell);
-				}
-			}
-		}
-		return lBlocks;
-	}
-
-	// TODO REF Class Cell Grid
-	public void killCell(Pos pPos) {
-		mCellGrid[pPos.x - mPos.x + 1][pPos.y - mPos.y + 1] = null;
+		return mCellGrid.getGridBlocks();
 	}
 
 	public void step() {
@@ -163,7 +135,6 @@ public class Idvm extends Block implements iIdvm {
 		if (mEnergy > Config.cMaxEnergy)
 			mEnergy = Config.cMaxEnergy;
 		grow();
-		popAllSequences();
 	}
 
 	private void popAllSequences() {
@@ -178,7 +149,8 @@ public class Idvm extends Block implements iIdvm {
 
 	// TODO 4 IMPL defence
 	public void interactWithEnemy(Enemy pEnemy) {
-		killCell(pEnemy.getPos());
+		Pos lKillPos = new Pos(pEnemy.getPos().x - mPos.x + 1, pEnemy.getPos().y - mPos.y + 1);
+		mCellGrid.removeCell(lKillPos);
 	}
 
 	public IdvmState getState() {

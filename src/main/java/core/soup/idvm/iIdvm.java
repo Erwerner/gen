@@ -19,8 +19,6 @@ public interface iIdvm extends iBlock, iPresentIdvm {
 
 	void interactWithEnemy(Enemy pEnemy);
 
-	void killCell(Pos pPos);
-
 	HashMap<Pos, Sensor> getDetectedPos();
 
 	IdvmState getState();

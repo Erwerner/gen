@@ -32,12 +32,11 @@ import core.soup.block.iBlockGrid;
 import core.soup.idvm.Idvm;
 import core.soup.idvm.IdvmState;
 import core.soup.idvm.Sensor;
-import core.soup.idvm.iIdvm;
 
 public class IdvmTest {
 	private static final int cStartPosX = 50;
 	private static final int cStartPosY = 60;
-	iIdvm cut;
+	Idvm cut;
 	Genome mGenome;
 	private IdvmCell[] mCellGrow;
 	private iBlockGrid mBlockGrid;
@@ -133,7 +132,9 @@ public class IdvmTest {
 		try {
 			assertHasGrowCellOnPosDiff(true, 0, 0, 0);
 
-			cut.killCell(new Pos(cStartPosX, cStartPosY));
+			Enemy lEnemy = new Enemy(mBlockGrid);
+			lEnemy.setPosition(cut.getPos());
+			cut.interactWithEnemy(lEnemy);
 
 			assertHasGrowCellOnPosDiff(false, 0, 0, 0);
 			assertNull(mBlockGrid.getBlock(new Pos(cStartPosX, cStartPosY)));
@@ -152,7 +153,9 @@ public class IdvmTest {
 	public void noLifeKills() {
 		assertTrue(cut.isAlive());
 
-		cut.killCell(getSoupPosFromGrowCell(0));
+		Enemy lEnemy = new Enemy(mBlockGrid);
+		lEnemy.setPosition(cut.getPos());
+		cut.interactWithEnemy(lEnemy);
 
 		for (iBlock iCell : cut.getUsedBlocks()) {
 			if (iCell.getBlockType() == BlockType.LIFE) {

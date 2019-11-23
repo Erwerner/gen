@@ -26,8 +26,8 @@ public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 
 	public void run() {
 		Genome mGenome = initializeGenome().forceMutation();
-		
-			runGenome((Genome) mGenome);
+
+		runGenome((Genome) mGenome);
 	}
 
 	public static Genome initializeGenome() {
@@ -41,54 +41,35 @@ public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 		mCellGrow[5] = new IdvmCell(BlockType.SENSOR, new Pos(-1, -1));
 		mCellGrow[6] = new IdvmCell(BlockType.SENSOR, new Pos(-1, 1));
 		for (IdvmCell iCell : mCellGrow) {
-			lGenome.cellGrow.add(new IdvmCell(iCell.getBlockType(), iCell
-					.getPosOnIdvm()));
+			lGenome.cellGrow.add(new IdvmCell(iCell.getBlockType(), iCell.getPosOnIdvm()));
 		}
 		ArrayList<MoveDecisionsProbability> lIdlelMoveProbability = new ArrayList<MoveDecisionsProbability>();
-		lIdlelMoveProbability.add(new MoveDecisionsProbability()
-				.appendDecision(Decisions.DOWN, 1)
-				.appendDecision(Decisions.RIGHT, 5)
-				.appendDecision(Decisions.CURRENT, 10)
-				.appendDecision(Decisions.CURRENT_OPPOSITE, 1));
-		lIdlelMoveProbability.add(new MoveDecisionsProbability()
-				.appendDecision(Decisions.UP, 4).appendDecision(Decisions.LEFT, 2)
-				.appendDecision(Decisions.RIGHT, 1)
-				.appendDecision(Decisions.NOTHING, 1));
-		lIdlelMoveProbability.add(new MoveDecisionsProbability()
-				.appendDecision(Decisions.DOWN, 1)
-				.appendDecision(Decisions.RIGHT, 1)
-				.appendDecision(Decisions.NOTHING, 1));
-		lIdlelMoveProbability.add(new MoveDecisionsProbability()
-				.appendDecision(Decisions.UP, 1).appendDecision(Decisions.RIGHT, 1)
-				.appendDecision(Decisions.NOTHING, 1));
-		lIdlelMoveProbability.add(new MoveDecisionsProbability()
-				.appendDecision(Decisions.DOWN, 1)
-				.appendDecision(Decisions.LEFT, 2)
-				.appendDecision(Decisions.NOTHING, 1));
+		lIdlelMoveProbability
+				.add(new MoveDecisionsProbability().appendDecision(Decisions.DOWN, 1).appendDecision(Decisions.RIGHT, 5)
+						.appendDecision(Decisions.CURRENT, 10).appendDecision(Decisions.CURRENT_OPPOSITE, 1));
+		lIdlelMoveProbability
+				.add(new MoveDecisionsProbability().appendDecision(Decisions.UP, 4).appendDecision(Decisions.LEFT, 2)
+						.appendDecision(Decisions.RIGHT, 1).appendDecision(Decisions.NOTHING, 1));
+		lIdlelMoveProbability.add(new MoveDecisionsProbability().appendDecision(Decisions.DOWN, 1)
+				.appendDecision(Decisions.RIGHT, 1).appendDecision(Decisions.NOTHING, 1));
+		lIdlelMoveProbability.add(new MoveDecisionsProbability().appendDecision(Decisions.UP, 1)
+				.appendDecision(Decisions.RIGHT, 1).appendDecision(Decisions.NOTHING, 1));
+		lIdlelMoveProbability.add(new MoveDecisionsProbability().appendDecision(Decisions.DOWN, 1)
+				.appendDecision(Decisions.LEFT, 2).appendDecision(Decisions.NOTHING, 1));
 		lGenome.moveSequencesForState.put(IdvmState.IDLE, lIdlelMoveProbability);
 		ArrayList<MoveDecisionsProbability> lFoodMoveProbability = new ArrayList<MoveDecisionsProbability>();
-		lFoodMoveProbability.add(new MoveDecisionsProbability().appendDecision(
-				Decisions.TARGET, 1));
-		lFoodMoveProbability.add(new MoveDecisionsProbability().appendDecision(
-				Decisions.TARGET, 1));
-		lFoodMoveProbability.add(new MoveDecisionsProbability().appendDecision(
-				Decisions.TARGET, 1));
-		lFoodMoveProbability.add(new MoveDecisionsProbability().appendDecision(
-				Decisions.TARGET, 1));
-		lFoodMoveProbability.add(new MoveDecisionsProbability().appendDecision(
-				Decisions.TARGET, 1));
+		lFoodMoveProbability.add(new MoveDecisionsProbability().appendDecision(Decisions.TARGET, 1));
+		lFoodMoveProbability.add(new MoveDecisionsProbability().appendDecision(Decisions.TARGET, 1));
+		lFoodMoveProbability.add(new MoveDecisionsProbability().appendDecision(Decisions.TARGET, 1));
+		lFoodMoveProbability.add(new MoveDecisionsProbability().appendDecision(Decisions.TARGET, 1));
+		lFoodMoveProbability.add(new MoveDecisionsProbability().appendDecision(Decisions.TARGET, 1));
 		lGenome.moveSequencesForState.put(IdvmState.FOOD, lFoodMoveProbability);
 		ArrayList<MoveDecisionsProbability> lEnemyMoveProbability = new ArrayList<MoveDecisionsProbability>();
-		lEnemyMoveProbability.add(new MoveDecisionsProbability().appendDecision(
-				Decisions.TARGET_OPPOSITE, 1));
-		lEnemyMoveProbability.add(new MoveDecisionsProbability().appendDecision(
-				Decisions.TARGET_OPPOSITE, 1));
-		lEnemyMoveProbability.add(new MoveDecisionsProbability().appendDecision(
-				Decisions.TARGET_OPPOSITE, 1));
-		lEnemyMoveProbability.add(new MoveDecisionsProbability().appendDecision(
-				Decisions.TARGET_OPPOSITE, 1));
-		lEnemyMoveProbability.add(new MoveDecisionsProbability().appendDecision(
-				Decisions.TARGET_OPPOSITE, 1));
+		lEnemyMoveProbability.add(new MoveDecisionsProbability().appendDecision(Decisions.TARGET_OPPOSITE, 1));
+		lEnemyMoveProbability.add(new MoveDecisionsProbability().appendDecision(Decisions.TARGET_OPPOSITE, 1));
+		lEnemyMoveProbability.add(new MoveDecisionsProbability().appendDecision(Decisions.TARGET_OPPOSITE, 1));
+		lEnemyMoveProbability.add(new MoveDecisionsProbability().appendDecision(Decisions.TARGET_OPPOSITE, 1));
+		lEnemyMoveProbability.add(new MoveDecisionsProbability().appendDecision(Decisions.TARGET_OPPOSITE, 1));
 		lGenome.moveSequencesForState.put(IdvmState.ENEMY, lEnemyMoveProbability);
 
 		lGenome.setHunger(50);
