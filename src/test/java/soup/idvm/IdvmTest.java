@@ -16,6 +16,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import core.datatypes.Decisions;
+import core.datatypes.Direction;
 import core.datatypes.Pos;
 import core.exceptions.PosIsOutOfGrid;
 import core.exceptions.WrongState;
@@ -340,7 +341,7 @@ public class IdvmTest {
 		assertHasCell(true, BlockType.SENSOR, 1, 0, cStartPosX + 1, cStartPosY);
 		mBlockGrid.setBlock(new Pos(cStartPosX + 2, cStartPosY), new Food());
 		assertEquals(IdvmState.FOOD, cut.getState());
-		assertEquals(Decisions.RIGHT, cut.getTargetDirection());
+		assertEquals(Direction.EAST, cut.getTargetDirection());
 	}
 
 	@Test

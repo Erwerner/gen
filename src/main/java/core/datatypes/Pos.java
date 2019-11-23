@@ -3,7 +3,7 @@ package core.datatypes;
 import java.util.ArrayList;
 
 import core.exceptions.PosIsOutOfGrid;
-import core.exceptions.WrongDecision;
+import core.exceptions.WrongDirection;
 import globals.Config;
 
 public class Pos {
@@ -26,50 +26,42 @@ public class Pos {
 		return this.x == other.x && this.y == other.y;
 	}
 
-	//TODO 2 REF Direction Type
-	public Pos getPosFromDirection(Decisions pDirection) throws PosIsOutOfGrid {
+	public Pos getPosFromDirection(Direction pDirection) throws PosIsOutOfGrid {
 		Pos lNewPos;
 		switch (pDirection) {
-		case UP:
+		case NORTH:
 			lNewPos = new Pos(x, y - 1);
 			break;
-		case DOWN:
+		case SOUTH:
 			lNewPos = new Pos(x, y + 1);
 			break;
-		case LEFT:
+		case WEST:
 			lNewPos = new Pos(x - 1, y);
 			break;
-		case RIGHT:
+		case EAST:
 			lNewPos = new Pos(x + 1, y);
 			break;
 		case NOTHING:
 			lNewPos = new Pos(x, y);
 			break;
 		default:
-			throw new WrongDecision(pDirection);
+			throw new WrongDirection();
 		}
 
-		if (lNewPos.x < 0)
-			throw new PosIsOutOfGrid();
-		if (lNewPos.x > Config.soupSize - 1)
-			throw new PosIsOutOfGrid();
-		if (lNewPos.y < 0)
-			throw new PosIsOutOfGrid();
-		if (lNewPos.y > Config.soupSize - 1)
-			throw new PosIsOutOfGrid();
+		lNewPos.isInGrid();
 		return lNewPos;
 	}
 
-	public Decisions getDircetionTo(Pos pTargetPos) {
+	public Direction getDircetionTo(Pos pTargetPos) {
 		if (pTargetPos.y < this.y)
-			return Decisions.UP;
+			return Direction.NORTH;
 		if (pTargetPos.y > this.y)
-			return Decisions.DOWN;
+			return Direction.SOUTH;
 		if (pTargetPos.x < this.x)
-			return Decisions.LEFT;
+			return Direction.WEST;
 		if (pTargetPos.x > this.x)
-			return Decisions.RIGHT;
-		return Decisions.NOTHING;
+			return Direction.EAST;
+		return Direction.NOTHING;
 	}
 
 	public static ArrayList<Pos> getAllGridPos() {

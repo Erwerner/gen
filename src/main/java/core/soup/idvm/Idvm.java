@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import core.datatypes.Decisions;
+import core.datatypes.Direction;
 import core.datatypes.Pos;
 import core.exceptions.PosIsOutOfGrid;
 import core.genes.Genome;
@@ -27,7 +28,7 @@ public class Idvm extends Block implements iIdvm {
 	private iBlockGrid mBlockGrid;
 	private int mStepCount;
 	private int mEnergy = Config.cMaxEnergy / 3;
-	private iIdvmMoveCalculation mMoveCalculation;
+	private IdvmMoveCalculation mMoveCalculation;
 	private IdvmSensor mIdvmSensor;
 
 	public Idvm(Genome pGenome) {
@@ -224,7 +225,7 @@ public class Idvm extends Block implements iIdvm {
 		}
 	}
 
-	public Decisions getTargetDirection() {
+	public Direction getTargetDirection() {
 		return mMoveCalculation.getTargetDirection(getState(), getDetectedPos());
 	}
 
