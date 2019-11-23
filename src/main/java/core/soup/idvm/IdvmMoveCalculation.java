@@ -91,7 +91,7 @@ public class IdvmMoveCalculation implements iIdvmMoveCalculation {
 			HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> pMovementSequences) throws PosIsOutOfGrid {
 		Decisions lTargetDirection = mCurrentDirection;
 		IdvmState lState = pIdvm.getState();
-		if (lState != IdvmState.IDLE) {
+		if (lState != IdvmState.IDLE && lState != IdvmState.BLIND) {
 			lTargetDirection = getTargetDirection(lState, pIdvm.getDetectedPos());
 		}
 		Decisions lDirection = calcMovingDirection(pMovementSequences, lState, lTargetDirection);

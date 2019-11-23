@@ -20,10 +20,13 @@ public class IdvmSensor {
 		mBlockGrid = pBlockGrid;
 	}
 
-	// REF move ti Idvm
+	// TODO REF 6 move to Idvm
 	// TODO 2 IMPL dynamic target order
 	// TODO 4 IMPL sensor range
+	// TODO 6 IMPL idle and blind hunger
 	public IdvmState getState(HashMap<Pos, Sensor> pDetectedPos, boolean pIsHungry) {
+		if (pDetectedPos.size() == 0)
+			return IdvmState.BLIND;
 		if (detectSurroundingBlockType(BlockType.ENEMY, pDetectedPos))
 			if (pIsHungry) {
 				return IdvmState.ENEMY_HUNGER;

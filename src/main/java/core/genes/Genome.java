@@ -15,8 +15,8 @@ import globals.Config;
 import globals.Helpers;
 
 public class Genome implements Cloneable {
-	private GeneInt mHunger = new GeneInt(0, Config.cMaxEnergy, 50);
-	public GeneDouble mMutationRate = new GeneDouble(0.0, 0.2, 0.005);
+	private GeneInt mHunger = new GeneInt(0, Config.cMaxEnergy, Config.cMaxEnergy / 2);
+	public GeneDouble mMutationRate = new GeneDouble(0.005, 0.05, 0.005);
 	// TODO 9 REF make this private
 	public ArrayList<IdvmCell> cellGrow = new ArrayList<IdvmCell>();
 	public HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> moveSequencesForState = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
@@ -28,6 +28,7 @@ public class Genome implements Cloneable {
 	}
 
 	public Genome() {
+		//TODO init sequences
 	}
 
 	private void initSequences() {
@@ -51,7 +52,6 @@ public class Genome implements Cloneable {
 		ArrayList<iGene> lGenes;
 		lGenes = getGeneCollection();
 
-		// TODO REF check mutation rate here
 		for (iGene iGene : lGenes)
 			if (Helpers.checkChance(pMutationRate))
 				iGene.mutate();
@@ -83,7 +83,7 @@ public class Genome implements Cloneable {
 		ArrayList<iGene> lGenes = new ArrayList<iGene>();
 		lGenes.add(mHunger);
 		lGenes.add(mMutationRate);
-		
+
 		for (iGene iGene : cellGrow) {
 			lGenes.add(iGene);
 		}

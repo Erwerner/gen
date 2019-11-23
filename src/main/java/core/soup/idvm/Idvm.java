@@ -26,7 +26,7 @@ public class Idvm extends Block implements iIdvm {
 	private int mHunger;
 	private iBlockGrid mBlockGrid;
 	private int mStepCount;
-	private int mEnergy = Config.cFoodEnergy;
+	private int mEnergy = Config.cMaxEnergy / 3;
 	private iIdvmMoveCalculation mMoveCalculation;
 	private IdvmSensor mIdvmSensor;
 
@@ -113,7 +113,7 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	// TODO REF Class Cell Grid
-	//TODO 3 IMPL cell type connection
+	// TODO 3 IMPL cell type connection
 	public ArrayList<iBlock> getUsedBlocks() {
 		ArrayList<iBlock> lBlocks = new ArrayList<iBlock>();
 		for (IdvmCell[] iRow : mCellGrid) {
@@ -135,12 +135,12 @@ public class Idvm extends Block implements iIdvm {
 		mStepCount++;
 		for (iBlock iCount : getUsedBlocks(BlockType.LIFE)) {
 			mEnergy--;
-			mEnergy--;			
+			mEnergy--;
 		}
 		move();
 	}
 
-	//TODO 4 IMPL turn
+	// TODO 4 IMPL turn
 	@SuppressWarnings("unused")
 	private void move() {
 		for (iBlock iCount : getUsedBlocks(BlockType.MOVE)) {
@@ -159,7 +159,7 @@ public class Idvm extends Block implements iIdvm {
 
 	public void interactWithFood(Food pFood) {
 		mEnergy = mEnergy + Config.cFoodEnergy;
-		if(mEnergy>Config.cMaxEnergy)
+		if (mEnergy > Config.cMaxEnergy)
 			mEnergy = Config.cMaxEnergy;
 		grow();
 		popAllSequences();
@@ -175,7 +175,7 @@ public class Idvm extends Block implements iIdvm {
 		}
 	}
 
-	//TODO 4 IMPL defence
+	// TODO 4 IMPL defence
 	public void interactWithEnemy(Enemy pEnemy) {
 		killCell(pEnemy.getPos());
 	}

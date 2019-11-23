@@ -24,8 +24,9 @@ public class MoveDecisionsProbability implements iGene {
 		return mPossibleDecisions.get(lRnd);
 	}
 
+	//TODO 5 IMPL gene to reset, clear and alter probability
 	public void mutate() {
-		if (!Helpers.checkChance(0.6)) {
+		if (!Helpers.checkChance(0.4)) {
 			mPossibleDecisions = null;
 			return;
 		}

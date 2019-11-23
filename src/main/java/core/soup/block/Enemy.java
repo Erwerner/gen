@@ -54,11 +54,13 @@ public class Enemy extends Block {
 						if (lDetectedBlock == null)
 							continue;
 						switch (lDetectedBlock.getBlockType()) {
-						case DEFENCE:
 						case LIFE:
 						case SENSOR:
 						case MOVE:
 							return lDetectPos;
+						case DEFENCE:
+							Decisions lDirectionEscape = mPos.getDircetionTo(lDetectPos).opposite();
+							return mPos.getPosFromDirection(lDirectionEscape);
 						default:
 							break;
 						}
