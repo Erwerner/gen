@@ -6,6 +6,6 @@ public class Config {
 	public static final int foodSupply = 60 * cSoupFctor * cSoupFctor;
 	public static final int enemySupply = 20 * cSoupFctor * cSoupFctor;
 	public static final int cMaxSequence = 100;
-	public static final int cMaxEnergy = 900;
-	public static final int cFoodEnergy = 280;
+	public static final int cMaxEnergy = 1200;
+	public static final int cFoodEnergy = 400;
 }

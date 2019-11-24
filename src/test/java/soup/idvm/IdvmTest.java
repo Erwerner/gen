@@ -28,7 +28,6 @@ import core.soup.block.Enemy;
 import core.soup.block.Food;
 import core.soup.block.IdvmCell;
 import core.soup.block.iBlock;
-import core.soup.block.iBlockGrid;
 import core.soup.idvm.Idvm;
 import core.soup.idvm.IdvmState;
 import core.soup.idvm.Sensor;
@@ -39,7 +38,7 @@ public class IdvmTest {
 	Idvm cut;
 	Genome mGenome;
 	private IdvmCell[] mCellGrow;
-	private iBlockGrid mBlockGrid;
+	private BlockGrid mBlockGrid;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {

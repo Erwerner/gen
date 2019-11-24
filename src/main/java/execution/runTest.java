@@ -1,9 +1,5 @@
 package execution;
 
-import core.genes.Genome;
-import core.soup.Soup;
-import core.soup.idvm.Idvm;
-import devutils.Measure;
 import globals.Helpers;
 
 public class runTest {

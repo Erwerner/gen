@@ -1,6 +1,7 @@
 package execution;
 
 import core.genes.Genome;
+import core.soup.Soup;
 import core.soup.idvm.Idvm;
 
 public class IdvmExecutionThread implements Runnable {
@@ -14,6 +15,7 @@ public class IdvmExecutionThread implements Runnable {
 
 	public void run() {
 		mIdvm = new Idvm((Genome) mGenome);
+		new Soup(mIdvm).executeIdvm();
 	}
 
 	public int getCount() {

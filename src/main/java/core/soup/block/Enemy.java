@@ -1,8 +1,5 @@
 package core.soup.block;
 
-import java.util.Random;
-
-import core.datatypes.Decisions;
 import core.datatypes.Direction;
 import core.datatypes.Pos;
 import core.exceptions.PosIsOutOfGrid;
@@ -10,9 +7,9 @@ import globals.Helpers;
 
 public class Enemy extends Block {
 	Direction mCurrentDirection;
-	private iBlockGrid mBlockGrid;
+	private BlockGrid mBlockGrid;
 
-	public Enemy(iBlockGrid pBlockGrid) {
+	public Enemy(BlockGrid pBlockGrid) {
 		super(BlockType.ENEMY);
 		setRandomDirection();
 		mBlockGrid = pBlockGrid;

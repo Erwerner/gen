@@ -14,12 +14,12 @@ import core.exceptions.PosIsOutOfGrid;
 import core.soup.Soup;
 import core.soup.block.BlockType;
 import core.soup.block.iBlock;
-import core.soup.idvm.iIdvm;
+import core.soup.idvm.Idvm;
 import utils.TestMock;
 
 public class SoupTest {
 	Soup cut;
-	private iIdvm mIdvm;
+	private Idvm mIdvm;
 
 	@Before
 	public void setUp() throws Exception {

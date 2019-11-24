@@ -10,10 +10,9 @@ import core.soup.block.BlockType;
 import core.soup.block.IdvmCell;
 import core.soup.idvm.Idvm;
 import core.soup.idvm.IdvmState;
-import core.soup.idvm.iIdvm;
 
 public class TestMock {
-	public static iIdvm getIdvmMock() {
+	public static Idvm getIdvmMock() {
 		Genome lGenome;
 		IdvmCell[] lCellGrow = new IdvmCell[6];
 		lCellGrow[0] = new IdvmCell(BlockType.LIFE, new Pos(0, 0));

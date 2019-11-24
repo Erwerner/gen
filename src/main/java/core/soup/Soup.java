@@ -9,17 +9,16 @@ import core.soup.block.BlockType;
 import core.soup.block.Enemy;
 import core.soup.block.Food;
 import core.soup.block.iBlock;
-import core.soup.block.iBlockGrid;
-import core.soup.idvm.iIdvm;
+import core.soup.idvm.Idvm;
 import globals.Config;
 import ui.presenter.iPresentSoup;
 
 public class Soup implements iSoup {
-	private iIdvm mIndividuum;
-	private iBlockGrid mBlockGrid;
+	private Idvm mIndividuum;
+	private BlockGrid mBlockGrid;
 	private ArrayList<iBlock> mAllBlocks = new ArrayList<iBlock>();
 
-	public Soup(iIdvm pIdvm) {
+	public Soup(Idvm pIdvm) {
 		mBlockGrid = new BlockGrid();
 		mIndividuum = pIdvm;
 		mIndividuum.setBlockGrid(mBlockGrid);
@@ -79,8 +78,8 @@ public class Soup implements iSoup {
 			} catch (PosIsOutOfGrid e) {
 			}
 		}
-		//REF move to BlockGrid
-		mIndividuum.detectCollisions();
+		// REF move to BlockGrid
+		mBlockGrid.detectCollisions(mIndividuum);
 
 		for (iBlock iBlock : mAllBlocks) {
 			try {

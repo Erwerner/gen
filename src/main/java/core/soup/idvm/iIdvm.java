@@ -4,14 +4,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import core.datatypes.Pos;
+import core.soup.block.BlockGrid;
+import core.soup.block.BlockType;
 import core.soup.block.Enemy;
 import core.soup.block.Food;
 import core.soup.block.iBlock;
-import core.soup.block.iBlockGrid;
+import ui.presenter.iPresentDevIdvmStats;
 import ui.presenter.iPresentIdvm;
 
 // TOTO REF delete interface
-public interface iIdvm extends iBlock, iPresentIdvm {
+public interface iIdvm extends iBlock, iPresentIdvm, iPresentDevIdvmStats {
 
 	ArrayList<iBlock> getUsedBlocks();
 
@@ -25,11 +27,11 @@ public interface iIdvm extends iBlock, iPresentIdvm {
 
 	// Direction getTargetDirection();
 
-	void setBlockGrid(iBlockGrid pBlockGrid);
+	void setBlockGrid(BlockGrid pBlockGrid);
 
 	boolean isAlive();
 
 	Boolean isHungry();
 
-	void detectCollisions();
+	ArrayList<iBlock> getUsedBlocks(BlockType pBlockType);
 }

@@ -11,6 +11,7 @@ import core.soup.idvm.IdvmState;
 import core.soup.idvm.Sensor;
 import ui.mvc.Model;
 import ui.mvc.View;
+import ui.presenter.iPresentDevIdvmStats;
 import ui.presenter.iPresentIdvm;
 import ui.presenter.iPresentSoup;
 
@@ -28,11 +29,13 @@ public class ViewConsoleMonitorIdvm extends View {
 	private static final int cViewSize = 25;
 	private iPresentIdvm mIdvm;
 	private iPresentSoup mSoup;
+	private iPresentDevIdvmStats mIdvStats;
 
 	public ViewConsoleMonitorIdvm(Model pModel) {
 		super(pModel);
 		mSoup = (iPresentSoup) pModel.getPresenter(iPresentSoup.class);
 		mIdvm = (iPresentIdvm) pModel.getPresenter(iPresentIdvm.class);
+		mIdvStats = (iPresentDevIdvmStats) pModel.getPresenter(iPresentDevIdvmStats.class);
 	}
 
 	public void update() {
@@ -117,7 +120,6 @@ public class ViewConsoleMonitorIdvm extends View {
 		System.out.print("Steps: " + mIdvm.getStepCount());
 		System.out.print(" Alive: " + mIdvm.isAlive());
 		System.out.print(" State: " + mIdvm.getState());
-		System.out.print(" Pos: " + mIdvm.getPos());
 		System.out.println();
 		for (int x = 1; x <= mIdvm.getEnergyCount(); x++)
 			System.out.print("*");

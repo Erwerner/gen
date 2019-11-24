@@ -11,12 +11,12 @@ import core.exceptions.PosIsOutOfGrid;
 import core.genes.Genome;
 import core.genes.MoveDecisionsProbability;
 import core.soup.block.Block;
+import core.soup.block.BlockGrid;
 import core.soup.block.BlockType;
 import core.soup.block.Enemy;
 import core.soup.block.Food;
 import core.soup.block.IdvmCell;
 import core.soup.block.iBlock;
-import core.soup.block.iBlockGrid;
 import globals.Config;
 
 public class Idvm extends Block implements iIdvm {
@@ -24,7 +24,7 @@ public class Idvm extends Block implements iIdvm {
 	Genome mGenomeUsing;
 	private IdvmCellGrid mCellGrid = new IdvmCellGrid();
 	private HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> mMovementSequences = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
-	private iBlockGrid mBlockGrid;
+	private BlockGrid mBlockGrid;
 	private int mStepCount;
 	private int mEnergy = Config.cMaxEnergy / 3;
 	private IdvmMoveCalculation mMoveCalculation;
@@ -43,18 +43,15 @@ public class Idvm extends Block implements iIdvm {
 			grow();
 
 			for (IdvmState iState : pGenome.moveSequencesForState.keySet()) {
-				addaptMovementSequence(iState, pGenome);
+				@SuppressWarnings("unchecked")
+				ArrayList<MoveDecisionsProbability> lMoveProbability = (ArrayList<MoveDecisionsProbability>) pGenome.moveSequencesForState
+						.get(iState).clone();
+				mMovementSequences.put(iState, lMoveProbability);
 			}
+
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException();
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private void addaptMovementSequence(IdvmState pState, Genome pGenome) {
-		ArrayList<MoveDecisionsProbability> lMoveProbability = (ArrayList<MoveDecisionsProbability>) pGenome.moveSequencesForState
-				.get(pState).clone();
-		mMovementSequences.put(pState, lMoveProbability);
 	}
 
 	private void grow() {
@@ -119,7 +116,7 @@ public class Idvm extends Block implements iIdvm {
 		for (iBlock iCount : getUsedBlocks(BlockType.MOVE)) {
 			for (int i = 0; i < 10; i++) {
 				try {
-					Pos lNewPos = mMoveCalculation.getMovingPosition(this, mMovementSequences);
+					Pos lNewPos = mMoveCalculation.getMovingPosition(this, mMovementSequences, mIdvmSensor);
 					if (lNewPos != mPos)
 						mEnergy--;
 					setPosition(lNewPos);
@@ -128,6 +125,29 @@ public class Idvm extends Block implements iIdvm {
 				}
 			}
 		}
+	}
+
+	// TODO 3 IMPL dynamic target order
+	// TODO 4 IMPL sensor range
+	// TODO 6 IMPL add hunger and blind
+	// TODO 6 IMPL idle and blind hunger
+	public IdvmState getState(HashMap<Pos, Sensor> pDetectedPos, boolean pIsHungry) {
+		// if (pDetectedPos.size() == 0)
+		// return IdvmState.BLIND;
+		if (mIdvmSensor.detectSurroundingBlockType(BlockType.ENEMY, pDetectedPos))
+			// if (pIsHungry) {
+			// return IdvmState.ENEMY_HUNGER;
+			// } else {
+			return IdvmState.ENEMY;
+		// }
+		if (mIdvmSensor.detectSurroundingBlockType(BlockType.FOOD, pDetectedPos))
+			// if (pIsHungry) {
+			// return IdvmState.FOOD_HUNGER;
+			// } else {
+			return IdvmState.FOOD;
+		// }
+		return IdvmState.IDLE;
+
 	}
 
 	public void interactWithFood(Food pFood) {
@@ -154,7 +174,7 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	public IdvmState getState() {
-		return mIdvmSensor.getState(getDetectedPos(), isHungry());
+		return getState(getDetectedPos(), isHungry());
 	}
 
 	public HashMap<Pos, Sensor> getDetectedPos() {
@@ -162,7 +182,7 @@ public class Idvm extends Block implements iIdvm {
 		return mIdvmSensor.getDetectedPos(lSensors);
 	}
 
-	public void setBlockGrid(iBlockGrid pBlockGrid) {
+	public void setBlockGrid(BlockGrid pBlockGrid) {
 		mBlockGrid = pBlockGrid;
 		mMoveCalculation = new IdvmMoveCalculation(mBlockGrid);
 		mIdvmSensor = new IdvmSensor(mBlockGrid);
@@ -172,33 +192,8 @@ public class Idvm extends Block implements iIdvm {
 		return mStepCount;
 	}
 
-	// TODO REF Class Block Grid
-	public void detectCollisions() {
-		for (iBlock iBlock : getUsedBlocks()) {
-			Pos iPos = iBlock.getPos();
-			iBlock lGridBlock;
-			try {
-				lGridBlock = mBlockGrid.getBlock(iPos);
-				if (lGridBlock != null) {
-					switch (lGridBlock.getBlockType()) {
-					case FOOD:
-						interactWithFood((Food) lGridBlock);
-						lGridBlock.setNull();
-						break;
-					case ENEMY:
-						interactWithEnemy((Enemy) lGridBlock);
-						break;
-					default:
-						break;
-					}
-				}
-			} catch (PosIsOutOfGrid e) {
-			}
-		}
-	}
-
 	public Direction getTargetDirection() {
-		return mMoveCalculation.getTargetDirection(getState(), getDetectedPos());
+		return mIdvmSensor.getTargetDirection(getState(), getUsedBlocks(BlockType.SENSOR));
 	}
 
 	public int getEnergyCount() {
@@ -211,5 +206,9 @@ public class Idvm extends Block implements iIdvm {
 
 	public Genome getGenomeOrigin() {
 		return mGenomeOrigin;
+	}
+
+	public Double getMutationRate() {
+		return mGenomeUsing.mMutationRate.getValue();
 	}
 }

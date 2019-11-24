@@ -1,8 +1,6 @@
 package devutils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
 
 public class Measure {
 	private static ArrayList<String> mEntries = new ArrayList<String>();

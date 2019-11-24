@@ -12,20 +12,20 @@ import core.soup.block.BlockType;
 import core.soup.block.IdvmCell;
 import core.soup.idvm.Idvm;
 import core.soup.idvm.IdvmState;
-import core.soup.idvm.iIdvm;
 import ui.controller.iControllRunSoup;
 import ui.mvc.Model;
 import ui.presenter.WrongPresenterType;
+import ui.presenter.iPresentDevIdvmStats;
 import ui.presenter.iPresentIdvm;
 import ui.presenter.iPresentSoup;
 
 public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 
-	iIdvm mIdvm;
+	Idvm mIdvm;
 	iSoup mSoup;
 
 	public void run() {
-		Genome mGenome = initializeGenome().forceMutation();
+		Genome mGenome = initializeGenome();
 
 		runGenome((Genome) mGenome);
 	}
@@ -101,6 +101,8 @@ public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 		if (pType == iPresentSoup.class)
 			return mSoup;
 		if (pType == iPresentIdvm.class)
+			return mIdvm;
+		if (pType == iPresentDevIdvmStats.class)
 			return mIdvm;
 		throw new WrongPresenterType();
 	}

@@ -2,27 +2,23 @@ package core.soup.idvm;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map.Entry;
 
 import core.datatypes.Decisions;
 import core.datatypes.Direction;
 import core.datatypes.Pos;
-import core.exceptions.DetectionFailed;
 import core.exceptions.PosIsOutOfGrid;
-import core.exceptions.WrongBlockType;
-import core.exceptions.WrongState;
 import core.genes.MoveDecisionsProbability;
+import core.soup.block.BlockGrid;
 import core.soup.block.BlockType;
 import core.soup.block.iBlock;
-import core.soup.block.iBlockGrid;
 
 public class IdvmMoveCalculation {
 
-	private iBlockGrid mBlockGrid;
+	private BlockGrid mBlockGrid;
 	private Direction mCurrentDirection = Direction.NORTH;
 	private Decisions mCalculatedDecision = Decisions.UP;
 
-	public IdvmMoveCalculation(iBlockGrid pBlockGrid) {
+	public IdvmMoveCalculation(BlockGrid pBlockGrid) {
 		super();
 		mBlockGrid = pBlockGrid;
 	}
@@ -39,46 +35,14 @@ public class IdvmMoveCalculation {
 		return lNewPos;
 	}
 
-	// TODO REF Sensor Class
-	public Direction getTargetDirection(IdvmState pState, HashMap<Pos, Sensor> pDetectedPos) {
-		BlockType lSearchBlock;
-		if (pDetectedPos == null)
-			throw new DetectionFailed();
-
-		switch (pState) {
-		case FOOD:
-		case FOOD_HUNGER:
-			lSearchBlock = BlockType.FOOD;
-			break;
-		case ENEMY:
-		case ENEMY_HUNGER:
-			lSearchBlock = BlockType.ENEMY;
-			break;
-		default:
-			throw new WrongState();
-		}
-
-		for (Entry<Pos, Sensor> iPos : pDetectedPos.entrySet()) {
-			iBlock lGridBlock;
-			try {
-				lGridBlock = mBlockGrid.getBlock(iPos.getKey());
-				if (lGridBlock != null && lGridBlock.getBlockType() == lSearchBlock) {
-					Pos lSensorPos = iPos.getValue().getPos();
-					Direction lDircetion = lSensorPos.getDircetionTo(iPos.getKey());
-					return lDircetion;
-				}
-			} catch (PosIsOutOfGrid e) {
-			}
-		}
-		throw new WrongBlockType();
-	}
-
+//TODO add blind
 	public Pos getMovingPosition(iIdvm pIdvm,
-			HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> pMovementSequences) throws PosIsOutOfGrid {
+			HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> pMovementSequences, IdvmSensor pIdvmSensor)
+			throws PosIsOutOfGrid {
 		Direction lTargetDirection = mCurrentDirection;
 		IdvmState lState = pIdvm.getState();
-		if (lState != IdvmState.IDLE && lState != IdvmState.BLIND) {
-			lTargetDirection = getTargetDirection(lState, pIdvm.getDetectedPos());
+		if (lState != IdvmState.IDLE) { // && lState!= IdvmState.BLIND) {
+			lTargetDirection = pIdvmSensor.getTargetDirection(lState, pIdvm.getUsedBlocks(BlockType.SENSOR));
 		}
 		Direction lDirection = calcMovingDirection(pMovementSequences, lState, lTargetDirection);
 

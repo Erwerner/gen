@@ -20,8 +20,8 @@ import core.soup.block.Enemy;
 import core.soup.block.Food;
 import core.soup.block.IdvmCell;
 import core.soup.block.iBlock;
-import core.soup.block.iBlockGrid;
 import core.soup.idvm.IdvmMoveCalculation;
+import core.soup.idvm.IdvmSensor;
 import core.soup.idvm.IdvmState;
 import core.soup.idvm.iIdvm;
 import globals.Config;
@@ -29,7 +29,7 @@ import utils.TestMock;
 
 public class MoveCalculationTest {
 	IdvmMoveCalculation cut;
-	iBlockGrid mBlockGrid = new BlockGrid();
+	BlockGrid mBlockGrid = new BlockGrid();
 	private ArrayList<iBlock> mIdvmBlocks = new ArrayList<iBlock>();
 
 	@Before
@@ -142,7 +142,7 @@ public class MoveCalculationTest {
 		Pos lIdvmPos = lFoodPos.getPosFromDirection(Direction.WEST).getPosFromDirection(Direction.WEST);
 		lIdvm.setPosition(lIdvmPos);
 
-		Pos lAct = cut.getMovingPosition(lIdvm, lMovementSequences);
+		Pos lAct = cut.getMovingPosition(lIdvm, lMovementSequences, new IdvmSensor(mBlockGrid));
 
 		assertEquals(lIdvmPos.getPosFromDirection(Direction.EAST), lAct);
 	}
@@ -162,7 +162,7 @@ public class MoveCalculationTest {
 		Pos lIdvmPos = lEnemyPos.getPosFromDirection(Direction.WEST).getPosFromDirection(Direction.WEST);
 		lIdvm.setPosition(lIdvmPos);
 
-		Pos lAct = cut.getMovingPosition(lIdvm, lMovementSequences);
+		Pos lAct = cut.getMovingPosition(lIdvm, lMovementSequences, new IdvmSensor(mBlockGrid));
 
 		assertEquals(lIdvmPos.getPosFromDirection(Direction.WEST), lAct);
 	}
