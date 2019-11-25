@@ -46,7 +46,6 @@ public class GenomeTest {
 
 	@Test
 	public void nullSequencesBecomePrevious() {
-		cut.mMutationRate.setValue(0.0);
 		cut.forceMutation();
 		ArrayList<MoveDecisionsProbability> lIdleSequence = cut.moveSequencesForState.get(IdvmState.IDLE);
 		assertNotNull(lIdleSequence.get(0).mPossibleDecisions);
@@ -59,7 +58,6 @@ public class GenomeTest {
 
 	@Test
 	public void followingSequencesHaveSameContent() {
-		cut.mMutationRate.setValue(0.0);
 		cut.forceMutation();
 		ArrayList<MoveDecisionsProbability> lIdleSequence = cut.moveSequencesForState.get(IdvmState.IDLE);
 		ArrayList<Decisions> lFirstProbability = lIdleSequence.get(0).mPossibleDecisions;
@@ -72,7 +70,6 @@ public class GenomeTest {
 
 	@Test
 	public void followingSequencesAreNotSameInstance() {
-		cut.mMutationRate.setValue(0.0);
 		cut.forceMutation();
 		ArrayList<MoveDecisionsProbability> lIdleSequence = cut.moveSequencesForState.get(IdvmState.IDLE);
 		ArrayList<Decisions> lFirstProbability = lIdleSequence.get(0).mPossibleDecisions;

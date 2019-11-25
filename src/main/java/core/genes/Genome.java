@@ -16,8 +16,6 @@ import globals.Helpers;
 
 public class Genome implements Cloneable {
 	private GeneInt mHunger = new GeneInt(0, Config.cMaxEnergy, Config.cMaxEnergy / 2);
-	//TODO 1 REF move to Config
-	public GeneDouble mMutationRate = new GeneDouble(0.025, 0.025, 0.025);
 	// TODO 9 REF make this private
 	public ArrayList<IdvmCell> cellGrow = new ArrayList<IdvmCell>();
 	public HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> moveSequencesForState = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
@@ -30,6 +28,7 @@ public class Genome implements Cloneable {
 
 	public Genome() {
 		//TODO 1 FIX init sequences
+		//initSequences();
 	}
 
 	private void initSequences() {
@@ -46,7 +45,7 @@ public class Genome implements Cloneable {
 	}
 
 	public void naturalMutation() {
-		mutate(mMutationRate.getValue());
+		mutate(Config.cMutationRate);
 	}
 
 	private void mutate(Double pMutationRate) {
@@ -83,7 +82,6 @@ public class Genome implements Cloneable {
 	private ArrayList<iGene> getGeneCollection() {
 		ArrayList<iGene> lGenes = new ArrayList<iGene>();
 		lGenes.add(mHunger);
-		lGenes.add(mMutationRate);
 
 		for (iGene iGene : cellGrow) {
 			lGenes.add(iGene);
@@ -109,10 +107,11 @@ public class Genome implements Cloneable {
 		Genome lClone = new Genome();
 
 		lClone.setHunger(mHunger.getValue());
-
+		lClone.cellGrow.clear();
 		for (IdvmCell iCell : cellGrow)
 			lClone.cellGrow.add((IdvmCell) iCell.clone());
 
+		lClone.moveSequencesForState.clear();
 		for (IdvmState iState : IdvmState.values()) {
 			ArrayList<MoveDecisionsProbability> lNewSequence = new ArrayList<MoveDecisionsProbability>();
 			assertNotNull(moveSequencesForState);
