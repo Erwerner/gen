@@ -11,17 +11,19 @@ import ui.console.monitor.ModelMonitorIdvm;
 
 public class runCrossover {
 	static ArrayList<Thread> mThreads = new ArrayList<Thread>();
-	private static final int cTopFittest = 16;
+	private static final int cTopFittest = 4;
 
 	public static void main(String[] args) throws CloneNotSupportedException, InterruptedException {
 		System.out.println("Init");
 		Genome lBestOfLastGeneration = new Genome().forceMutation();
 		ArrayList<Idvm> lPopulation = new ArrayList<Idvm>();
 		lPopulation = initializePopulation();
-		int iGeneration=0;
+		int iGeneration = 0;
 		while (true) {
-			if(iGeneration<12)lBestOfLastGeneration=null;
+			if (iGeneration < 25 || iGeneration % 5 != 0)
+				lBestOfLastGeneration = null;
 			lPopulation = runPopulation(lPopulation, lBestOfLastGeneration);
+			System.out.println("Generation finished: " + iGeneration);
 			ArrayList<Idvm> lFittestIdvm = evaluateFitness(lPopulation);
 			checkFitness(lFittestIdvm);
 			lBestOfLastGeneration = (Genome) lFittestIdvm.get(lFittestIdvm.size() - 1).getGenomeOrigin().clone();
@@ -105,12 +107,12 @@ public class runCrossover {
 			IdvmExecutionThread lIdvmRunner = new IdvmExecutionThread((Genome) iIdvm.getGenomeOrigin().clone());
 			Thread lThread = new Thread(lIdvmRunner);
 			lThread.start();
-			mThreads.add(lThread);
+			//lThread.join();mThreads.add(lThread);
 			mIdvmExecutionThread.add(lIdvmRunner);
 		}
 		ModelMonitorIdvm lMonitor = new ModelMonitorIdvm();
-		if(pBestOfLastGeneration!=null)
-		lMonitor.runGenome(pBestOfLastGeneration);
+		if (pBestOfLastGeneration != null)
+			lMonitor.runGenome(pBestOfLastGeneration);
 		for (Thread iThread : mThreads) {
 			iThread.join();
 		}
@@ -122,7 +124,7 @@ public class runCrossover {
 
 	private static ArrayList<Idvm> initializePopulation() {
 		ArrayList<Idvm> lPopulation = new ArrayList<Idvm>();
-		for (int iIdvmCount = 0; iIdvmCount < 8000; iIdvmCount++) {
+		for (int iIdvmCount = 0; iIdvmCount < 4000; iIdvmCount++) {
 			lPopulation.add(new Idvm(new Genome().forceMutation()));
 		}
 		return lPopulation;

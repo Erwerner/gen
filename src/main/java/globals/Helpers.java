@@ -24,4 +24,8 @@ public class Helpers {
 	public static int rndInt(int pMax) {
 		return mRandom.nextInt(pMax + 1);
 	}
+
+	public static Double rndDouble(Double pMin, Double pMax) {
+		return pMin + (pMax - pMin) * mRandom.nextDouble();
+	}
 }

@@ -8,10 +8,8 @@ public class GeneInt implements iGene {
 	private int pMin;
 	private int mValue;
 
-	public void mutate(Double pMutationRate) {
-		// TODO FIX add mutation rate
-		int lRnd = ThreadLocalRandom.current().nextInt(pMin, pMax + 1);
-		mValue = lRnd;
+	public void mutate() {
+		mValue = ThreadLocalRandom.current().nextInt(pMin, pMax + 1);
 	}
 
 	public GeneInt(int pPMin, int pPMax, int pStartValue) {

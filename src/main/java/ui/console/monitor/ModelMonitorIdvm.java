@@ -25,7 +25,7 @@ public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 	iSoup mSoup;
 
 	public void run() {
-		Genome mGenome = initializeGenome();
+		Genome mGenome = initializeGenome().forceMutation();
 		
 			runGenome((Genome) mGenome);
 	}

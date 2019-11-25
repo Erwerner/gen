@@ -58,7 +58,7 @@ public class Idvm extends Block implements iIdvm {
 		mMovementSequences.put(pState, lMoveProbability);
 	}
 
-	// TODO REF Class Cell Grid
+	// TODO 3 REF Class Cell Grid
 	private void grow() {
 		if (mCellGrow.size() == 0)
 			return;
@@ -113,6 +113,7 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	// TODO REF Class Cell Grid
+	//TODO 3 IMPL cell type connection
 	public ArrayList<iBlock> getUsedBlocks() {
 		ArrayList<iBlock> lBlocks = new ArrayList<iBlock>();
 		for (IdvmCell[] iRow : mCellGrid) {
@@ -139,6 +140,7 @@ public class Idvm extends Block implements iIdvm {
 		move();
 	}
 
+	//TODO 4 IMPL turn
 	@SuppressWarnings("unused")
 	private void move() {
 		for (iBlock iCount : getUsedBlocks(BlockType.MOVE)) {
@@ -173,6 +175,7 @@ public class Idvm extends Block implements iIdvm {
 		}
 	}
 
+	//TODO 4 IMPL defence
 	public void interactWithEnemy(Enemy pEnemy) {
 		killCell(pEnemy.getPos());
 	}

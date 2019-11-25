@@ -26,7 +26,9 @@ public class Enemy extends Block {
 		while (true)
 			try {
 				Pos lNewPos;
-				Pos lDetectIdvmPos = detectIdvmPos();
+				Pos lDetectIdvmPos = null;
+				if (Helpers.checkChance(0.8))
+					lDetectIdvmPos = detectIdvmPos();
 				if (lDetectIdvmPos != null) {
 					lNewPos = lDetectIdvmPos;
 				} else {
@@ -40,6 +42,7 @@ public class Enemy extends Block {
 			}
 	}
 
+	// REF move to BlockGrid
 	private Pos detectIdvmPos() {
 		for (int x = -1; x <= 1; x++)
 			for (int y = -1; y <= 1; y++) {
@@ -60,7 +63,7 @@ public class Enemy extends Block {
 							break;
 						}
 					} catch (PosIsOutOfGrid e) {
-						// TODO Auto-generated cat
+						// No grid position
 					}
 				}
 			}

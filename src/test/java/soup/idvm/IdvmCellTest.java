@@ -20,15 +20,8 @@ public class IdvmCellTest {
 	@Test
 	public void mutates() {
 		initInvalidCut();
-		cut.mutate(1.0);
+		cut.mutate();
 		checkCutMutatedValid();
-	}
-	@Test
-	public void chanceZeroDoesntMutate() {
-		initInvalidCut();
-		cut.mutate(0.0);
-		assertEquals(BlockType.NOTHING, cut.getBlockType());
-		assertEquals(new Pos(10,10), cut.getPosOnIdvm());
 	}
 
 	private void checkCutMutatedValid() {
