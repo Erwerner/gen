@@ -6,6 +6,7 @@ import core.soup.idvm.Idvm;
 import core.soup.idvm.iIdvm;
 import globals.Config;
 
+// TODO 2 Test Class
 public class BlockGrid {
 	private iBlock[][] mGrid;
 

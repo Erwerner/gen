@@ -14,7 +14,7 @@ import core.soup.block.BlockGrid;
 import core.soup.block.BlockType;
 import core.soup.block.iBlock;
 
-//TODO 3 Test Class
+//TODO 2 Test Class
 public class IdvmSensor {
 
 	private BlockGrid mBlockGrid;

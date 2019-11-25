@@ -12,15 +12,14 @@ import core.soup.block.BlockGrid;
 import core.soup.block.BlockType;
 import core.soup.block.iBlock;
 
+//TODO 2 Test Class
 public class IdvmMoveCalculation {
 
-	private BlockGrid mBlockGrid;
 	private Direction mCurrentDirection = Direction.NORTH;
 	private Decisions mCalculatedDecision = Decisions.UP;
 
 	public IdvmMoveCalculation(BlockGrid pBlockGrid) {
 		super();
-		mBlockGrid = pBlockGrid;
 	}
 
 	public Pos calcPosFromDirection(Direction pDirection, Pos pIdvmPos, ArrayList<iBlock> pIdvmBlocks)

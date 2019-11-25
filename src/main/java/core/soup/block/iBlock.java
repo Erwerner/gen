@@ -9,7 +9,7 @@ public interface iBlock {
 
 	Pos getPos();
 
-	// TODO 3 REF move to new interface iLiving
+	// TODO 1 REF move to new interface iLiving
 	void step();
 
 	void setNull();

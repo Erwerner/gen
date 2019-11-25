@@ -16,6 +16,7 @@ import globals.Helpers;
 
 public class Genome implements Cloneable {
 	private GeneInt mHunger = new GeneInt(0, Config.cMaxEnergy, Config.cMaxEnergy / 2);
+	//TODO 1 REF move to Config
 	public GeneDouble mMutationRate = new GeneDouble(0.025, 0.025, 0.025);
 	// TODO 9 REF make this private
 	public ArrayList<IdvmCell> cellGrow = new ArrayList<IdvmCell>();
@@ -28,7 +29,7 @@ public class Genome implements Cloneable {
 	}
 
 	public Genome() {
-		//TODO 4 FIX init sequences
+		//TODO 1 FIX init sequences
 	}
 
 	private void initSequences() {
