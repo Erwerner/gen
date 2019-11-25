@@ -4,15 +4,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import core.datatypes.Decisions;
 import core.datatypes.Pos;
 import core.exceptions.PosIsOutOfGrid;
-import core.exceptions.WrongState;
 import core.soup.block.iBlock;
 import core.soup.idvm.IdvmState;
 import core.soup.idvm.Sensor;
 import ui.mvc.Model;
 import ui.mvc.View;
+import ui.presenter.iPresentDevIdvmStats;
 import ui.presenter.iPresentIdvm;
 import ui.presenter.iPresentSoup;
 
@@ -30,11 +29,13 @@ public class ViewConsoleMonitorIdvm extends View {
 	private static final int cViewSize = 25;
 	private iPresentIdvm mIdvm;
 	private iPresentSoup mSoup;
+	private iPresentDevIdvmStats mIdvStats;
 
 	public ViewConsoleMonitorIdvm(Model pModel) {
 		super(pModel);
 		mSoup = (iPresentSoup) pModel.getPresenter(iPresentSoup.class);
 		mIdvm = (iPresentIdvm) pModel.getPresenter(iPresentIdvm.class);
+		mIdvStats = (iPresentDevIdvmStats) pModel.getPresenter(iPresentDevIdvmStats.class);
 	}
 
 	public void update() {
@@ -63,8 +64,7 @@ public class ViewConsoleMonitorIdvm extends View {
 		}
 	}
 
-	private String getCharForBlock(Pos pPos, HashMap<Pos, Sensor> pDetectedPos)
-			throws PosIsOutOfGrid {
+	private String getCharForBlock(Pos pPos, HashMap<Pos, Sensor> pDetectedPos) throws PosIsOutOfGrid {
 		String lBlockChar = " ";
 		iBlock lBlock = mSoup.getBlock(pPos);
 		if (lBlock != null) {
@@ -120,7 +120,6 @@ public class ViewConsoleMonitorIdvm extends View {
 		System.out.print("Steps: " + mIdvm.getStepCount());
 		System.out.print(" Alive: " + mIdvm.isAlive());
 		System.out.print(" State: " + mIdvm.getState());
-		System.out.print(" Pos: " + mIdvm.getPos());
 		System.out.println();
 		for (int x = 1; x <= mIdvm.getEnergyCount(); x++)
 			System.out.print("*");

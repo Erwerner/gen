@@ -2,10 +2,12 @@ package core.soup.block;
 
 import core.datatypes.Pos;
 import core.exceptions.PosIsOutOfGrid;
+import core.soup.idvm.Idvm;
 import core.soup.idvm.iIdvm;
 import globals.Config;
 
-public class BlockGrid implements iBlockGrid {
+// TODO 2 Test Class
+public class BlockGrid {
 	private iBlock[][] mGrid;
 
 	public BlockGrid() {
@@ -53,6 +55,30 @@ public class BlockGrid implements iBlockGrid {
 		for (int x = 0; x < Config.soupSize; x++) {
 			for (int y = 0; y < Config.soupSize; y++) {
 				mGrid[x][y] = null;
+			}
+		}
+	}
+
+	public void detectCollisions(Idvm pIdvm) {
+		for (iBlock iBlock : pIdvm.getUsedBlocks()) {
+			Pos iPos = iBlock.getPos();
+			iBlock lGridBlock;
+			try {
+				lGridBlock = getBlock(iPos);
+				if (lGridBlock != null) {
+					switch (lGridBlock.getBlockType()) {
+					case FOOD:
+						pIdvm.interactWithFood((Food) lGridBlock);
+						lGridBlock.setNull();
+						break;
+					case ENEMY:
+						pIdvm.interactWithEnemy((Enemy) lGridBlock);
+						break;
+					default:
+						break;
+					}
+				}
+			} catch (PosIsOutOfGrid e) {
 			}
 		}
 	}

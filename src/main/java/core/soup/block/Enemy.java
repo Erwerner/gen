@@ -1,17 +1,15 @@
 package core.soup.block;
 
-import java.util.Random;
-
-import core.datatypes.Decisions;
+import core.datatypes.Direction;
 import core.datatypes.Pos;
 import core.exceptions.PosIsOutOfGrid;
 import globals.Helpers;
 
 public class Enemy extends Block {
-	Decisions mCurrentDirection;
-	private iBlockGrid mBlockGrid;
+	Direction mCurrentDirection;
+	private BlockGrid mBlockGrid;
 
-	public Enemy(iBlockGrid pBlockGrid) {
+	public Enemy(BlockGrid pBlockGrid) {
 		super(BlockType.ENEMY);
 		setRandomDirection();
 		mBlockGrid = pBlockGrid;
@@ -54,11 +52,13 @@ public class Enemy extends Block {
 						if (lDetectedBlock == null)
 							continue;
 						switch (lDetectedBlock.getBlockType()) {
-						case DEFENCE:
 						case LIFE:
 						case SENSOR:
 						case MOVE:
 							return lDetectPos;
+						case DEFENCE:
+							Direction lDirectionEscape = mPos.getDircetionTo(lDetectPos).opposite();
+							return mPos.getPosFromDirection(lDirectionEscape);
 						default:
 							break;
 						}
@@ -76,8 +76,7 @@ public class Enemy extends Block {
 	}
 
 	private void setRandomDirection() {
-		Decisions[] lDirections = { Decisions.UP, Decisions.DOWN, Decisions.LEFT, Decisions.RIGHT, };
-		mCurrentDirection = (Decisions) Helpers.rndArrayEntry(lDirections);
+		mCurrentDirection = (Direction) Helpers.rndArrayEntry(Direction.values());
 	}
 
 }

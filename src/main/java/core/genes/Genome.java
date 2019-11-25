@@ -1,5 +1,7 @@
 package core.genes;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -8,15 +10,14 @@ import core.datatypes.Decisions;
 import core.datatypes.Pos;
 import core.soup.block.BlockType;
 import core.soup.block.IdvmCell;
-import core.soup.idvm.Idvm;
 import core.soup.idvm.IdvmState;
 import globals.Config;
 import globals.Helpers;
 
 public class Genome implements Cloneable {
-	private GeneInt mHunger = new GeneInt(0, Config.cMaxEnergy, 50);
-	// TODO 0 IMPL make mutation rate a gene
-	public GeneDouble mMutationRate = new GeneDouble(0.0, 1.0, 0.005);
+	private GeneInt mHunger = new GeneInt(0, Config.cMaxEnergy, Config.cMaxEnergy / 2);
+	//TODO 1 REF move to Config
+	public GeneDouble mMutationRate = new GeneDouble(0.025, 0.025, 0.025);
 	// TODO 9 REF make this private
 	public ArrayList<IdvmCell> cellGrow = new ArrayList<IdvmCell>();
 	public HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> moveSequencesForState = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
@@ -28,9 +29,9 @@ public class Genome implements Cloneable {
 	}
 
 	public Genome() {
+		//TODO 1 FIX init sequences
 	}
 
-	//TODO 2 FIX for UT
 	private void initSequences() {
 		cellGrow = new ArrayList<IdvmCell>();
 		moveSequencesForState = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
@@ -52,7 +53,6 @@ public class Genome implements Cloneable {
 		ArrayList<iGene> lGenes;
 		lGenes = getGeneCollection();
 
-		// TODO REF check mutation rate here
 		for (iGene iGene : lGenes)
 			if (Helpers.checkChance(pMutationRate))
 				iGene.mutate();
@@ -84,6 +84,7 @@ public class Genome implements Cloneable {
 		ArrayList<iGene> lGenes = new ArrayList<iGene>();
 		lGenes.add(mHunger);
 		lGenes.add(mMutationRate);
+
 		for (iGene iGene : cellGrow) {
 			lGenes.add(iGene);
 		}
@@ -114,6 +115,7 @@ public class Genome implements Cloneable {
 
 		for (IdvmState iState : IdvmState.values()) {
 			ArrayList<MoveDecisionsProbability> lNewSequence = new ArrayList<MoveDecisionsProbability>();
+			assertNotNull(moveSequencesForState);
 			for (MoveDecisionsProbability iOriginProbability : moveSequencesForState.get(iState)) {
 				MoveDecisionsProbability lNewMovePorobability = (MoveDecisionsProbability) iOriginProbability.clone();
 				lNewSequence.add(lNewMovePorobability);

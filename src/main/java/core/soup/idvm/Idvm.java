@@ -5,68 +5,62 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import core.datatypes.Decisions;
+import core.datatypes.Direction;
 import core.datatypes.Pos;
 import core.exceptions.PosIsOutOfGrid;
 import core.genes.Genome;
 import core.genes.MoveDecisionsProbability;
 import core.soup.block.Block;
+import core.soup.block.BlockGrid;
 import core.soup.block.BlockType;
 import core.soup.block.Enemy;
 import core.soup.block.Food;
 import core.soup.block.IdvmCell;
 import core.soup.block.iBlock;
-import core.soup.block.iBlockGrid;
 import globals.Config;
 
 public class Idvm extends Block implements iIdvm {
 	Genome mGenomeOrigin;
-	private IdvmCell[][] mCellGrid = new IdvmCell[4][4];
+	Genome mGenomeUsing;
+	private IdvmCellGrid mCellGrid = new IdvmCellGrid();
 	private HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> mMovementSequences = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
-	private ArrayList<IdvmCell> mCellGrow;
-	private int mHunger;
-	private iBlockGrid mBlockGrid;
+	private BlockGrid mBlockGrid;
 	private int mStepCount;
-	private int mEnergy = Config.cFoodEnergy;
-	private iIdvmMoveCalculation mMoveCalculation;
+	private int mEnergy = Config.cMaxEnergy / 3;
+	private IdvmMoveCalculation mMoveCalculation;
 	private IdvmSensor mIdvmSensor;
 
 	public Idvm(Genome pGenome) {
 		super(BlockType.IDVM);
-		mPos = new Pos(0, 0);
 		try {
+			mPos = new Pos(0, 0);
 			mGenomeOrigin = (Genome) pGenome.clone();
+			mGenomeUsing = (Genome) pGenome.clone();
+
+			grow();
+			grow();
+			grow();
+			grow();
+
+			for (IdvmState iState : pGenome.moveSequencesForState.keySet()) {
+				@SuppressWarnings("unchecked")
+				ArrayList<MoveDecisionsProbability> lMoveProbability = (ArrayList<MoveDecisionsProbability>) pGenome.moveSequencesForState
+						.get(iState).clone();
+				mMovementSequences.put(iState, lMoveProbability);
+			}
+
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException();
 		}
-		mCellGrow = pGenome.cellGrow;
-		mHunger = pGenome.getHunger().getValue();
-
-		grow();
-		grow();
-		grow();
-		grow();
-
-		for (IdvmState iState : pGenome.moveSequencesForState.keySet()) {
-			addaptMovementSequence(iState, pGenome);
-		}
 	}
 
-	@SuppressWarnings("unchecked")
-	private void addaptMovementSequence(IdvmState pState, Genome pGenome) {
-		ArrayList<MoveDecisionsProbability> lMoveProbability = (ArrayList<MoveDecisionsProbability>) pGenome.moveSequencesForState
-				.get(pState).clone();
-		mMovementSequences.put(pState, lMoveProbability);
-	}
-
-	// TODO 3 REF Class Cell Grid
 	private void grow() {
-		if (mCellGrow.size() == 0)
+		if (mGenomeUsing.cellGrow.size() == 0)
 			return;
-		IdvmCell lCell = mCellGrow.get(0);
-		mCellGrow.remove(0);
-		Pos lPos = lCell.getPosOnIdvm();
-		mCellGrid[lPos.x + 1][lPos.y + 1] = lCell;
-		refreshCellPos(lPos.x + 1, lPos.y + 1);
+		IdvmCell lCell = mGenomeUsing.cellGrow.get(0);
+		mGenomeUsing.cellGrow.remove(0);
+		mCellGrid.appendCell(lCell, mPos);
+		popAllSequences();
 	}
 
 	public boolean isAlive() {
@@ -81,72 +75,46 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	public Boolean isHungry() {
-		return mEnergy < mHunger;
+		return mEnergy < mGenomeUsing.getHunger().getValue();
 	}
 
+	//TODO 4 REF move to cell grid
 	public iBlock setPosition(Pos pPos) {
 		super.setPosition(pPos);
 		for (int x = 0; x <= 3; x++) {
 			for (int y = 0; y <= 3; y++) {
-				refreshCellPos(x, y);
+				mCellGrid.refreshCellPosOnGrid(x, y, mPos);
 			}
 		}
 		return this;
 	}
 
-	// TODO REF Class Cell Grid
-	private void refreshCellPos(int pCellX, int pCellY) {
-		IdvmCell lCell = mCellGrid[pCellX][pCellY];
-		if (lCell != null) {
-			Pos lNewPos = new Pos(mPos.x - 1 + pCellX, mPos.y - 1 + pCellY);
-			lCell.setPosition(lNewPos);
-		}
-	}
-
-	// TODO REF Class Cell Grid
+	// TODO 4 REF move to cell grid
 	public ArrayList<iBlock> getUsedBlocks(BlockType pBlockType) {
 		ArrayList<iBlock> lBlocks = new ArrayList<iBlock>();
-		for (iBlock iBlock : getUsedBlocks())
+		for (iBlock iBlock : mCellGrid.getGridBlocks())
 			if (iBlock.getBlockType() == pBlockType)
 				lBlocks.add(iBlock);
 		return lBlocks;
 	}
 
-	// TODO REF Class Cell Grid
-	//TODO 3 IMPL cell type connection
-	public ArrayList<iBlock> getUsedBlocks() {
-		ArrayList<iBlock> lBlocks = new ArrayList<iBlock>();
-		for (IdvmCell[] iRow : mCellGrid) {
-			for (iBlock iCell : iRow) {
-				if (iCell != null) {
-					lBlocks.add(iCell);
-				}
-			}
-		}
-		return lBlocks;
-	}
-
-	// TODO REF Class Cell Grid
-	public void killCell(Pos pPos) {
-		mCellGrid[pPos.x - mPos.x + 1][pPos.y - mPos.y + 1] = null;
-	}
 
 	public void step() {
 		mStepCount++;
 		for (iBlock iCount : getUsedBlocks(BlockType.LIFE)) {
 			mEnergy--;
-			mEnergy--;			
+			mEnergy--;
 		}
 		move();
 	}
 
-	//TODO 4 IMPL turn
+	// TODO 4 IMPL turn
 	@SuppressWarnings("unused")
 	private void move() {
 		for (iBlock iCount : getUsedBlocks(BlockType.MOVE)) {
 			for (int i = 0; i < 10; i++) {
 				try {
-					Pos lNewPos = mMoveCalculation.getMovingPosition(this, mMovementSequences);
+					Pos lNewPos = mMoveCalculation.getMovingPosition(this, mMovementSequences, mIdvmSensor);
 					if (lNewPos != mPos)
 						mEnergy--;
 					setPosition(lNewPos);
@@ -159,10 +127,9 @@ public class Idvm extends Block implements iIdvm {
 
 	public void interactWithFood(Food pFood) {
 		mEnergy = mEnergy + Config.cFoodEnergy;
-		if(mEnergy>Config.cMaxEnergy)
+		if (mEnergy > Config.cMaxEnergy)
 			mEnergy = Config.cMaxEnergy;
 		grow();
-		popAllSequences();
 	}
 
 	private void popAllSequences() {
@@ -175,13 +142,34 @@ public class Idvm extends Block implements iIdvm {
 		}
 	}
 
-	//TODO 4 IMPL defence
+	// TODO 4 IMPL defence
 	public void interactWithEnemy(Enemy pEnemy) {
-		killCell(pEnemy.getPos());
+		Pos lKillPos = new Pos(pEnemy.getPos().x - mPos.x + 1, pEnemy.getPos().y - mPos.y + 1);
+		mCellGrid.removeCell(lKillPos);
 	}
 
+	// TODO 3 IMPL dynamic target order
+	// TODO 4 IMPL sensor range
+	// TODO 6 IMPL add hunger and blind
+	// TODO 6 IMPL idle and blind hunger
+	// if (pDetectedPos.size() == 0)
+	// return IdvmState.BLIND;
 	public IdvmState getState() {
-		return mIdvmSensor.getState(getDetectedPos(), isHungry());
+		HashMap<Pos, Sensor> lDetectedPos = getDetectedPos();
+		if (mIdvmSensor.detectSurroundingBlockType(BlockType.ENEMY, lDetectedPos))
+			// if (pIsHungry) {
+			// return IdvmState.ENEMY_HUNGER;
+			// } else {
+			return IdvmState.ENEMY;
+		// }
+		if (mIdvmSensor.detectSurroundingBlockType(BlockType.FOOD, lDetectedPos))
+			// if (pIsHungry) {
+			// return IdvmState.FOOD_HUNGER;
+			// } else {
+			return IdvmState.FOOD;
+		// }
+		return IdvmState.IDLE;
+
 	}
 
 	public HashMap<Pos, Sensor> getDetectedPos() {
@@ -189,7 +177,7 @@ public class Idvm extends Block implements iIdvm {
 		return mIdvmSensor.getDetectedPos(lSensors);
 	}
 
-	public void setBlockGrid(iBlockGrid pBlockGrid) {
+	public void setBlockGrid(BlockGrid pBlockGrid) {
 		mBlockGrid = pBlockGrid;
 		mMoveCalculation = new IdvmMoveCalculation(mBlockGrid);
 		mIdvmSensor = new IdvmSensor(mBlockGrid);
@@ -199,33 +187,8 @@ public class Idvm extends Block implements iIdvm {
 		return mStepCount;
 	}
 
-	// TODO REF Class Block Grid
-	public void detectCollisions() {
-		for (iBlock iBlock : getUsedBlocks()) {
-			Pos iPos = iBlock.getPos();
-			iBlock lGridBlock;
-			try {
-				lGridBlock = mBlockGrid.getBlock(iPos);
-				if (lGridBlock != null) {
-					switch (lGridBlock.getBlockType()) {
-					case FOOD:
-						interactWithFood((Food) lGridBlock);
-						lGridBlock.setNull();
-						break;
-					case ENEMY:
-						interactWithEnemy((Enemy) lGridBlock);
-						break;
-					default:
-						break;
-					}
-				}
-			} catch (PosIsOutOfGrid e) {
-			}
-		}
-	}
-
-	public Decisions getTargetDirection() {
-		return mMoveCalculation.getTargetDirection(getState(), getDetectedPos());
+	public Direction getTargetDirection() {
+		return mIdvmSensor.getTargetDirection(getState(), getUsedBlocks(BlockType.SENSOR));
 	}
 
 	public int getEnergyCount() {
@@ -238,5 +201,14 @@ public class Idvm extends Block implements iIdvm {
 
 	public Genome getGenomeOrigin() {
 		return mGenomeOrigin;
+	}
+
+	// TODO 7 REF delte
+	public Double getMutationRate() {
+		return mGenomeUsing.mMutationRate.getValue();
+	}
+	// TODO 3 IMPL cell type connection
+	public ArrayList<iBlock> getUsedBlocks() {
+		return mCellGrid.getGridBlocks();
 	}
 }

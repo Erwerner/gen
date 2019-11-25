@@ -4,6 +4,7 @@ import core.datatypes.Pos;
 import core.exceptions.PosIsOutOfGrid;
 import core.soup.idvm.iIdvm;
 
+// TODO 1 REF delete
 public interface iBlockGrid {
 
 	iBlock getBlock(Pos pos) throws PosIsOutOfGrid;

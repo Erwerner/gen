@@ -8,19 +8,18 @@ import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 
-import core.datatypes.Decisions;
+import core.datatypes.Direction;
 import core.datatypes.Pos;
 import core.exceptions.PosIsOutOfGrid;
 import core.soup.Soup;
 import core.soup.block.BlockType;
 import core.soup.block.iBlock;
-import core.soup.idvm.iIdvm;
+import core.soup.idvm.Idvm;
 import utils.TestMock;
-import globals.Config;
 
 public class SoupTest {
 	Soup cut;
-	private iIdvm mIdvm;
+	private Idvm mIdvm;
 
 	@Before
 	public void setUp() throws Exception {
@@ -49,9 +48,9 @@ public class SoupTest {
 				continue;
 			mIdvm.setPosition(iPos);
 			cut.step();
-			mIdvm.setPosition(iPos.getPosFromDirection(Decisions.RIGHT));
+			mIdvm.setPosition(iPos.getPosFromDirection(Direction.EAST));
 			cut.step();
-			mIdvm.setPosition(iPos.getPosFromDirection(Decisions.RIGHT));
+			mIdvm.setPosition(iPos.getPosFromDirection(Direction.EAST));
 			cut.step();
 			assertNull(cut.getBlock(iPos));
 			return;

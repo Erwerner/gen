@@ -1,6 +1,7 @@
 package soup.block;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -61,15 +62,15 @@ public class BlockGridTest {
 			if (cut.getBlock(iPos) != null)
 				lCount++;
 		}
-		assertEquals(4, lCount);	
+		assertEquals(4, lCount);
 	}
-	
+
 	@Test
 	public void idvmInitAtMidPos() throws PosIsOutOfGrid {
 		iIdvm lIdvm = TestMock.getIdvmMock();
 		cut.addInitialIdvm(lIdvm);
 		Pos lMidPos = lIdvm.getPos();
 		iBlock lMidBlock = cut.getBlock(lMidPos);
-		assertEquals(BlockType.LIFE,lMidBlock.getBlockType());
+		assertEquals(BlockType.LIFE, lMidBlock.getBlockType());
 	}
 }
