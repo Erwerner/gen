@@ -27,8 +27,6 @@ public class Genome implements Cloneable {
 	}
 
 	public Genome() {
-		//TODO 1 FIX init sequences
-		//initSequences();
 	}
 
 	private void initSequences() {

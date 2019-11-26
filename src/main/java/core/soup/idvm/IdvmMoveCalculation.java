@@ -54,7 +54,8 @@ public class IdvmMoveCalculation {
 		Direction lNewDirection = null;
 		switch (mCalculatedDecision) {
 		case CURRENT:
-			return mCurrentDirection;
+			lNewDirection = mCurrentDirection;
+			break;
 		case CURRENT_OPPOSITE:
 			lNewDirection = mCurrentDirection.opposite();
 			break;
