@@ -9,13 +9,12 @@ import core.datatypes.Pos;
 import core.exceptions.PosIsOutOfGrid;
 import core.genes.MoveDecisionsProbability;
 import core.soup.block.BlockGrid;
-import core.soup.block.BlockType;
 import core.soup.block.iBlock;
 
-//TODO 2 Test Class
 public class IdvmMoveCalculation {
 
 	private Direction mCurrentDirection = Direction.NORTH;
+	//TODO REF move to Decision class
 	private Decisions mCalculatedDecision = Decisions.UP;
 
 	public IdvmMoveCalculation(BlockGrid pBlockGrid) {
@@ -34,16 +33,12 @@ public class IdvmMoveCalculation {
 		return lNewPos;
 	}
 
-//TODO add blind
 	public Pos getMovingPosition(iIdvm pIdvm,
-			HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> pMovementSequences, IdvmSensor pIdvmSensor)
+			HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> pMovementSequences, Direction pTargetDirection)
 			throws PosIsOutOfGrid {
-		Direction lTargetDirection = mCurrentDirection;
-		IdvmState lState = pIdvm.getState();
-		if (lState != IdvmState.IDLE) { // && lState!= IdvmState.BLIND) {
-			lTargetDirection = pIdvmSensor.getTargetDirection(lState, pIdvm.getUsedBlocks(BlockType.SENSOR));
-		}
-		Direction lDirection = calcMovingDirection(pMovementSequences, lState, lTargetDirection);
+		if (pTargetDirection == null)
+			pTargetDirection = mCurrentDirection;
+		Direction lDirection = calcMovingDirection(pMovementSequences, pIdvm.getState(), pTargetDirection);
 
 		Pos lNewPos = calcPosFromDirection(lDirection, pIdvm.getPos(), pIdvm.getUsedBlocks());
 		return lNewPos;
@@ -53,6 +48,7 @@ public class IdvmMoveCalculation {
 			IdvmState lState, Direction pTargetDirection) {
 		ArrayList<MoveDecisionsProbability> lSequence = pMovementSequences.get(lState);
 		try {
+			//TODO REF move to Decision class
 			mCalculatedDecision = lSequence.get(0).getDecision();
 		} catch (Throwable e) {
 			e.printStackTrace();
@@ -101,7 +97,8 @@ public class IdvmMoveCalculation {
 		return lNewDirection;
 	}
 
-	public Decisions getCalculatedDirection() {
+	//TODO 2 REF move to Decision class
+	public Decisions getCalculatedDecision() {
 		return mCalculatedDecision;
 	}
 

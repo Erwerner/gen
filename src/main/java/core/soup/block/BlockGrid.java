@@ -6,7 +6,6 @@ import core.soup.idvm.Idvm;
 import core.soup.idvm.iIdvm;
 import globals.Config;
 
-// TODO 2 Test Class
 public class BlockGrid {
 	private iBlock[][] mGrid;
 
@@ -59,6 +58,7 @@ public class BlockGrid {
 		}
 	}
 
+	//TOTO TEST with Mock
 	public void detectCollisions(Idvm pIdvm) {
 		for (iBlock iBlock : pIdvm.getUsedBlocks()) {
 			Pos iPos = iBlock.getPos();

@@ -6,6 +6,7 @@ import java.util.Collections;
 import core.genes.Crossover;
 import core.genes.Genome;
 import core.soup.idvm.Idvm;
+import devutils.Debug;
 import globals.Helpers;
 import ui.console.monitor.ModelMonitorIdvm;
 
@@ -26,6 +27,7 @@ public class runCrossover {
 			ArrayList<Idvm> lFittestIdvm = evaluateFitness(lPopulation);
 			checkFitness(lFittestIdvm);
 			lBestOfLastGeneration = (Genome) lFittestIdvm.get(lFittestIdvm.size() - 4).getGenomeOrigin().clone();
+			Debug.printCurrentChange();
 			System.out.println("Generation finished: " + iGeneration);
 			lPopulation = getOffsprings(lFittestIdvm);
 			iGeneration++;

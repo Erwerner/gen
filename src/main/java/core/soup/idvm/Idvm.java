@@ -78,7 +78,7 @@ public class Idvm extends Block implements iIdvm {
 		return mEnergy < mGenomeUsing.getHunger().getValue();
 	}
 
-	//TODO 4 REF move to cell grid
+	// TODO 4 REF move to cell grid
 	public iBlock setPosition(Pos pPos) {
 		super.setPosition(pPos);
 		for (int x = 0; x <= 3; x++) {
@@ -98,10 +98,10 @@ public class Idvm extends Block implements iIdvm {
 		return lBlocks;
 	}
 
-
 	public void step() {
 		mStepCount++;
-		for (@SuppressWarnings("unused") iBlock iCount : getUsedBlocks(BlockType.LIFE)) {
+		for (@SuppressWarnings("unused")
+		iBlock iCount : getUsedBlocks(BlockType.LIFE)) {
 			mEnergy--;
 			mEnergy--;
 		}
@@ -114,7 +114,14 @@ public class Idvm extends Block implements iIdvm {
 		for (iBlock iCount : getUsedBlocks(BlockType.MOVE)) {
 			for (int i = 0; i < 10; i++) {
 				try {
-					Pos lNewPos = mMoveCalculation.getMovingPosition(this, mMovementSequences, mIdvmSensor);
+					Direction lTargetDirection = null;
+					// Todo add blind
+					IdvmState lState = getState();
+					if (lState != IdvmState.IDLE) { // && lState!= IdvmState.BLIND) {
+						// TOTO test
+						lTargetDirection = mIdvmSensor.getTargetDirection(lState, getUsedBlocks(BlockType.SENSOR));
+					}
+					Pos lNewPos = mMoveCalculation.getMovingPosition(this, mMovementSequences, lTargetDirection);
 					if (lNewPos != mPos)
 						mEnergy--;
 					setPosition(lNewPos);
@@ -196,12 +203,13 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	public Decisions getCalculatedDirection() {
-		return mMoveCalculation.getCalculatedDirection();
+		return mMoveCalculation.getCalculatedDecision();
 	}
 
 	public Genome getGenomeOrigin() {
 		return mGenomeOrigin;
 	}
+
 	// TODO 3 IMPL cell type connection
 	public ArrayList<iBlock> getUsedBlocks() {
 		return mCellGrid.getGridBlocks();
