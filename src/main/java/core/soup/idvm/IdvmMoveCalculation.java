@@ -14,7 +14,6 @@ import core.soup.block.iBlock;
 public class IdvmMoveCalculation {
 
 	private Direction mCurrentDirection = Direction.NORTH;
-	//TODO REF move to Decision class
 	private Decisions mCalculatedDecision = Decisions.UP;
 
 	public IdvmMoveCalculation(BlockGrid pBlockGrid) {
@@ -48,7 +47,6 @@ public class IdvmMoveCalculation {
 			IdvmState lState, Direction pTargetDirection) {
 		ArrayList<MoveDecisionsProbability> lSequence = pMovementSequences.get(lState);
 		try {
-			//TODO REF move to Decision class
 			mCalculatedDecision = lSequence.get(0).getDecision();
 		} catch (Throwable e) {
 			e.printStackTrace();
@@ -97,7 +95,6 @@ public class IdvmMoveCalculation {
 		return lNewDirection;
 	}
 
-	//TODO 2 REF move to Decision class
 	public Decisions getCalculatedDecision() {
 		return mCalculatedDecision;
 	}

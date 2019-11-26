@@ -3,9 +3,10 @@ package core.soup.block;
 import core.datatypes.Direction;
 import core.datatypes.Pos;
 import core.exceptions.PosIsOutOfGrid;
+import core.soup.idvm.iLiving;
 import globals.Helpers;
 
-public class Enemy extends Block {
+public class Enemy extends Block implements iLiving{
 	Direction mCurrentDirection;
 	private BlockGrid mBlockGrid;
 
