@@ -114,13 +114,8 @@ public class Idvm extends Block implements iIdvm {
 		for (iBlock iCount : getUsedBlocks(BlockType.MOVE)) {
 			for (int i = 0; i < 10; i++) {
 				try {
-					Direction lTargetDirection = null;
-					// Todo add blind
 					IdvmState lState = getState();
-					if (lState != IdvmState.IDLE) { // && lState!= IdvmState.BLIND) {
-						// TOTO test
-						lTargetDirection = mIdvmSensor.getTargetDirection(lState, getUsedBlocks(BlockType.SENSOR));
-					}
+					Direction lTargetDirection = mIdvmSensor.getTargetDirection(lState, getUsedBlocks(BlockType.SENSOR));
 					Pos lNewPos = mMoveCalculation.getMovingPosition(this, mMovementSequences, lTargetDirection);
 					if (lNewPos != mPos)
 						mEnergy--;

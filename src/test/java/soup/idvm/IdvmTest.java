@@ -333,7 +333,6 @@ public class IdvmTest {
 		assertEquals(IdvmState.FOOD, cut.getState());
 	}
 
-	@Test(expected = WrongState.class)
 	public void targetIsNull() {
 		assertNull(cut.getTargetDirection());
 	}

@@ -14,7 +14,6 @@ import core.soup.block.BlockGrid;
 import core.soup.block.BlockType;
 import core.soup.block.iBlock;
 
-//TODO 2 Test Class
 public class IdvmSensor {
 
 	private BlockGrid mBlockGrid;
@@ -41,7 +40,7 @@ public class IdvmSensor {
 			lSearchBlock = BlockType.ENEMY;
 			break;
 		default:
-			throw new WrongState();
+			return null;
 		}
 
 		for (Entry<Pos, Sensor> iPos : lDetectedPos.entrySet()) {
@@ -58,6 +57,7 @@ public class IdvmSensor {
 		}
 		throw new WrongBlockType();
 	}
+	
 	public boolean detectSurroundingBlockType(BlockType pBlockType, HashMap<Pos, Sensor> pDetectedPos) {
 		for (Entry<Pos, Sensor> iPos : pDetectedPos.entrySet()) {
 			Pos lPos = iPos.getKey();
