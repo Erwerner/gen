@@ -101,7 +101,7 @@ public class Idvm extends Block implements iIdvm {
 
 	public void step() {
 		mStepCount++;
-		for (iBlock iCount : getUsedBlocks(BlockType.LIFE)) {
+		for (@SuppressWarnings("unused") iBlock iCount : getUsedBlocks(BlockType.LIFE)) {
 			mEnergy--;
 			mEnergy--;
 		}
@@ -201,11 +201,6 @@ public class Idvm extends Block implements iIdvm {
 
 	public Genome getGenomeOrigin() {
 		return mGenomeOrigin;
-	}
-
-	// TODO 7 REF delte
-	public Double getMutationRate() {
-		return mGenomeUsing.mMutationRate.getValue();
 	}
 	// TODO 3 IMPL cell type connection
 	public ArrayList<iBlock> getUsedBlocks() {

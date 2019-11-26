@@ -4,16 +4,15 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import ui.mvc.Model;
+import ui.mvc.View;
+import ui.presenter.iPresentIdvm;
+import ui.presenter.iPresentSoup;
 import core.datatypes.Pos;
 import core.exceptions.PosIsOutOfGrid;
 import core.soup.block.iBlock;
 import core.soup.idvm.IdvmState;
 import core.soup.idvm.Sensor;
-import ui.mvc.Model;
-import ui.mvc.View;
-import ui.presenter.iPresentDevIdvmStats;
-import ui.presenter.iPresentIdvm;
-import ui.presenter.iPresentSoup;
 
 public class ViewConsoleMonitorIdvm extends View {
 	public static final String ANSI_RESET = "\u001B[0m";
@@ -29,13 +28,11 @@ public class ViewConsoleMonitorIdvm extends View {
 	private static final int cViewSize = 25;
 	private iPresentIdvm mIdvm;
 	private iPresentSoup mSoup;
-	private iPresentDevIdvmStats mIdvStats;
 
 	public ViewConsoleMonitorIdvm(Model pModel) {
 		super(pModel);
 		mSoup = (iPresentSoup) pModel.getPresenter(iPresentSoup.class);
 		mIdvm = (iPresentIdvm) pModel.getPresenter(iPresentIdvm.class);
-		mIdvStats = (iPresentDevIdvmStats) pModel.getPresenter(iPresentDevIdvmStats.class);
 	}
 
 	public void update() {
@@ -64,7 +61,8 @@ public class ViewConsoleMonitorIdvm extends View {
 		}
 	}
 
-	private String getCharForBlock(Pos pPos, HashMap<Pos, Sensor> pDetectedPos) throws PosIsOutOfGrid {
+	private String getCharForBlock(Pos pPos, HashMap<Pos, Sensor> pDetectedPos)
+			throws PosIsOutOfGrid {
 		String lBlockChar = " ";
 		iBlock lBlock = mSoup.getBlock(pPos);
 		if (lBlock != null) {
@@ -92,6 +90,8 @@ public class ViewConsoleMonitorIdvm extends View {
 		case TARGET_SITE1:
 		case TARGET_SITE2:
 			lSensorChar = "~";
+			break;
+		default:
 			break;
 		}
 		return lSensorChar;

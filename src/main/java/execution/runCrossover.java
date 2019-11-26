@@ -26,7 +26,7 @@ public class runCrossover {
 			ArrayList<Idvm> lFittestIdvm = evaluateFitness(lPopulation);
 			checkFitness(lFittestIdvm);
 			lBestOfLastGeneration = (Genome) lFittestIdvm.get(lFittestIdvm.size() - 4).getGenomeOrigin().clone();
-			System.out.println("MutationRate " + lBestOfLastGeneration.mMutationRate.getValue() + " Generation finished: " + iGeneration);
+			System.out.println("Generation finished: " + iGeneration);
 			lPopulation = getOffsprings(lFittestIdvm);
 			iGeneration++;
 		}

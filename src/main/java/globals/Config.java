@@ -8,4 +8,5 @@ public class Config {
 	public static final int cMaxSequence = 100;
 	public static final int cMaxEnergy = 1200;
 	public static final int cFoodEnergy = 400;
+	public static final Double cMutationRate = 0.025;
 }
