@@ -115,7 +115,8 @@ public class Idvm extends Block implements iIdvm {
 			for (int i = 0; i < 10; i++) {
 				try {
 					IdvmState lState = getState();
-					Direction lTargetDirection = mIdvmSensor.getTargetDirection(lState, getUsedBlocks(BlockType.SENSOR));
+					Direction lTargetDirection = mIdvmSensor.getTargetDirection(lState,
+							getUsedBlocks(BlockType.SENSOR));
 					Pos lNewPos = mMoveCalculation.getMovingPosition(this, mMovementSequences, lTargetDirection);
 					if (lNewPos != mPos)
 						mEnergy--;
@@ -154,9 +155,9 @@ public class Idvm extends Block implements iIdvm {
 	// TODO 4 IMPL sensor range
 	// TODO 6 IMPL add hunger and blind
 	// TODO 6 IMPL idle and blind hunger
-	// if (pDetectedPos.size() == 0)
-	// return IdvmState.BLIND;
 	public IdvmState getState() {
+		//if (getUsedBlocks(BlockType.SENSOR).size() == 0)
+		//	return IdvmState.BLIND;
 		HashMap<Pos, Sensor> lDetectedPos = getDetectedPos();
 		if (mIdvmSensor.detectSurroundingBlockType(BlockType.ENEMY, lDetectedPos))
 			// if (pIsHungry) {
