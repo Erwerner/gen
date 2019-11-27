@@ -9,4 +9,6 @@ public class Config {
 	public static final int cMaxEnergy = 1200;
 	public static final int cFoodEnergy = 400;
 	public static final Double cMutationRate = 0.025;
+	public static final int cLifeEnergyCount = 2;
+	public static final int cSensorRange = 3;
 }

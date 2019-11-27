@@ -57,4 +57,12 @@ public class SoupTest {
 		}
 		fail();
 	}
+
+	@Test
+	public void stepMovesIdvm() throws PosIsOutOfGrid {
+		Pos lIdvmStartPos = mIdvm.getPos();
+		cut.step();
+		assertEquals(lIdvmStartPos.getPosFromDirection(Direction.WEST),
+				mIdvm.getPos());
+	}
 }
