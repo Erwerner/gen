@@ -35,10 +35,12 @@ public class CrossoverTest {
 
 		ArrayList<MoveDecisionsProbability> lFirstCrossoverSequence;
 		ArrayList<MoveDecisionsProbability> lSecondCrossoverSequence;
-		if (lActSequence.get(0).mPossibleDecisions == lGenome1Sequence.get(0).mPossibleDecisions) {
+		if (lActSequence.get(0).mPossibleDecisions.equals(lGenome1Sequence.get(0).mPossibleDecisions)) {
+			assertEquals(lActSequence.get(0).mPossibleDecisions, lGenome1Sequence.get(0).mPossibleDecisions);
 			lFirstCrossoverSequence = lGenome1Sequence;
 			lSecondCrossoverSequence = lGenome2Sequence;
 		} else {
+			assertEquals(lActSequence.get(0).mPossibleDecisions, lGenome2Sequence.get(0).mPossibleDecisions);
 			lFirstCrossoverSequence = lGenome2Sequence;
 			lSecondCrossoverSequence = lGenome1Sequence;
 		}
@@ -46,8 +48,7 @@ public class CrossoverTest {
 		for (int i = 0; i < Config.cMaxSequence; i++) {
 			if (lActSequence.get(i).mPossibleDecisions.equals(lFirstCrossoverSequence.get(i).mPossibleDecisions))
 				continue;
-			// TODO 4 Fix Test First entry is first Genome
-			// assertTrue(i > 0);
+			assertTrue(i > 0);
 			assertEquals(lSecondCrossoverSequence.get(i).mPossibleDecisions, lActSequence.get(i).mPossibleDecisions);
 		}
 	}

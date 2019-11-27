@@ -92,8 +92,8 @@ public class Idvm extends Block implements iIdvm {
 		mStepCount++;
 		for (@SuppressWarnings("unused")
 		iBlock iCount : getUsedBlocks(BlockType.LIFE)) {
-			mEnergy--;
-			mEnergy--;
+			for (int i = 0; i < Config.cLifeEnergyCount; i++)
+				mEnergy--;
 		}
 		move();
 	}
@@ -102,15 +102,18 @@ public class Idvm extends Block implements iIdvm {
 	@SuppressWarnings("unused")
 	private void move() {
 		for (iBlock iCount : getUsedBlocks(BlockType.MOVE)) {
+			IdvmState lState = getState();
+			Direction lTargetDirection = mIdvmSensor.getTargetDirection(lState,
+					getUsedBlocks(BlockType.SENSOR));
 			for (int i = 0; i < 10; i++) {
 				try {
-					IdvmState lState = getState();
-					Direction lTargetDirection = mIdvmSensor.getTargetDirection(lState, getUsedBlocks(BlockType.SENSOR));
-					Pos lNewPos = mMoveCalculation.getMovingPosition(this, mMovementSequences, lTargetDirection);
-					if (lNewPos != mPos)
+					Pos lNewPos = mMoveCalculation.getMovingPosition(this,
+							mMovementSequences, lTargetDirection);
+					if (!lNewPos.equals(mPos)) {
 						mEnergy--;
-					setPosition(lNewPos);
-					break;
+						setPosition(lNewPos);
+						break;
+					}
 				} catch (PosIsOutOfGrid e) {
 				}
 			}
@@ -125,7 +128,8 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	private void popAllSequences() {
-		for (Entry<IdvmState, ArrayList<MoveDecisionsProbability>> iSequence : mMovementSequences.entrySet()) {
+		for (Entry<IdvmState, ArrayList<MoveDecisionsProbability>> iSequence : mMovementSequences
+				.entrySet()) {
 			try {
 				iSequence.getValue().remove(0);
 			} catch (RuntimeException e) {
@@ -136,7 +140,8 @@ public class Idvm extends Block implements iIdvm {
 
 	// TODO 4 IMPL defence
 	public void interactWithEnemy(Enemy pEnemy) {
-		Pos lKillPos = new Pos(pEnemy.getPos().x - mPos.x + 1, pEnemy.getPos().y - mPos.y + 1);
+		Pos lKillPos = new Pos(pEnemy.getPos().x - mPos.x + 1,
+				pEnemy.getPos().y - mPos.y + 1);
 		mCellGrid.removeCell(lKillPos);
 	}
 
@@ -144,16 +149,20 @@ public class Idvm extends Block implements iIdvm {
 	// TODO 4 IMPL sensor range
 	// TODO 6 IMPL add hunger and blind
 	public IdvmState getState() {
+		// if (getUsedBlocks(BlockType.SENSOR).size() == 0)
+		// return IdvmState.BLIND;
 		HashMap<Pos, Sensor> lDetectedPos = getDetectedPos();
-		if (lDetectedPos.size() == 0)
-		 return IdvmState.BLIND;
-		if (mIdvmSensor.detectSurroundingBlockType(BlockType.ENEMY, lDetectedPos))
+		// if (pDetectedPos.size() == 0)
+		// return IdvmState.BLIND;
+		if (mIdvmSensor.detectSurroundingBlockType(BlockType.ENEMY,
+				lDetectedPos))
 			// if (pIsHungry) {
 			// return IdvmState.ENEMY_HUNGER;
 			// } else {
 			return IdvmState.ENEMY;
 		// }
-		if (mIdvmSensor.detectSurroundingBlockType(BlockType.FOOD, lDetectedPos))
+		if (mIdvmSensor
+				.detectSurroundingBlockType(BlockType.FOOD, lDetectedPos))
 			// if (pIsHungry) {
 			// return IdvmState.FOOD_HUNGER;
 			// } else {
@@ -179,7 +188,8 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	public Direction getTargetDirection() {
-		return mIdvmSensor.getTargetDirection(getState(), getUsedBlocks(BlockType.SENSOR));
+		return mIdvmSensor.getTargetDirection(getState(),
+				getUsedBlocks(BlockType.SENSOR));
 	}
 
 	public int getEnergyCount() {

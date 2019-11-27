@@ -13,6 +13,7 @@ import core.exceptions.WrongState;
 import core.soup.block.BlockGrid;
 import core.soup.block.BlockType;
 import core.soup.block.iBlock;
+import globals.Config;
 
 public class IdvmSensor {
 
@@ -57,7 +58,7 @@ public class IdvmSensor {
 		}
 		throw new WrongBlockType();
 	}
-	
+
 	public boolean detectSurroundingBlockType(BlockType pBlockType, HashMap<Pos, Sensor> pDetectedPos) {
 		for (Entry<Pos, Sensor> iPos : pDetectedPos.entrySet()) {
 			Pos lPos = iPos.getKey();
@@ -75,8 +76,8 @@ public class IdvmSensor {
 	public HashMap<Pos, Sensor> getDetectedPos(ArrayList<iBlock> pSensors) {
 		HashMap<Pos, Sensor> lDetectedPos = new HashMap<Pos, Sensor>();
 		for (iBlock iCell : pSensors) {
-			for (int x = -3; x <= 3; x++) {
-				for (int y = -3; y <= 3; y++) {
+			for (int x = Config.cSensorRange * -1; x <= Config.cSensorRange; x++) {
+				for (int y = Config.cSensorRange * -1; y <= Config.cSensorRange; y++) {
 					int lCellX = iCell.getPos().x;
 					int lCellY = iCell.getPos().y;
 					lDetectedPos.put(new Pos(lCellX + x, lCellY + y),

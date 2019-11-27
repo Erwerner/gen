@@ -5,14 +5,27 @@ import java.util.Collections;
 
 import core.genes.Crossover;
 import core.genes.Genome;
+import core.soup.block.BlockType;
+import core.soup.block.IdvmCell;
 import core.soup.idvm.Idvm;
 import devutils.Debug;
 import globals.Helpers;
 import ui.console.monitor.ModelMonitorIdvm;
+/*
+Tests:
+Food
+Maxenergy
+Energy life
+Sensor range
+Add blind
 
+*/
 public class runCrossover {
-	static ArrayList<Thread> mThreads = new ArrayList<Thread>();
+	private static final int cEachIdvmMonitor = 15;
+	private static final int cThousandsPopulation = 2;
+	private static final int cFirstMonitorGeneration = 1000;
 	private static final int cTopFittest = 8;
+	static ArrayList<Thread> mThreads = new ArrayList<Thread>();
 
 	public static void main(String[] args) throws CloneNotSupportedException, InterruptedException {
 		System.out.println("Init");
@@ -21,7 +34,7 @@ public class runCrossover {
 		lPopulation = initializePopulation();
 		int iGeneration = 0;
 		while (true) {
-			if (iGeneration < 100 || iGeneration % 10 != 0)
+			if (iGeneration < cFirstMonitorGeneration || iGeneration % cEachIdvmMonitor != 0)
 				lBestOfLastGeneration = null;
 			lPopulation = runPopulation(lPopulation, lBestOfLastGeneration);
 			ArrayList<Idvm> lFittestIdvm = evaluateFitness(lPopulation);
@@ -72,10 +85,17 @@ public class runCrossover {
 
 	private static void checkFitness(ArrayList<Idvm> pFittestIdvm) {
 		int lCount = 0;
+		int lTotalSensorCount = 0;
 		for (Idvm iIdvm : pFittestIdvm) {
 			lCount += iIdvm.getStepCount();
+			for (int idx = 0; idx < 12;idx++) {
+				IdvmCell lCellGrow = iIdvm.getGenomeOrigin().cellGrow.get(idx);
+				if (lCellGrow.getBlockType() == BlockType.SENSOR)
+					lTotalSensorCount++;
+			}
 		}
-		System.out.println(lCount + "/" + pFittestIdvm.size());
+		System.out.println(lCount + "/" + pFittestIdvm.size() + "; Sensors per 100 Idvm: "
+				+ lTotalSensorCount * 100 / pFittestIdvm.size());
 	}
 
 	private static ArrayList<Idvm> evaluateFitness(ArrayList<Idvm> pPopulation) {
@@ -127,7 +147,7 @@ public class runCrossover {
 
 	private static ArrayList<Idvm> initializePopulation() {
 		ArrayList<Idvm> lPopulation = new ArrayList<Idvm>();
-		for (int iIdvmCount = 0; iIdvmCount < 1024*2; iIdvmCount++) {
+		for (int iIdvmCount = 0; iIdvmCount < 1024 * cThousandsPopulation; iIdvmCount++) {
 			lPopulation.add(new Idvm(new Genome().forceMutation()));
 		}
 		return lPopulation;
