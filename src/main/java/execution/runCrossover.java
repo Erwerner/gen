@@ -21,7 +21,7 @@ public class runCrossover {
 		lPopulation = initializePopulation();
 		int iGeneration = 0;
 		while (true) {
-			if (iGeneration < 250 || iGeneration % 15 != 0)
+			if (iGeneration < 100 || iGeneration % 10 != 0)
 				lBestOfLastGeneration = null;
 			lPopulation = runPopulation(lPopulation, lBestOfLastGeneration);
 			ArrayList<Idvm> lFittestIdvm = evaluateFitness(lPopulation);
@@ -127,7 +127,7 @@ public class runCrossover {
 
 	private static ArrayList<Idvm> initializePopulation() {
 		ArrayList<Idvm> lPopulation = new ArrayList<Idvm>();
-		for (int iIdvmCount = 0; iIdvmCount < 1024*6; iIdvmCount++) {
+		for (int iIdvmCount = 0; iIdvmCount < 1024*2; iIdvmCount++) {
 			lPopulation.add(new Idvm(new Genome().forceMutation()));
 		}
 		return lPopulation;

@@ -2,7 +2,7 @@ package devutils;
 
 public class Debug {
 	public static boolean debugOn = true;
-	public static String currentChange = "";
+	public static String currentChange = "With Blind";
 
 	public static void printCurrentChange() {
 		if (debugOn)
