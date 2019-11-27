@@ -6,7 +6,7 @@ import core.datatypes.Decisions;
 import globals.Helpers;
 
 public class MoveDecisionsProbability implements iGene {
-	// TODO REF make private
+	// TODO 9 REF make private
 	public ArrayList<Decisions> mPossibleDecisions = new ArrayList<Decisions>();
 
 	public MoveDecisionsProbability() {
