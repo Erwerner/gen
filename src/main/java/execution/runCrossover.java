@@ -11,20 +11,17 @@ import core.soup.idvm.Idvm;
 import devutils.Debug;
 import globals.Helpers;
 import ui.console.monitor.ModelMonitorIdvm;
-/*
-Tests:
-Food 			60 -> 48
-Food Energy 	400 -> 300 
-*/
+
 public class runCrossover {
 	private static final int cEachIdvmMonitor = 15;
-	private static final int cThousandsPopulation = 2;
+	private static final int cThousandsPopulation = 1;
 	private static final int cFirstMonitorGeneration = 1000;
 	private static final int cTopFittest = 8;
 	static ArrayList<Thread> mThreads = new ArrayList<Thread>();
 
 	public static void main(String[] args) throws CloneNotSupportedException, InterruptedException {
 		System.out.println("Init");
+		Debug.printCurrentChange();
 		Genome lBestOfLastGeneration = new Genome().forceMutation();
 		ArrayList<Idvm> lPopulation = new ArrayList<Idvm>();
 		lPopulation = initializePopulation();
@@ -81,17 +78,24 @@ public class runCrossover {
 
 	private static void checkFitness(ArrayList<Idvm> pFittestIdvm) {
 		int lCount = 0;
-		int lTotalSensorCount = 0;
 		for (Idvm iIdvm : pFittestIdvm) {
 			lCount += iIdvm.getStepCount();
-			for (int idx = 0; idx < 12;idx++) {
-				IdvmCell lCellGrow = iIdvm.getGenomeOrigin().cellGrow.get(idx);
-				if (lCellGrow.getBlockType() == BlockType.SENSOR)
-					lTotalSensorCount++;
-			}
 		}
-		System.out.println(lCount + "/" + pFittestIdvm.size() + "; Sensors per 100 Idvm: "
-				+ lTotalSensorCount * 100 / pFittestIdvm.size());
+		System.out.println(lCount + "/" + pFittestIdvm.size());
+		BlockType[] lCellBlocks = { BlockType.DEFENCE, BlockType.MOVE, BlockType.LIFE, BlockType.SENSOR };
+		for (BlockType iBlockType : lCellBlocks) {
+			int lTotalBlockCount = 0;
+			for (Idvm iIdvm : pFittestIdvm) {
+				for (int idx = 0; idx < 12; idx++) {
+					IdvmCell lCellGrow = iIdvm.getGenomeOrigin().cellGrow.get(idx);
+					if (lCellGrow.getBlockType() == iBlockType)
+						lTotalBlockCount++;
+				}
+			}
+			System.out
+					.print(100 * lTotalBlockCount / pFittestIdvm.size() / 12 + "% " + iBlockType + "; ");
+		}
+		System.out.println("");
 	}
 
 	private static ArrayList<Idvm> evaluateFitness(ArrayList<Idvm> pPopulation) {
