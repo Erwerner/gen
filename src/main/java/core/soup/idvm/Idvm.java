@@ -109,7 +109,8 @@ public class Idvm extends Block implements iIdvm {
 							getUsedBlocks(BlockType.SENSOR));
 					Pos lNewPos = mMoveCalculation.getMovingPosition(this, mMovementSequences, lTargetDirection);
 					if (lNewPos != mPos)
-						mEnergy--;
+						for (int iEnergyCount = 0; iEnergyCount < Config.cMoveEnergyCount; iEnergyCount++)
+							mEnergy--;
 					setPosition(lNewPos);
 					break;
 				} catch (PosIsOutOfGrid e) {

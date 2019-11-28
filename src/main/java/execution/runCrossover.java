@@ -13,11 +13,11 @@ import globals.Helpers;
 import ui.console.monitor.ModelMonitorIdvm;
 /*
 Tests:
-Food
-Maxenergy
-Energy life
-Sensor range
-Add blind
+Food 			60 -> 48
+Food Energy 	400 -> 300 
+Energy life		-2 -> -1
+Sensor range	3 -> 5
+Add blind		X
 
 */
 public class runCrossover {

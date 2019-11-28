@@ -16,7 +16,7 @@ public class Crossover {
 	public Genome crossover() {
 		try {
 			mNewGenome = new Genome();
-			mNewGenome.forceMutation();
+			mNewGenome.forceMutation(); //TODO 8 Fix remove
 			setPrimitiveGenes();
 			setSequences();
 			setGrowCells();
