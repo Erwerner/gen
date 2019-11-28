@@ -146,11 +146,9 @@ public class Idvm extends Block implements iIdvm {
 	// TODO 4 IMPL sensor range
 	// TODO 6 IMPL add hunger and blind
 	public IdvmState getState() {
-		// if (getUsedBlocks(BlockType.SENSOR).size() == 0)
-		// return IdvmState.BLIND;
+		if (getUsedBlocks(BlockType.SENSOR).size() == 0)
+		 return IdvmState.BLIND;
 		HashMap<Pos, Sensor> lDetectedPos = getDetectedPos();
-		// if (pDetectedPos.size() == 0)
-		// return IdvmState.BLIND;
 		if (mIdvmSensor.detectSurroundingBlockType(BlockType.ENEMY, lDetectedPos))
 			// if (pIsHungry) {
 			// return IdvmState.ENEMY_HUNGER;
