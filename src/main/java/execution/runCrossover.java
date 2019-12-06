@@ -12,10 +12,11 @@ import devutils.Debug;
 import globals.Helpers;
 import ui.console.monitor.ModelMonitorIdvm;
 
+// TODO 1 IMPL new Pairing
 public class runCrossover {
-	private static final int cEachIdvmMonitor = 15;
-	private static final int cThousandsPopulation = 1;
-	private static final int cFirstMonitorGeneration = 1000;
+	private static final int cEachIdvmMonitor = 10;
+	private static final int cPopulation = 1024 * 5;
+	private static final int cFirstMonitorGeneration = 80;
 	private static final int cTopFittest = 8;
 	static ArrayList<Thread> mThreads = new ArrayList<Thread>();
 
@@ -82,18 +83,25 @@ public class runCrossover {
 			lCount += iIdvm.getStepCount();
 		}
 		System.out.println(lCount + "/" + pFittestIdvm.size());
+		printBlockStats(pFittestIdvm, 4);
+		printBlockStats(pFittestIdvm, 6);
+		printBlockStats(pFittestIdvm, 10);
+		printBlockStats(pFittestIdvm, 14);
+	}
+
+	private static void printBlockStats(ArrayList<Idvm> pFittestIdvm, int pCount) {
+		System.out.print(pCount + " Cells: ");
 		BlockType[] lCellBlocks = { BlockType.DEFENCE, BlockType.MOVE, BlockType.LIFE, BlockType.SENSOR };
 		for (BlockType iBlockType : lCellBlocks) {
 			int lTotalBlockCount = 0;
 			for (Idvm iIdvm : pFittestIdvm) {
-				for (int idx = 0; idx < 12; idx++) {
+				for (int idx = 0; idx < (pCount); idx++) {
 					IdvmCell lCellGrow = iIdvm.getGenomeOrigin().cellGrow.get(idx);
 					if (lCellGrow.getBlockType() == iBlockType)
 						lTotalBlockCount++;
 				}
 			}
-			System.out
-					.print(100 * lTotalBlockCount / pFittestIdvm.size() / 12 + "% " + iBlockType + "; ");
+			System.out.print(100 * lTotalBlockCount / pFittestIdvm.size() / (pCount) + "% " + iBlockType + "; ");
 		}
 		System.out.println("");
 	}
@@ -147,7 +155,7 @@ public class runCrossover {
 
 	private static ArrayList<Idvm> initializePopulation() {
 		ArrayList<Idvm> lPopulation = new ArrayList<Idvm>();
-		for (int iIdvmCount = 0; iIdvmCount < 1024 * cThousandsPopulation; iIdvmCount++) {
+		for (int iIdvmCount = 0; iIdvmCount < cPopulation; iIdvmCount++) {
 			lPopulation.add(new Idvm(new Genome().forceMutation()));
 		}
 		return lPopulation;

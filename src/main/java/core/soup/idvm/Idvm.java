@@ -26,7 +26,7 @@ public class Idvm extends Block implements iIdvm {
 	private HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> mMovementSequences = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
 	private BlockGrid mBlockGrid;
 	private int mStepCount;
-	private int mEnergy = Config.cMaxEnergy / 3;
+	private int mEnergy = Config.cFoodEnergy;
 	private IdvmMoveCalculation mMoveCalculation;
 	private IdvmSensor mIdvmSensor;
 
@@ -144,24 +144,27 @@ public class Idvm extends Block implements iIdvm {
 
 	// TODO 3 IMPL dynamic target order
 	// TODO 4 IMPL sensor range
-	// TODO 6 IMPL add hunger and blind
 	public IdvmState getState() {
 		if (getUsedBlocks(BlockType.SENSOR).size() == 0)
-		 return IdvmState.BLIND;
+			return IdvmState.BLIND;
 		HashMap<Pos, Sensor> lDetectedPos = getDetectedPos();
 		if (mIdvmSensor.detectSurroundingBlockType(BlockType.ENEMY, lDetectedPos))
-			// if (pIsHungry) {
-			// return IdvmState.ENEMY_HUNGER;
-			// } else {
-			return IdvmState.ENEMY;
-		// }
+			if (isHungry()) {
+				return IdvmState.ENEMY;
+			} else {
+				return IdvmState.ENEMY;
+			}
 		if (mIdvmSensor.detectSurroundingBlockType(BlockType.FOOD, lDetectedPos))
-			// if (pIsHungry) {
-			// return IdvmState.FOOD_HUNGER;
-			// } else {
-			return IdvmState.FOOD;
-		// }
-		return IdvmState.IDLE;
+			if (isHungry()) {
+				return IdvmState.FOOD;
+			} else {
+				return IdvmState.FOOD;
+			}
+		if (isHungry()) {
+			return IdvmState.IDLE;
+		} else {
+			return IdvmState.IDLE;
+		}
 
 	}
 

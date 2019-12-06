@@ -24,7 +24,6 @@ public class IdvmSensor {
 		mBlockGrid = pBlockGrid;
 	}
 
-	// TODO add hunger
 	public Direction getTargetDirection(IdvmState pState, ArrayList<iBlock> pSensors) {
 		BlockType lSearchBlock;
 		HashMap<Pos, Sensor> lDetectedPos = getDetectedPos(pSensors);
@@ -33,11 +32,11 @@ public class IdvmSensor {
 
 		switch (pState) {
 		case FOOD:
-			// case FOOD_HUNGER:
+		case FOOD_HUNGER:
 			lSearchBlock = BlockType.FOOD;
 			break;
 		case ENEMY:
-			// case ENEMY_HUNGER:
+		case ENEMY_HUNGER:
 			lSearchBlock = BlockType.ENEMY;
 			break;
 		default:
