@@ -11,35 +11,33 @@ import core.soup.idvm.Idvm;
 import devutils.Debug;
 import globals.Helpers;
 import ui.console.monitor.ModelMonitorIdvm;
-/*
-Tests:
-Food
-Maxenergy
-Energy life
-Sensor range
-Add blind
 
-*/
+// TODO 1 IMPL new Pairing
+// TODO 1 IMPL Population Save
 public class runCrossover {
-	private static final int cEachIdvmMonitor = 15;
-	private static final int cThousandsPopulation = 2;
-	private static final int cFirstMonitorGeneration = 1000;
+	private static final int cEachIdvmMonitor = 10;
+	private static final int cPopulation = 128;
+	private static final int cFirstMonitorGeneration = 80;
 	private static final int cTopFittest = 8;
 	static ArrayList<Thread> mThreads = new ArrayList<Thread>();
 
-	public static void main(String[] args) throws CloneNotSupportedException, InterruptedException {
+	public static void main(String[] args) throws CloneNotSupportedException,
+			InterruptedException {
 		System.out.println("Init");
+		Debug.printCurrentChange();
 		Genome lBestOfLastGeneration = new Genome().forceMutation();
 		ArrayList<Idvm> lPopulation = new ArrayList<Idvm>();
 		lPopulation = initializePopulation();
 		int iGeneration = 0;
 		while (true) {
-			if (iGeneration < cFirstMonitorGeneration || iGeneration % cEachIdvmMonitor != 0)
+			if (iGeneration < cFirstMonitorGeneration
+					|| iGeneration % cEachIdvmMonitor != 0)
 				lBestOfLastGeneration = null;
 			lPopulation = runPopulation(lPopulation, lBestOfLastGeneration);
 			ArrayList<Idvm> lFittestIdvm = evaluateFitness(lPopulation);
 			checkFitness(lFittestIdvm);
-			lBestOfLastGeneration = (Genome) lFittestIdvm.get(lFittestIdvm.size() - 4).getGenomeOrigin().clone();
+			lBestOfLastGeneration = (Genome) lFittestIdvm
+					.get(lFittestIdvm.size() - 4).getGenomeOrigin().clone();
 			Debug.printCurrentChange();
 			System.out.println("Generation finished: " + iGeneration);
 			lPopulation = getOffsprings(lFittestIdvm);
@@ -47,7 +45,8 @@ public class runCrossover {
 		}
 	}
 
-	private static ArrayList<Idvm> getOffsprings(ArrayList<Idvm> pFittestIdvm) throws CloneNotSupportedException {
+	private static ArrayList<Idvm> getOffsprings(ArrayList<Idvm> pFittestIdvm)
+			throws CloneNotSupportedException {
 		ArrayList<Idvm> lOffsprings = new ArrayList<Idvm>();
 		ArrayList<Idvm> lParents = new ArrayList<Idvm>();
 		for (int iIdvmIdx = pFittestIdvm.size() - 1; iIdvmIdx >= 0; iIdvmIdx--) {
@@ -85,17 +84,44 @@ public class runCrossover {
 
 	private static void checkFitness(ArrayList<Idvm> pFittestIdvm) {
 		int lCount = 0;
-		int lTotalSensorCount = 0;
 		for (Idvm iIdvm : pFittestIdvm) {
 			lCount += iIdvm.getStepCount();
-			for (int idx = 0; idx < 12;idx++) {
-				IdvmCell lCellGrow = iIdvm.getGenomeOrigin().cellGrow.get(idx);
-				if (lCellGrow.getBlockType() == BlockType.SENSOR)
-					lTotalSensorCount++;
-			}
 		}
-		System.out.println(lCount + "/" + pFittestIdvm.size() + "; Sensors per 100 Idvm: "
-				+ lTotalSensorCount * 100 / pFittestIdvm.size());
+		System.out.println(lCount + "/" + pFittestIdvm.size());
+		printBlockStats(pFittestIdvm, 4);
+		printBlockStats(pFittestIdvm, 6);
+		printBlockStats(pFittestIdvm, 10);
+		printBlockStats(pFittestIdvm, 14);
+		printTargetStats(pFittestIdvm);
+	}
+
+	private static void printTargetStats(ArrayList<Idvm> pFittestIdvm) {
+		Double lPercentageTotal = 0.0;
+		for (Idvm iIdvm : pFittestIdvm) {
+			lPercentageTotal += iIdvm.getGenomeOrigin()
+					.getPercentageOfTargetMovements(14);
+		}
+		System.out.println("Population Target Percentage: " + lPercentageTotal);
+	}
+
+	private static void printBlockStats(ArrayList<Idvm> pFittestIdvm, int pCount) {
+		System.out.print(pCount + " Cells: ");
+		BlockType[] lCellBlocks = { BlockType.DEFENCE, BlockType.MOVE,
+				BlockType.LIFE, BlockType.SENSOR };
+		for (BlockType iBlockType : lCellBlocks) {
+			int lTotalBlockCount = 0;
+			for (Idvm iIdvm : pFittestIdvm) {
+				for (int idx = 0; idx < (pCount); idx++) {
+					IdvmCell lCellGrow = iIdvm.getGenomeOrigin().cellGrow
+							.get(idx);
+					if (lCellGrow.getBlockType() == iBlockType)
+						lTotalBlockCount++;
+				}
+			}
+			System.out.print(100 * lTotalBlockCount / pFittestIdvm.size()
+					/ (pCount) + "% " + iBlockType + "; ");
+		}
+		System.out.println("");
 	}
 
 	private static ArrayList<Idvm> evaluateFitness(ArrayList<Idvm> pPopulation) {
@@ -108,25 +134,29 @@ public class runCrossover {
 		Collections.sort(lFitness);
 		ArrayList<Idvm> lFittestIdvm = new ArrayList<Idvm>();
 		for (int iFitnessIdx = lFitness.size() - 1; iFitnessIdx >= 0; iFitnessIdx--) {
-			// for (int iFitnessIdx = 0; iFitnessIdx < lFitness.size() ; iFitnessIdx++) {
+			// for (int iFitnessIdx = 0; iFitnessIdx < lFitness.size() ;
+			// iFitnessIdx++) {
 			for (Idvm iIdvm : pPopulation) {
 				if (iIdvm.getStepCount() == (int) lFitness.get(iFitnessIdx))
 					lFittestIdvm.add(iIdvm);
 			}
 		}
-		for (int iFitnessIdx = pPopulation.size() - 1; iFitnessIdx >= pPopulation.size() / cTopFittest; iFitnessIdx--) {
+		for (int iFitnessIdx = pPopulation.size() - 1; iFitnessIdx >= pPopulation
+				.size() / cTopFittest; iFitnessIdx--) {
 			lFittestIdvm.remove(lFittestIdvm.size() - 1);
 		}
 		return lFittestIdvm;
 	}
 
-	private static ArrayList<Idvm> runPopulation(ArrayList<Idvm> pPopulation, Genome pBestOfLastGeneration)
-			throws CloneNotSupportedException, InterruptedException {
+	private static ArrayList<Idvm> runPopulation(ArrayList<Idvm> pPopulation,
+			Genome pBestOfLastGeneration) throws CloneNotSupportedException,
+			InterruptedException {
 		ArrayList<Idvm> lExecutedPopulation = new ArrayList<Idvm>();
 		ArrayList<IdvmExecutionThread> mIdvmExecutionThread = new ArrayList<IdvmExecutionThread>();
 		mThreads = new ArrayList<Thread>();
 		for (Idvm iIdvm : pPopulation) {
-			IdvmExecutionThread lIdvmRunner = new IdvmExecutionThread((Genome) iIdvm.getGenomeOrigin().clone());
+			IdvmExecutionThread lIdvmRunner = new IdvmExecutionThread(
+					(Genome) iIdvm.getGenomeOrigin().clone());
 			Thread lThread = new Thread(lIdvmRunner);
 			lThread.start();
 			// lThread.join();
@@ -147,7 +177,7 @@ public class runCrossover {
 
 	private static ArrayList<Idvm> initializePopulation() {
 		ArrayList<Idvm> lPopulation = new ArrayList<Idvm>();
-		for (int iIdvmCount = 0; iIdvmCount < 1024 * cThousandsPopulation; iIdvmCount++) {
+		for (int iIdvmCount = 0; iIdvmCount < cPopulation; iIdvmCount++) {
 			lPopulation.add(new Idvm(new Genome().forceMutation()));
 		}
 		return lPopulation;

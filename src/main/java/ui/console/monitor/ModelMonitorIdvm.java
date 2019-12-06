@@ -31,7 +31,7 @@ public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 	}
 
 	public static Genome initializeGenome() {
-		Genome lGenome = new Genome();
+		Genome lGenome = new Genome().forceMutation();
 		IdvmCell[] mCellGrow = new IdvmCell[7];
 		mCellGrow[0] = new IdvmCell(BlockType.LIFE, new Pos(0, 0));
 		mCellGrow[1] = new IdvmCell(BlockType.SENSOR, new Pos(1, 0));
