@@ -143,8 +143,7 @@ public class Genome implements Cloneable, iPresentGenomeStats {
 
 			MoveDecisionsProbability lMovement = moveSequencesForState.get(
 					IdvmState.ENEMY).get(iCountCellGrow);
-			if (lMovement.mPossibleDecisions.contains(Decisions.TARGET)
-					|| lMovement.mPossibleDecisions
+			if (lMovement.mPossibleDecisions
 							.contains(Decisions.TARGET_OPPOSITE)
 					|| lMovement.mPossibleDecisions
 							.contains(Decisions.TARGET_SITE1)
@@ -154,13 +153,7 @@ public class Genome implements Cloneable, iPresentGenomeStats {
 			}
 			lMovement = moveSequencesForState.get(IdvmState.FOOD).get(
 					iCountCellGrow);
-			if (lMovement.mPossibleDecisions.contains(Decisions.TARGET)
-					|| lMovement.mPossibleDecisions
-							.contains(Decisions.TARGET_OPPOSITE)
-					|| lMovement.mPossibleDecisions
-							.contains(Decisions.TARGET_SITE1)
-					|| lMovement.mPossibleDecisions
-							.contains(Decisions.TARGET_SITE2)) {
+			if (lMovement.mPossibleDecisions.contains(Decisions.TARGET)) {
 				lPercentage += 0.5 / (pNumberOfCellGrow + 1);
 			}
 		}

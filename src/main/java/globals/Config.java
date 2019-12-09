@@ -8,7 +8,7 @@ public class Config {
 	
 	public static final int enemySupply = 20 * cSoupFctor * cSoupFctor;
 	public static final int foodSupply = 48 * cSoupFctor * cSoupFctor; //40,50
-	public static final int cFoodEnergy = 350; //500
+	public static final int cFoodEnergy = 250; //500
 	public static final int cMaxEnergy = cFoodEnergy *10; //1000
 	public static final int cLifeEnergyCount = 1;
 	public static final int cMoveEnergyCount = 1;

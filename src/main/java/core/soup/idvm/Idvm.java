@@ -98,7 +98,7 @@ public class Idvm extends Block implements iIdvm {
 		move();
 	}
 
-	// TODO 4 IMPL turn
+	// TODO 5 IMPL turn
 	@SuppressWarnings("unused")
 	private void move() {
 		for (iBlock iCount : getUsedBlocks(BlockType.MOVE)) {
@@ -146,7 +146,7 @@ public class Idvm extends Block implements iIdvm {
 		mCellGrid.removeCell(lKillPos);
 	}
 
-	// TODO 3 IMPL dynamic target order
+	// TODO 2 IMPL dynamic target order
 	// TODO 4 IMPL sensor range
 	public IdvmState getState() {
 		if (getUsedBlocks(BlockType.SENSOR).size() == 0)
