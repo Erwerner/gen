@@ -2,7 +2,7 @@ package devutils;
 
 public class Debug {
 	public static boolean debugOn = true;
-	public static String currentChange = "defence stops enemy, enemy random at border, 250 food";
+	public static String currentChange = "Copy 5; Reset 7, Hunger";
 
 	public static void printCurrentChange() {
 		if (debugOn)

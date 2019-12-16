@@ -1,4 +1,4 @@
-package soup.block;
+package core.soup.block;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;

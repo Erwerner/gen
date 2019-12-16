@@ -3,6 +3,7 @@ package core.genes;
 import java.util.ArrayList;
 
 import core.datatypes.Decisions;
+import globals.Config;
 import globals.Helpers;
 
 public class MoveDecisionsProbability implements iGene {
@@ -20,15 +21,14 @@ public class MoveDecisionsProbability implements iGene {
 		return mPossibleDecisions.get(lRnd);
 	}
 
-	//TODO 0 test variables
 	public void mutate() {
-		if (!Helpers.checkChance(0.5)) {
+		if (!Helpers.checkChance(Config.cChanceCopyDirections)) {
 			mPossibleDecisions = null;
 			return;
 		}
-		//if (!Helpers.checkChance(0.1)) {
-			//mPossibleDecisions = null;
-		//}
+		if (!Helpers.checkChance(Config.cChanceResetDirections)) {
+			mPossibleDecisions = null;
+		}
 		if (mPossibleDecisions == null)
 			mPossibleDecisions = new ArrayList<Decisions>();
 		// Remove random decision
