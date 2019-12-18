@@ -98,7 +98,7 @@ public class Idvm extends Block implements iIdvm {
 		move();
 	}
 
-	// TODO 4 IMPL turn
+	// TODO 5 IMPL turn
 	@SuppressWarnings("unused")
 	private void move() {
 		for (iBlock iCount : getUsedBlocks(BlockType.MOVE)) {
@@ -146,7 +146,7 @@ public class Idvm extends Block implements iIdvm {
 		mCellGrid.removeCell(lKillPos);
 	}
 
-	// TODO 3 IMPL dynamic target order
+	// TODO 6 IMPL dynamic target order
 	// TODO 4 IMPL sensor range
 	public IdvmState getState() {
 		if (getUsedBlocks(BlockType.SENSOR).size() == 0)
@@ -155,19 +155,19 @@ public class Idvm extends Block implements iIdvm {
 		if (mIdvmSensor.detectSurroundingBlockType(BlockType.ENEMY,
 				lDetectedPos))
 			if (isHungry()) {
-				return IdvmState.ENEMY;
+				return IdvmState.ENEMY_HUNGER;
 			} else {
 				return IdvmState.ENEMY;
 			}
 		if (mIdvmSensor
 				.detectSurroundingBlockType(BlockType.FOOD, lDetectedPos))
 			if (isHungry()) {
-				return IdvmState.FOOD;
+				return IdvmState.FOOD_HUNGER;
 			} else {
 				return IdvmState.FOOD;
 			}
 		if (isHungry()) {
-			return IdvmState.IDLE;
+			return IdvmState.IDLE_HUNGER;
 		} else {
 			return IdvmState.IDLE;
 		}

@@ -1,4 +1,4 @@
-package soup.idvm;
+package core.soup.idvm;
 
 import static org.junit.Assert.assertTrue;
 

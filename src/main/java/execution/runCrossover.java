@@ -12,13 +12,13 @@ import devutils.Debug;
 import globals.Helpers;
 import ui.console.monitor.ModelMonitorIdvm;
 
-// TODO 1 IMPL new Pairing
+// TODO 0 IMPL new Pairing 2x/2 + 2x/4 + 2x2/8
 // TODO 1 IMPL Population Save
 public class runCrossover {
 	private static final int cEachIdvmMonitor = 10;
-	private static final int cPopulation = 128;
-	private static final int cFirstMonitorGeneration = 80;
-	private static final int cTopFittest = 8;
+	private static final int cPopulation = 1024*7;
+	private static final int cFirstMonitorGeneration = 60;
+	private static final int cTopFittest = 4;
 	static ArrayList<Thread> mThreads = new ArrayList<Thread>();
 
 	public static void main(String[] args) throws CloneNotSupportedException,

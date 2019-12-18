@@ -1,4 +1,4 @@
-package datatypes;
+package core.datatypes;
 
 import static org.junit.Assert.assertEquals;
 

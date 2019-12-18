@@ -36,7 +36,8 @@ public class Enemy extends Block implements iLiving{
 				setPosition(lNewPos);
 				break;
 			} catch (PosIsOutOfGrid e) {
-				mCurrentDirection = mCurrentDirection.opposite();
+				setRandomDirection();
+				//mCurrentDirection = mCurrentDirection.opposite();
 				move();
 			}
 	}
@@ -58,8 +59,9 @@ public class Enemy extends Block implements iLiving{
 						case MOVE:
 							return lDetectPos;
 						case DEFENCE:
-							Direction lDirectionEscape = mPos.getDircetionTo(lDetectPos).opposite();
-							return mPos.getPosFromDirection(lDirectionEscape);
+							//Direction lDirectionEscape = mPos.getDircetionTo(lDetectPos).opposite();
+							//return mPos.getPosFromDirection(lDirectionEscape);
+							return mPos;
 						default:
 							break;
 						}
@@ -72,7 +74,7 @@ public class Enemy extends Block implements iLiving{
 	}
 
 	private void setDirection() {
-		if (Helpers.rndInt(15) == 1)
+		if (Helpers.rndInt(8) == 1)
 			setRandomDirection();
 	}
 
