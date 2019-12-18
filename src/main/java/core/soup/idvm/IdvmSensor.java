@@ -13,8 +13,8 @@ import core.exceptions.WrongState;
 import core.soup.block.BlockGrid;
 import core.soup.block.BlockType;
 import core.soup.block.iBlock;
+import globals.Config;
 
-//TODO 2 Test Class
 public class IdvmSensor {
 
 	private BlockGrid mBlockGrid;
@@ -24,7 +24,6 @@ public class IdvmSensor {
 		mBlockGrid = pBlockGrid;
 	}
 
-	// TODO add hunger
 	public Direction getTargetDirection(IdvmState pState, ArrayList<iBlock> pSensors) {
 		BlockType lSearchBlock;
 		HashMap<Pos, Sensor> lDetectedPos = getDetectedPos(pSensors);
@@ -33,15 +32,15 @@ public class IdvmSensor {
 
 		switch (pState) {
 		case FOOD:
-			// case FOOD_HUNGER:
+		case FOOD_HUNGER:
 			lSearchBlock = BlockType.FOOD;
 			break;
 		case ENEMY:
-			// case ENEMY_HUNGER:
+		case ENEMY_HUNGER:
 			lSearchBlock = BlockType.ENEMY;
 			break;
 		default:
-			throw new WrongState();
+			return null;
 		}
 
 		for (Entry<Pos, Sensor> iPos : lDetectedPos.entrySet()) {
@@ -58,6 +57,7 @@ public class IdvmSensor {
 		}
 		throw new WrongBlockType();
 	}
+
 	public boolean detectSurroundingBlockType(BlockType pBlockType, HashMap<Pos, Sensor> pDetectedPos) {
 		for (Entry<Pos, Sensor> iPos : pDetectedPos.entrySet()) {
 			Pos lPos = iPos.getKey();
@@ -75,8 +75,8 @@ public class IdvmSensor {
 	public HashMap<Pos, Sensor> getDetectedPos(ArrayList<iBlock> pSensors) {
 		HashMap<Pos, Sensor> lDetectedPos = new HashMap<Pos, Sensor>();
 		for (iBlock iCell : pSensors) {
-			for (int x = -3; x <= 3; x++) {
-				for (int y = -3; y <= 3; y++) {
+			for (int x = Config.cSensorRange * -1; x <= Config.cSensorRange; x++) {
+				for (int y = Config.cSensorRange * -1; y <= Config.cSensorRange; y++) {
 					int lCellX = iCell.getPos().x;
 					int lCellY = iCell.getPos().y;
 					lDetectedPos.put(new Pos(lCellX + x, lCellY + y),

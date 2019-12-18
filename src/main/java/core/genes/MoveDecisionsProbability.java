@@ -6,12 +6,8 @@ import core.datatypes.Decisions;
 import globals.Helpers;
 
 public class MoveDecisionsProbability implements iGene {
-	// TODO REF make private
+	// TODO 9 REF make private
 	public ArrayList<Decisions> mPossibleDecisions = new ArrayList<Decisions>();
-
-	public MoveDecisionsProbability() {
-
-	}
 
 	public MoveDecisionsProbability appendDecision(Decisions pDecision, int pProbability) {
 		for (int i = 0; i < pProbability; i++)
@@ -26,10 +22,13 @@ public class MoveDecisionsProbability implements iGene {
 
 	//TODO 4 IMPL gene to reset, clear and alter probability
 	public void mutate() {
-		if (!Helpers.checkChance(0.4)) {
+		if (!Helpers.checkChance(0.5)) {
 			mPossibleDecisions = null;
 			return;
 		}
+		//if (!Helpers.checkChance(0.1)) {
+			//mPossibleDecisions = null;
+		//}
 		if (mPossibleDecisions == null)
 			mPossibleDecisions = new ArrayList<Decisions>();
 		// Remove random decision

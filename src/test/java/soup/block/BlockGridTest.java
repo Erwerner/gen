@@ -1,6 +1,7 @@
 package soup.block;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.fail;
 
 import org.junit.Before;
@@ -72,5 +73,15 @@ public class BlockGridTest {
 		Pos lMidPos = lIdvm.getPos();
 		iBlock lMidBlock = cut.getBlock(lMidPos);
 		assertEquals(BlockType.LIFE, lMidBlock.getBlockType());
+	}
+	
+	@Test
+	public void refreshBlockSetsBlockPosition() {
+		Pos lExpPos = new Pos(10,10);
+		Food lBlock = new Food();
+		cut.setRandomBlock(lBlock);
+		assertNotEquals(lExpPos, lBlock.getPos());
+		lBlock.setPosition(lExpPos);
+		assertEquals(lExpPos, lBlock.getPos());
 	}
 }

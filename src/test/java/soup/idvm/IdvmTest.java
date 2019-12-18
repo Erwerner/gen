@@ -62,6 +62,7 @@ public class IdvmTest {
 		ArrayList<MoveDecisionsProbability> lIdlelMoveProbability = new ArrayList<MoveDecisionsProbability>();
 		lIdlelMoveProbability.add(new MoveDecisionsProbability().appendDecision(Decisions.LEFT, 1));
 		lIdlelMoveProbability.add(new MoveDecisionsProbability().appendDecision(Decisions.DOWN, 1));
+		mGenome.moveSequencesForState = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
 		for (IdvmState iState : IdvmState.values())
 			mGenome.moveSequencesForState.put(iState,
 					(ArrayList<MoveDecisionsProbability>) lIdlelMoveProbability.clone());
@@ -333,7 +334,6 @@ public class IdvmTest {
 		assertEquals(IdvmState.FOOD, cut.getState());
 	}
 
-	@Test(expected = WrongState.class)
 	public void targetIsNull() {
 		assertNull(cut.getTargetDirection());
 	}

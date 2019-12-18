@@ -14,10 +14,9 @@ import core.soup.idvm.IdvmState;
 import globals.Config;
 import globals.Helpers;
 
-public class Genome implements Cloneable {
-	private GeneInt mHunger = new GeneInt(0, Config.cMaxEnergy, Config.cMaxEnergy / 2);
-	//TODO 1 REF move to Config
-	public GeneDouble mMutationRate = new GeneDouble(0.025, 0.025, 0.025);
+public class Genome implements Cloneable, iPresentGenomeStats {
+	private GeneInt mHunger = new GeneInt(0, Config.cMaxEnergy,
+			Config.cMaxEnergy / 2);
 	// TODO 9 REF make this private
 	public ArrayList<IdvmCell> cellGrow = new ArrayList<IdvmCell>();
 	public HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> moveSequencesForState = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
@@ -29,7 +28,6 @@ public class Genome implements Cloneable {
 	}
 
 	public Genome() {
-		//TODO 1 FIX init sequences
 	}
 
 	private void initSequences() {
@@ -46,7 +44,7 @@ public class Genome implements Cloneable {
 	}
 
 	public void naturalMutation() {
-		mutate(mMutationRate.getValue());
+		mutate(Config.cMutationRate);
 	}
 
 	private void mutate(Double pMutationRate) {
@@ -64,10 +62,12 @@ public class Genome implements Cloneable {
 				.entrySet()) {
 			ArrayList<Decisions> lLastPossibleDecisions = new ArrayList<Decisions>();
 			lLastPossibleDecisions.add(Decisions.UP);
-			for (MoveDecisionsProbability iProbability : iStateMoveSequence.getValue()) {
+			for (MoveDecisionsProbability iProbability : iStateMoveSequence
+					.getValue()) {
 				if (iProbability.mPossibleDecisions == null) {
 					// Repeat last probability
-					iProbability.mPossibleDecisions = (ArrayList<Decisions>) lLastPossibleDecisions.clone();
+					iProbability.mPossibleDecisions = (ArrayList<Decisions>) lLastPossibleDecisions
+							.clone();
 				} else {
 					lLastPossibleDecisions = iProbability.mPossibleDecisions;
 				}
@@ -83,12 +83,12 @@ public class Genome implements Cloneable {
 	private ArrayList<iGene> getGeneCollection() {
 		ArrayList<iGene> lGenes = new ArrayList<iGene>();
 		lGenes.add(mHunger);
-		lGenes.add(mMutationRate);
 
 		for (iGene iGene : cellGrow) {
 			lGenes.add(iGene);
 		}
-		for (ArrayList<MoveDecisionsProbability> iMoveProbability : moveSequencesForState.values()) {
+		for (ArrayList<MoveDecisionsProbability> iMoveProbability : moveSequencesForState
+				.values()) {
 			for (iGene iGene : iMoveProbability) {
 				lGenes.add(iGene);
 			}
@@ -109,19 +109,61 @@ public class Genome implements Cloneable {
 		Genome lClone = new Genome();
 
 		lClone.setHunger(mHunger.getValue());
-
+		lClone.cellGrow.clear();
 		for (IdvmCell iCell : cellGrow)
 			lClone.cellGrow.add((IdvmCell) iCell.clone());
 
+		lClone.moveSequencesForState.clear();
 		for (IdvmState iState : IdvmState.values()) {
 			ArrayList<MoveDecisionsProbability> lNewSequence = new ArrayList<MoveDecisionsProbability>();
 			assertNotNull(moveSequencesForState);
-			for (MoveDecisionsProbability iOriginProbability : moveSequencesForState.get(iState)) {
-				MoveDecisionsProbability lNewMovePorobability = (MoveDecisionsProbability) iOriginProbability.clone();
+			for (MoveDecisionsProbability iOriginProbability : moveSequencesForState
+					.get(iState)) {
+				MoveDecisionsProbability lNewMovePorobability = (MoveDecisionsProbability) iOriginProbability
+						.clone();
 				lNewSequence.add(lNewMovePorobability);
 			}
 			lClone.moveSequencesForState.put(iState, lNewSequence);
 		}
 		return lClone;
+	}
+
+	public Double getPercentageOfTargetMovements(int pNumberOfCellGrow) {
+		Double lPercentage = 0.0;
+		ArrayList<IdvmCell> lSensors = new ArrayList<IdvmCell>();
+		for (int iCountCellGrow = 0; iCountCellGrow <= pNumberOfCellGrow + 3; iCountCellGrow++) {
+			IdvmCell lCell = cellGrow.get(iCountCellGrow);
+			if (lCell.getBlockType() == BlockType.SENSOR) {
+				lSensors.add(lCell);
+			} else {
+				lSensors.remove(new IdvmCell(BlockType.SENSOR, lCell.getPos()));
+			}
+			if (lSensors.isEmpty())
+				continue;
+
+			MoveDecisionsProbability lMovement = moveSequencesForState.get(
+					IdvmState.ENEMY).get(iCountCellGrow);
+			if (lMovement.mPossibleDecisions.contains(Decisions.TARGET)
+					|| lMovement.mPossibleDecisions
+							.contains(Decisions.TARGET_OPPOSITE)
+					|| lMovement.mPossibleDecisions
+							.contains(Decisions.TARGET_SITE1)
+					|| lMovement.mPossibleDecisions
+							.contains(Decisions.TARGET_SITE2)) {
+				lPercentage += 0.5 / (pNumberOfCellGrow + 1);
+			}
+			lMovement = moveSequencesForState.get(IdvmState.FOOD).get(
+					iCountCellGrow);
+			if (lMovement.mPossibleDecisions.contains(Decisions.TARGET)
+					|| lMovement.mPossibleDecisions
+							.contains(Decisions.TARGET_OPPOSITE)
+					|| lMovement.mPossibleDecisions
+							.contains(Decisions.TARGET_SITE1)
+					|| lMovement.mPossibleDecisions
+							.contains(Decisions.TARGET_SITE2)) {
+				lPercentage += 0.5 / (pNumberOfCellGrow + 1);
+			}
+		}
+		return lPercentage;
 	}
 }

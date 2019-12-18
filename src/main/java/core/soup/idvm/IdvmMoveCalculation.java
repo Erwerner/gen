@@ -9,10 +9,8 @@ import core.datatypes.Pos;
 import core.exceptions.PosIsOutOfGrid;
 import core.genes.MoveDecisionsProbability;
 import core.soup.block.BlockGrid;
-import core.soup.block.BlockType;
 import core.soup.block.iBlock;
 
-//TODO 2 Test Class
 public class IdvmMoveCalculation {
 
 	private Direction mCurrentDirection = Direction.NORTH;
@@ -34,16 +32,12 @@ public class IdvmMoveCalculation {
 		return lNewPos;
 	}
 
-//TODO add blind
 	public Pos getMovingPosition(iIdvm pIdvm,
-			HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> pMovementSequences, IdvmSensor pIdvmSensor)
+			HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> pMovementSequences, Direction pTargetDirection)
 			throws PosIsOutOfGrid {
-		Direction lTargetDirection = mCurrentDirection;
-		IdvmState lState = pIdvm.getState();
-		if (lState != IdvmState.IDLE) { // && lState!= IdvmState.BLIND) {
-			lTargetDirection = pIdvmSensor.getTargetDirection(lState, pIdvm.getUsedBlocks(BlockType.SENSOR));
-		}
-		Direction lDirection = calcMovingDirection(pMovementSequences, lState, lTargetDirection);
+		if (pTargetDirection == null)
+			pTargetDirection = mCurrentDirection;
+		Direction lDirection = calcMovingDirection(pMovementSequences, pIdvm.getState(), pTargetDirection);
 
 		Pos lNewPos = calcPosFromDirection(lDirection, pIdvm.getPos(), pIdvm.getUsedBlocks());
 		return lNewPos;
@@ -60,7 +54,8 @@ public class IdvmMoveCalculation {
 		Direction lNewDirection = null;
 		switch (mCalculatedDecision) {
 		case CURRENT:
-			return mCurrentDirection;
+			lNewDirection = mCurrentDirection;
+			break;
 		case CURRENT_OPPOSITE:
 			lNewDirection = mCurrentDirection.opposite();
 			break;
@@ -101,7 +96,7 @@ public class IdvmMoveCalculation {
 		return lNewDirection;
 	}
 
-	public Decisions getCalculatedDirection() {
+	public Decisions getCalculatedDecision() {
 		return mCalculatedDecision;
 	}
 

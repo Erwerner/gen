@@ -21,7 +21,6 @@ import core.soup.block.Food;
 import core.soup.block.IdvmCell;
 import core.soup.block.iBlock;
 import core.soup.idvm.IdvmMoveCalculation;
-import core.soup.idvm.IdvmSensor;
 import core.soup.idvm.IdvmState;
 import core.soup.idvm.iIdvm;
 import globals.Config;
@@ -142,7 +141,7 @@ public class MoveCalculationTest {
 		Pos lIdvmPos = lFoodPos.getPosFromDirection(Direction.WEST).getPosFromDirection(Direction.WEST);
 		lIdvm.setPosition(lIdvmPos);
 
-		Pos lAct = cut.getMovingPosition(lIdvm, lMovementSequences, new IdvmSensor(mBlockGrid));
+		Pos lAct = cut.getMovingPosition(lIdvm, lMovementSequences, Direction.EAST);
 
 		assertEquals(lIdvmPos.getPosFromDirection(Direction.EAST), lAct);
 	}
@@ -162,8 +161,19 @@ public class MoveCalculationTest {
 		Pos lIdvmPos = lEnemyPos.getPosFromDirection(Direction.WEST).getPosFromDirection(Direction.WEST);
 		lIdvm.setPosition(lIdvmPos);
 
-		Pos lAct = cut.getMovingPosition(lIdvm, lMovementSequences, new IdvmSensor(mBlockGrid));
+		Pos lAct = cut.getMovingPosition(lIdvm, lMovementSequences, Direction.EAST);
 
 		assertEquals(lIdvmPos.getPosFromDirection(Direction.WEST), lAct);
+	}
+	
+	@Test
+	public void returnsLastCalculatedDecision() {
+		HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> lMovementSequences = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
+		ArrayList<MoveDecisionsProbability> lMoveList = new ArrayList<MoveDecisionsProbability>();
+		lMoveList.add(new MoveDecisionsProbability().appendDecision(Decisions.TARGET, 1));
+		lMovementSequences.put(IdvmState.FOOD, lMoveList);
+		cut.calcMovingDirection(lMovementSequences, IdvmState.FOOD, Direction.WEST);
+		Decisions lAct = cut.getCalculatedDecision();
+		assertEquals(Decisions.TARGET, lAct);
 	}
 }

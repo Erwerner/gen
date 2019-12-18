@@ -1,7 +1,10 @@
 package core.soup;
 
+import globals.Config;
+
 import java.util.ArrayList;
 
+import ui.presenter.iPresentSoup;
 import core.datatypes.Pos;
 import core.exceptions.PosIsOutOfGrid;
 import core.soup.block.BlockGrid;
@@ -10,13 +13,13 @@ import core.soup.block.Enemy;
 import core.soup.block.Food;
 import core.soup.block.iBlock;
 import core.soup.idvm.Idvm;
-import globals.Config;
-import ui.presenter.iPresentSoup;
+import core.soup.idvm.iLiving;
 
 public class Soup implements iSoup {
 	private Idvm mIndividuum;
 	private BlockGrid mBlockGrid;
 	private ArrayList<iBlock> mAllBlocks = new ArrayList<iBlock>();
+	private ArrayList<iLiving> mAllLivings = new ArrayList<iLiving>();
 
 	public Soup(Idvm pIdvm) {
 		mBlockGrid = new BlockGrid();
@@ -26,6 +29,7 @@ public class Soup implements iSoup {
 		initEnemyBlocks();
 		clearSurroundingsOfIdvm();
 		mBlockGrid.addInitialIdvm(mIndividuum);
+		mAllLivings.add(mIndividuum);
 	}
 
 	private void initEnemyBlocks() {
@@ -35,6 +39,7 @@ public class Soup implements iSoup {
 		for (iBlock iEnemyBlock : lEnemyList) {
 			mBlockGrid.setRandomBlock(iEnemyBlock);
 			mAllBlocks.add(iEnemyBlock);
+			mAllLivings.add((iLiving) iEnemyBlock);
 		}
 	}
 
@@ -98,9 +103,8 @@ public class Soup implements iSoup {
 	}
 
 	public void step() {
-		for (iBlock iBlock : mAllBlocks)
-			iBlock.step();
-		mIndividuum.step();
+		for (iLiving iLiving : mAllLivings)
+			iLiving.step();
 		refreshBlocks();
 	}
 
