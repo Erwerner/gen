@@ -1,22 +1,23 @@
 package execution;
 
+import globals.Helpers;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
+import ui.console.monitor.ModelMonitorIdvm;
 import core.genes.Crossover;
 import core.genes.Genome;
 import core.soup.block.BlockType;
 import core.soup.block.IdvmCell;
 import core.soup.idvm.Idvm;
 import devutils.Debug;
-import globals.Helpers;
-import ui.console.monitor.ModelMonitorIdvm;
 
 // TODO 0 IMPL new Pairing 2x/2 + 2x/4 + 2x2/8
 // TODO 1 IMPL Population Save
 public class runCrossover {
 	private static final int cEachIdvmMonitor = 10;
-	private static final int cPopulation = 1024*7;
+	private static final int cPopulation = 1024 * 7;
 	private static final int cFirstMonitorGeneration = 60;
 	private static final int cTopFittest = 4;
 	static ArrayList<Thread> mThreads = new ArrayList<Thread>();
