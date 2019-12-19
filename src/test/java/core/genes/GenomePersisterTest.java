@@ -20,7 +20,7 @@ public class GenomePersisterTest {
 		
 		assertEquals(lGenomeOrigin, lPersistetGenome);
 	}
-	@Test
+
 	public void testDummy() throws ClassNotFoundException, IOException {
 		TestPeristable lObject = new TestPeristable("ABC");
 		Object lAct = cut.peristDummy(lObject);

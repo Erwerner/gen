@@ -36,5 +36,10 @@ public class GeneInt implements Serializable, iGene  {
 	public iGene clone() throws CloneNotSupportedException {
 		return new GeneInt(pMin, pMax, mValue);
 	}
+	@Override
+	public boolean equals(Object o) {
+		GeneInt other = (GeneInt) o;
+		return mValue == other.mValue && pMin == other.pMin && pMax == other.pMax;
+	}
 
 }

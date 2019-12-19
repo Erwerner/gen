@@ -17,6 +17,9 @@ public class IdvmCell extends Block implements Serializable, iGene {
 	private Pos mPosOnIdvm;
 	private BlockType mBlockType;
 
+	public IdvmCell() {
+		super();
+	}
 	public IdvmCell(BlockType pCellType, Pos pPos) {
 		super(BlockType.CELL);
 		mBlockType = pCellType;

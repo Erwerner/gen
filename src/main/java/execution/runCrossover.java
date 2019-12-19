@@ -14,7 +14,6 @@ import devutils.Debug;
 import globals.Helpers;
 import ui.console.monitor.ModelMonitorIdvm;
 
-// TODO 0 IMPL new Pairing 2x/2 + 2x/4 + 2x2/8
 public class runCrossover {
 	private static final int cPopulation = 1024 * 6;
 	private static final int cTopFittest = 8;

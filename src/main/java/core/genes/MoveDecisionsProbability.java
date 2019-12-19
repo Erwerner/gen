@@ -55,4 +55,9 @@ public class MoveDecisionsProbability implements Serializable, iGene {
 		lNewMoveProbability.mPossibleDecisions.addAll((ArrayList<Decisions>) mPossibleDecisions.clone());
 		return lNewMoveProbability;
 	}
+	@Override
+	public boolean equals(Object o) {
+		MoveDecisionsProbability other = (MoveDecisionsProbability) o;
+		return mPossibleDecisions.equals(other.mPossibleDecisions);
+	}
 }

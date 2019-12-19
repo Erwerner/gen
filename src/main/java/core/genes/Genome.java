@@ -171,4 +171,9 @@ public class Genome implements Cloneable, iPresentGenomeStats, Serializable {
 		}
 		return lPercentage;
 	}
+	@Override
+	public boolean equals(Object o) {
+		Genome other = (Genome) o;
+		return mHunger.equals(other.mHunger) && cellGrow.equals(other.cellGrow) && moveSequencesForState.equals(other.moveSequencesForState);
+	}
 }

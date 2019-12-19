@@ -1,12 +1,23 @@
 package core.soup.block;
 
+import java.io.Serializable;
+
 import core.datatypes.Pos;
 
-public abstract class Block implements iBlock {
+public abstract class Block implements Serializable,  iBlock {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public Block(BlockType pBlockType) {
 		super();
 		mBlockType = pBlockType;
+	}
+
+	public Block() {
+		// TODO Auto-generated constructor stub
 	}
 
 	private BlockType mBlockType;

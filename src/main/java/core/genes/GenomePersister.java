@@ -3,7 +3,6 @@ package core.genes;
 import java.io.*;
 import java.util.Calendar;
 
-//TODO 1 IMPL Population Save
 public class GenomePersister {
 
 	public void perist(Genome pGenomeOrigin, String pPath) throws FileNotFoundException, IOException {
@@ -16,14 +15,14 @@ public class GenomePersister {
 		return load(lFilename);
 	}
 
-	public Object load(String pFileName) throws FileNotFoundException, IOException, ClassNotFoundException {
+	public Genome load(String pFileName) throws FileNotFoundException, IOException, ClassNotFoundException {
 		FileInputStream fileInputStream = null;
 		ObjectInputStream objectInputStream = null;
 
-		TestPeristable lLoadedObject;
+		Genome lLoadedObject;
 		fileInputStream = new FileInputStream(getPathToFilename(pFileName));
 		objectInputStream = new ObjectInputStream(fileInputStream);
-		lLoadedObject = (TestPeristable) objectInputStream.readObject();
+		lLoadedObject = (Genome) objectInputStream.readObject();
 		objectInputStream.close();
 		return lLoadedObject;
 	}
