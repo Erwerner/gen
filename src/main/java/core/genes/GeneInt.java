@@ -1,9 +1,14 @@
 package core.genes;
 
+import java.io.Serializable;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class GeneInt implements iGene {
+public class GeneInt implements Serializable, iGene  {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int pMax;
 	private int pMin;
 	private int mValue;

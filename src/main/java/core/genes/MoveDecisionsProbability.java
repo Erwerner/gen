@@ -1,12 +1,17 @@
 package core.genes;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import core.datatypes.Decisions;
 import globals.Config;
 import globals.Helpers;
 
-public class MoveDecisionsProbability implements iGene {
+public class MoveDecisionsProbability implements Serializable, iGene {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	// TODO 9 REF make private
 	public ArrayList<Decisions> mPossibleDecisions = new ArrayList<Decisions>();
 

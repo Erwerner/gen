@@ -2,6 +2,7 @@ package core.genes;
 
 import static org.junit.Assert.assertNotNull;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -14,7 +15,11 @@ import core.soup.idvm.IdvmState;
 import globals.Config;
 import globals.Helpers;
 
-public class Genome implements Cloneable, iPresentGenomeStats {
+public class Genome implements Cloneable, iPresentGenomeStats, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private GeneInt mHunger = new GeneInt(0, Config.cMaxEnergy,
 			Config.cMaxEnergy / 2);
 	// TODO 9 REF make this private
@@ -128,7 +133,7 @@ public class Genome implements Cloneable, iPresentGenomeStats {
 		return lClone;
 	}
 
-	public Double getPercentageOfTargetMovements(int pNumberOfCellGrow) {
+	public Double getPercentageOfWrongTargetDecision(int pNumberOfCellGrow) {
 		Double lPercentage = 0.0;
 		ArrayList<IdvmCell> lSensors = new ArrayList<IdvmCell>();
 		for (int iCountCellGrow = 0; iCountCellGrow <= pNumberOfCellGrow + 3; iCountCellGrow++) {
@@ -144,17 +149,24 @@ public class Genome implements Cloneable, iPresentGenomeStats {
 			MoveDecisionsProbability lMovement = moveSequencesForState.get(
 					IdvmState.ENEMY).get(iCountCellGrow);
 			if (lMovement.mPossibleDecisions
-							.contains(Decisions.TARGET_OPPOSITE)
-					|| lMovement.mPossibleDecisions
-							.contains(Decisions.TARGET_SITE1)
-					|| lMovement.mPossibleDecisions
-							.contains(Decisions.TARGET_SITE2)) {
-				lPercentage += 0.5 / (pNumberOfCellGrow + 1);
+							.contains(Decisions.TARGET)) {
+				lPercentage += 0.25 / (pNumberOfCellGrow + 1);
 			}
 			lMovement = moveSequencesForState.get(IdvmState.FOOD).get(
 					iCountCellGrow);
-			if (lMovement.mPossibleDecisions.contains(Decisions.TARGET)) {
-				lPercentage += 0.5 / (pNumberOfCellGrow + 1);
+			if (lMovement.mPossibleDecisions.contains(Decisions.TARGET_OPPOSITE)) {
+				lPercentage += 0.25 / (pNumberOfCellGrow + 1);
+			}
+			lMovement = moveSequencesForState.get(
+					IdvmState.ENEMY_HUNGER).get(iCountCellGrow);
+			if (lMovement.mPossibleDecisions
+							.contains(Decisions.TARGET)) {
+				lPercentage += 0.25 / (pNumberOfCellGrow + 1);
+			}
+			lMovement = moveSequencesForState.get(IdvmState.FOOD_HUNGER).get(
+					iCountCellGrow);
+			if (lMovement.mPossibleDecisions.contains(Decisions.TARGET_OPPOSITE)) {
+				lPercentage += 0.25 / (pNumberOfCellGrow + 1);
 			}
 		}
 		return lPercentage;

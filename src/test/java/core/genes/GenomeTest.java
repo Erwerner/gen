@@ -131,7 +131,7 @@ public class GenomeTest {
 		cut.cellGrow.set(4, lLifeCell);
 		cut.cellGrow.set(5, new IdvmCell(BlockType.SENSOR, new Pos(1, 1)));
 
-		Double lPercentage = cut.getPercentageOfTargetMovements(1);
+		Double lPercentage = cut.getPercentageOfWrongTargetDecision(1);
 		Double lExp = 0.0;
 		assertEquals(lExp, lPercentage);
 	}
@@ -168,7 +168,7 @@ public class GenomeTest {
 		lEnemyMovement.set(6, lDecisionNoTarget );
 		lFoodMovement.set(6, lDecisionNoTarget );
 		
-		Double lPercentage = cut.getPercentageOfTargetMovements(2);
+		Double lPercentage = cut.getPercentageOfWrongTargetDecision(2);
 		Double lExp = 0.0;
 		assertEquals(lExp, lPercentage);
 	}
@@ -210,7 +210,7 @@ public class GenomeTest {
 		lEnemyMovement.set(5, lDecisionTarget );
 		lFoodMovement.set(5, lDecisionTarget );
 		
-		Double lPercentage = cut.getPercentageOfTargetMovements(3);
+		Double lPercentage = cut.getPercentageOfWrongTargetDecision(3);
 		Double lExp = 0.25;
 		assertEquals(lExp, lPercentage);
 	}
@@ -249,7 +249,7 @@ public class GenomeTest {
 		lEnemyMovement.set(3, lDecisionTarget );
 		lFoodMovement.set(3, lDecisionTarget );
 		
-		Double lPercentage = cut.getPercentageOfTargetMovements(0);
+		Double lPercentage = cut.getPercentageOfWrongTargetDecision(0);
 		Double lExp = 1.0;
 		assertEquals(lExp, lPercentage);
 	}
