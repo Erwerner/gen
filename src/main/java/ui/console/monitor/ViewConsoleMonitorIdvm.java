@@ -104,12 +104,14 @@ public class ViewConsoleMonitorIdvm extends View {
 			return "©";
 		case ENEMY:
 			return "Z";
-		case LIFE:
+		case PARTNER:
 			return "❤";
+		case LIFE:
+			return "┼";
 		case SENSOR:
-			return "Θ";
+			return "Ø";
 		case MOVE:
-			return "≈";
+			return "≡";
 		case DEFENCE:
 			return "▒";
 		default:

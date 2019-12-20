@@ -11,6 +11,7 @@ import core.soup.block.BlockGrid;
 import core.soup.block.BlockType;
 import core.soup.block.Enemy;
 import core.soup.block.Food;
+import core.soup.block.Partner;
 import core.soup.block.iBlock;
 import core.soup.idvm.Idvm;
 import core.soup.idvm.iLiving;
@@ -27,9 +28,20 @@ public class Soup implements iSoup {
 		mIndividuum.setBlockGrid(mBlockGrid);
 		initFoodBlocks();
 		initEnemyBlocks();
+		initPartnerBlocks();
 		clearSurroundingsOfIdvm();
 		mBlockGrid.addInitialIdvm(mIndividuum);
 		mAllLivings.add(mIndividuum);
+	}
+
+	private void initPartnerBlocks() {
+		Partner[] lPartner = new Partner[Config.cPartnerSupply];
+		for (int i = 0; i < Config.cPartnerSupply; i++)
+			lPartner[i] = new Partner();
+		for (iBlock iPartner : lPartner) {
+			mBlockGrid.setRandomBlock(iPartner);
+			mAllBlocks.add(iPartner);
+		}
 	}
 
 	private void initEnemyBlocks() {
