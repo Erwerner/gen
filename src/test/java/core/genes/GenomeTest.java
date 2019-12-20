@@ -40,8 +40,7 @@ public class GenomeTest {
 	@Test
 	public void mutationDoesntSetNullSequences() {
 		cut.forceMutation();
-		ArrayList<MoveDecisionsProbability> lIdleSequence = cut.moveSequencesForState
-				.get(IdvmState.IDLE);
+		ArrayList<MoveDecisionsProbability> lIdleSequence = cut.moveSequencesForState.get(IdvmState.IDLE);
 		cut.naturalMutation();
 		for (MoveDecisionsProbability iProbability : lIdleSequence)
 			assertNotNull(iProbability);
@@ -50,8 +49,7 @@ public class GenomeTest {
 	@Test
 	public void nullSequencesBecomePrevious() {
 		cut.forceMutation();
-		ArrayList<MoveDecisionsProbability> lIdleSequence = cut.moveSequencesForState
-				.get(IdvmState.IDLE);
+		ArrayList<MoveDecisionsProbability> lIdleSequence = cut.moveSequencesForState.get(IdvmState.IDLE);
 		assertNotNull(lIdleSequence.get(0).mPossibleDecisions);
 		assertNotNull(lIdleSequence.get(1).mPossibleDecisions);
 		lIdleSequence.get(1).mPossibleDecisions = null;
@@ -63,8 +61,7 @@ public class GenomeTest {
 	@Test
 	public void followingSequencesHaveSameContent() {
 		cut.forceMutation();
-		ArrayList<MoveDecisionsProbability> lIdleSequence = cut.moveSequencesForState
-				.get(IdvmState.IDLE);
+		ArrayList<MoveDecisionsProbability> lIdleSequence = cut.moveSequencesForState.get(IdvmState.IDLE);
 		ArrayList<Decisions> lFirstProbability = lIdleSequence.get(0).mPossibleDecisions;
 		assertNotNull(lFirstProbability);
 		assertNotNull(lIdleSequence.get(1).mPossibleDecisions);
@@ -76,21 +73,18 @@ public class GenomeTest {
 	@Test
 	public void followingSequencesAreNotSameInstance() {
 		cut.forceMutation();
-		ArrayList<MoveDecisionsProbability> lIdleSequence = cut.moveSequencesForState
-				.get(IdvmState.IDLE);
+		ArrayList<MoveDecisionsProbability> lIdleSequence = cut.moveSequencesForState.get(IdvmState.IDLE);
 		ArrayList<Decisions> lFirstProbability = lIdleSequence.get(0).mPossibleDecisions;
 		assertNotNull(lFirstProbability);
 		assertNotNull(lIdleSequence.get(1).mPossibleDecisions);
 		lIdleSequence.get(1).mPossibleDecisions = null;
 		cut.naturalMutation();
 		lFirstProbability.clear();
-		assertNotEquals(lFirstProbability,
-				lIdleSequence.get(1).mPossibleDecisions);
+		assertNotEquals(lFirstProbability, lIdleSequence.get(1).mPossibleDecisions);
 	}
 
 	@Test
-	public void cloneWorksCorrectForCellGrow()
-			throws CloneNotSupportedException {
+	public void cloneWorksCorrectForCellGrow() throws CloneNotSupportedException {
 		cut.forceMutation();
 		Genome lCopy = (Genome) cut.clone();
 		Genome lAlteredCopy = (Genome) cut.clone();
@@ -103,19 +97,15 @@ public class GenomeTest {
 	}
 
 	@Test
-	public void cloneWorksCorrectForSequences()
-			throws CloneNotSupportedException {
+	public void cloneWorksCorrectForSequences() throws CloneNotSupportedException {
 		cut.forceMutation();
 		Genome lCopy = (Genome) cut.clone();
 		Genome lAlteredCopy = (Genome) cut.clone();
-		lAlteredCopy.moveSequencesForState.get(IdvmState.IDLE).get(1)
-				.appendDecision(Decisions.UP, 100);
-		ArrayList<Decisions> lActMovement = cut.moveSequencesForState.get(
-				IdvmState.IDLE).get(1).mPossibleDecisions;
-		ArrayList<Decisions> lCopyMovement = lCopy.moveSequencesForState.get(
-				IdvmState.IDLE).get(1).mPossibleDecisions;
-		ArrayList<Decisions> lAlteredCopyMovement = lAlteredCopy.moveSequencesForState
-				.get(IdvmState.IDLE).get(1).mPossibleDecisions;
+		lAlteredCopy.moveSequencesForState.get(IdvmState.IDLE).get(1).appendDecision(Decisions.UP, 100);
+		ArrayList<Decisions> lActMovement = cut.moveSequencesForState.get(IdvmState.IDLE).get(1).mPossibleDecisions;
+		ArrayList<Decisions> lCopyMovement = lCopy.moveSequencesForState.get(IdvmState.IDLE).get(1).mPossibleDecisions;
+		ArrayList<Decisions> lAlteredCopyMovement = lAlteredCopy.moveSequencesForState.get(IdvmState.IDLE)
+				.get(1).mPossibleDecisions;
 		assertEquals(lCopyMovement, lActMovement);
 		assertNotEquals(lAlteredCopyMovement, lActMovement);
 	}
@@ -149,27 +139,32 @@ public class GenomeTest {
 
 		ArrayList<MoveDecisionsProbability> lEnemyMovement = cut.moveSequencesForState.get(IdvmState.ENEMY);
 		ArrayList<MoveDecisionsProbability> lFoodMovement = cut.moveSequencesForState.get(IdvmState.FOOD);
-		
 
 		MoveDecisionsProbability lDecisionNoTarget = new MoveDecisionsProbability();
 		lDecisionNoTarget.appendDecision(Decisions.LEFT, 1);
-		lEnemyMovement.set(0, lDecisionNoTarget );
-		lFoodMovement.set(0, lDecisionNoTarget );
-		lEnemyMovement.set(1, lDecisionNoTarget );
-		lFoodMovement.set(1, lDecisionNoTarget );
-		lEnemyMovement.set(2, lDecisionNoTarget );
-		lFoodMovement.set(2, lDecisionNoTarget );
-		lEnemyMovement.set(3, lDecisionNoTarget );
-		lFoodMovement.set(3, lDecisionNoTarget );
-		lEnemyMovement.set(4, lDecisionNoTarget );
-		lFoodMovement.set(4, lDecisionNoTarget );
-		lEnemyMovement.set(5, lDecisionNoTarget );
-		lFoodMovement.set(5, lDecisionNoTarget );
-		lEnemyMovement.set(6, lDecisionNoTarget );
-		lFoodMovement.set(6, lDecisionNoTarget );
-		
+		lEnemyMovement.set(0, lDecisionNoTarget);
+		lFoodMovement.set(0, lDecisionNoTarget);
+		lEnemyMovement.set(1, lDecisionNoTarget);
+		lFoodMovement.set(1, lDecisionNoTarget);
+		lEnemyMovement.set(2, lDecisionNoTarget);
+		lFoodMovement.set(2, lDecisionNoTarget);
+		lEnemyMovement.set(3, lDecisionNoTarget);
+		lFoodMovement.set(3, lDecisionNoTarget);
+		lEnemyMovement.set(4, lDecisionNoTarget);
+		lFoodMovement.set(4, lDecisionNoTarget);
+		lEnemyMovement.set(5, lDecisionNoTarget);
+		lFoodMovement.set(5, lDecisionNoTarget);
+		lEnemyMovement.set(6, lDecisionNoTarget);
+		lFoodMovement.set(6, lDecisionNoTarget);
+
 		Double lPercentage = cut.getPercentageOfWrongTargetDecision(2);
 		Double lExp = 0.0;
 		assertEquals(lExp, lPercentage);
+	}
+
+	@Test
+	public void cloneedObjectIsEqual() throws CloneNotSupportedException {
+		Genome lClone = (Genome) cut.forceMutation().clone();
+		assertEquals(cut, lClone);
 	}
 }

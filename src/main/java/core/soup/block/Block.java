@@ -17,7 +17,7 @@ public abstract class Block implements Serializable,  iBlock {
 	}
 
 	public Block() {
-		// TODO Auto-generated constructor stub
+		// For serialization
 	}
 
 	private BlockType mBlockType;

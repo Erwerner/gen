@@ -14,6 +14,7 @@ import devutils.Debug;
 import globals.Helpers;
 import ui.console.monitor.ModelMonitorIdvm;
 
+//TODO 0 persist and load
 public class runCrossover {
 	private static final int cPopulation = 1024 * 6;
 	private static final int cTopFittest = 8;
