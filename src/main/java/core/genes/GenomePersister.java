@@ -3,6 +3,7 @@ package core.genes;
 import java.io.*;
 import java.util.Calendar;
 
+//TODO 3 write delete method
 public class GenomePersister {
 
 	public void perist(Genome pGenomeOrigin, String pPath) throws FileNotFoundException, IOException {

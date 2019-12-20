@@ -14,7 +14,7 @@ import devutils.Debug;
 import globals.Helpers;
 import ui.console.monitor.ModelMonitorIdvm;
 
-//TODO 0 persist and load
+//TODO 0 PAIRING, persist, load
 public class runCrossover {
 	private static final int cPopulation = 1024 * 6;
 	private static final int cTopFittest = 8;
@@ -81,12 +81,12 @@ public class runCrossover {
 		for (Idvm iIdvm : pFittestIdvm) {
 			lCount += iIdvm.getStepCount();
 		}
-		System.out.println(lCount + "/" + pFittestIdvm.size());
+		System.out.println("Average steps: " + lCount / pFittestIdvm.size() + " * " + pFittestIdvm.size());
 		printBlockStats(pFittestIdvm, 4);
 		printBlockStats(pFittestIdvm, 6);
+		printBlockStats(pFittestIdvm, 8);
 		printBlockStats(pFittestIdvm, 10);
-		printBlockStats(pFittestIdvm, 14);
-		printTargetStats(pFittestIdvm);
+		printBlockStats(pFittestIdvm, 12);
 	}
 
 	private static void printTargetStats(ArrayList<Idvm> pFittestIdvm) {
