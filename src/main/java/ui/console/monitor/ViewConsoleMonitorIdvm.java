@@ -13,6 +13,7 @@ import core.exceptions.PosIsOutOfGrid;
 import core.soup.block.iBlock;
 import core.soup.idvm.IdvmState;
 import core.soup.idvm.Sensor;
+import globals.Config;
 
 public class ViewConsoleMonitorIdvm extends View {
 	public static final String ANSI_RESET = "\u001B[0m";
@@ -121,9 +122,7 @@ public class ViewConsoleMonitorIdvm extends View {
 		System.out.print(" Alive: " + mIdvm.isAlive());
 		System.out.print(" State: " + mIdvm.getState());
 		System.out.println();
-		for (int x = 1; x <= mIdvm.getEnergyCount(); x++)
-			System.out.print("*");
-		System.out.println();
+		System.out.println("Energy: " + 100 * mIdvm.getEnergyCount() / Config.cMaxEnergy + " %");
 	}
 
 	private void clearScreen() {

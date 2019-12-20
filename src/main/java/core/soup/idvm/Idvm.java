@@ -19,6 +19,7 @@ import core.soup.block.IdvmCell;
 import core.soup.block.iBlock;
 import globals.Config;
 
+//TODO 0 impl Partner Fitnes
 public class Idvm extends Block implements iIdvm {
 	Genome mGenomeOrigin;
 	Genome mGenomeUsing;

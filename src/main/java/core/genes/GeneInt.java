@@ -1,9 +1,14 @@
 package core.genes;
 
+import java.io.Serializable;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class GeneInt implements iGene {
+public class GeneInt implements Serializable, iGene  {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int pMax;
 	private int pMin;
 	private int mValue;
@@ -30,6 +35,11 @@ public class GeneInt implements iGene {
 	@Override
 	public iGene clone() throws CloneNotSupportedException {
 		return new GeneInt(pMin, pMax, mValue);
+	}
+	@Override
+	public boolean equals(Object o) {
+		GeneInt other = (GeneInt) o;
+		return mValue == other.mValue && pMin == other.pMin && pMax == other.pMax;
 	}
 
 }

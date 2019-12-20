@@ -1,5 +1,7 @@
 package execution;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -12,17 +14,14 @@ import devutils.Debug;
 import globals.Helpers;
 import ui.console.monitor.ModelMonitorIdvm;
 
-// TODO 0 IMPL new Pairing 2x/2 + 2x/4 + 2x2/8
-// TODO 1 IMPL Population Save
+//TODO 0 PAIRING, persist, load
 public class runCrossover {
-	private static final int cEachIdvmMonitor = 10;
-	private static final int cPopulation = 1024*7;
-	private static final int cFirstMonitorGeneration = 60;
-	private static final int cTopFittest = 4;
+	private static final int cPopulation = 1024 * 6;
+	private static final int cTopFittest = 8;
 	static ArrayList<Thread> mThreads = new ArrayList<Thread>();
 
-	public static void main(String[] args) throws CloneNotSupportedException,
-			InterruptedException {
+	public static void main(String[] args)
+			throws CloneNotSupportedException, InterruptedException, FileNotFoundException, IOException {
 		System.out.println("Init");
 		Debug.printCurrentChange();
 		Genome lBestOfLastGeneration = new Genome().forceMutation();
@@ -30,14 +29,10 @@ public class runCrossover {
 		lPopulation = initializePopulation();
 		int iGeneration = 0;
 		while (true) {
-			if (iGeneration < cFirstMonitorGeneration
-					|| iGeneration % cEachIdvmMonitor != 0)
-				lBestOfLastGeneration = null;
 			lPopulation = runPopulation(lPopulation, lBestOfLastGeneration);
 			ArrayList<Idvm> lFittestIdvm = evaluateFitness(lPopulation);
 			checkFitness(lFittestIdvm);
-			lBestOfLastGeneration = (Genome) lFittestIdvm
-					.get(lFittestIdvm.size() - 4).getGenomeOrigin().clone();
+			lBestOfLastGeneration = (Genome) lFittestIdvm.get(lFittestIdvm.size() - 4).getGenomeOrigin().clone();
 			Debug.printCurrentChange();
 			System.out.println("Generation finished: " + iGeneration);
 			lPopulation = getOffsprings(lFittestIdvm);
@@ -45,8 +40,7 @@ public class runCrossover {
 		}
 	}
 
-	private static ArrayList<Idvm> getOffsprings(ArrayList<Idvm> pFittestIdvm)
-			throws CloneNotSupportedException {
+	private static ArrayList<Idvm> getOffsprings(ArrayList<Idvm> pFittestIdvm) throws CloneNotSupportedException {
 		ArrayList<Idvm> lOffsprings = new ArrayList<Idvm>();
 		ArrayList<Idvm> lParents = new ArrayList<Idvm>();
 		for (int iIdvmIdx = pFittestIdvm.size() - 1; iIdvmIdx >= 0; iIdvmIdx--) {
@@ -87,39 +81,35 @@ public class runCrossover {
 		for (Idvm iIdvm : pFittestIdvm) {
 			lCount += iIdvm.getStepCount();
 		}
-		System.out.println(lCount + "/" + pFittestIdvm.size());
+		System.out.println("Average steps: " + lCount / pFittestIdvm.size() + " * " + pFittestIdvm.size());
 		printBlockStats(pFittestIdvm, 4);
 		printBlockStats(pFittestIdvm, 6);
+		printBlockStats(pFittestIdvm, 8);
 		printBlockStats(pFittestIdvm, 10);
-		printBlockStats(pFittestIdvm, 14);
-		printTargetStats(pFittestIdvm);
+		printBlockStats(pFittestIdvm, 12);
 	}
 
 	private static void printTargetStats(ArrayList<Idvm> pFittestIdvm) {
 		Double lPercentageTotal = 0.0;
 		for (Idvm iIdvm : pFittestIdvm) {
-			lPercentageTotal += iIdvm.getGenomeOrigin()
-					.getPercentageOfTargetMovements(14);
+			lPercentageTotal += iIdvm.getGenomeOrigin().getPercentageOfWrongTargetDecision(14);
 		}
-		System.out.println("Population Target Percentage: " + lPercentageTotal);
+		System.out.println("Wrong Target Decision: " + lPercentageTotal);
 	}
 
 	private static void printBlockStats(ArrayList<Idvm> pFittestIdvm, int pCount) {
 		System.out.print(pCount + " Cells: ");
-		BlockType[] lCellBlocks = { BlockType.DEFENCE, BlockType.MOVE,
-				BlockType.LIFE, BlockType.SENSOR };
+		BlockType[] lCellBlocks = { BlockType.DEFENCE, BlockType.MOVE, BlockType.LIFE, BlockType.SENSOR };
 		for (BlockType iBlockType : lCellBlocks) {
 			int lTotalBlockCount = 0;
 			for (Idvm iIdvm : pFittestIdvm) {
 				for (int idx = 0; idx < (pCount); idx++) {
-					IdvmCell lCellGrow = iIdvm.getGenomeOrigin().cellGrow
-							.get(idx);
+					IdvmCell lCellGrow = iIdvm.getGenomeOrigin().cellGrow.get(idx);
 					if (lCellGrow.getBlockType() == iBlockType)
 						lTotalBlockCount++;
 				}
 			}
-			System.out.print(100 * lTotalBlockCount / pFittestIdvm.size()
-					/ (pCount) + "% " + iBlockType + "; ");
+			System.out.print(100 * lTotalBlockCount / pFittestIdvm.size() / (pCount) + "% " + iBlockType + "; ");
 		}
 		System.out.println("");
 	}
@@ -141,32 +131,32 @@ public class runCrossover {
 					lFittestIdvm.add(iIdvm);
 			}
 		}
-		for (int iFitnessIdx = pPopulation.size() - 1; iFitnessIdx >= pPopulation
-				.size() / cTopFittest; iFitnessIdx--) {
+		for (int iFitnessIdx = pPopulation.size() - 1; iFitnessIdx >= pPopulation.size() / cTopFittest; iFitnessIdx--) {
 			lFittestIdvm.remove(lFittestIdvm.size() - 1);
 		}
 		return lFittestIdvm;
 	}
 
-	private static ArrayList<Idvm> runPopulation(ArrayList<Idvm> pPopulation,
-			Genome pBestOfLastGeneration) throws CloneNotSupportedException,
-			InterruptedException {
+	private static ArrayList<Idvm> runPopulation(ArrayList<Idvm> pPopulation, Genome pBestOfLastGeneration)
+			throws CloneNotSupportedException, InterruptedException, FileNotFoundException, IOException {
 		ArrayList<Idvm> lExecutedPopulation = new ArrayList<Idvm>();
 		ArrayList<IdvmExecutionThread> mIdvmExecutionThread = new ArrayList<IdvmExecutionThread>();
 		mThreads = new ArrayList<Thread>();
 		for (Idvm iIdvm : pPopulation) {
-			IdvmExecutionThread lIdvmRunner = new IdvmExecutionThread(
-					(Genome) iIdvm.getGenomeOrigin().clone());
+			new Helpers().waitForConfigFlag("run");
+			IdvmExecutionThread lIdvmRunner = new IdvmExecutionThread((Genome) iIdvm.getGenomeOrigin().clone());
 			Thread lThread = new Thread(lIdvmRunner);
 			lThread.start();
-			// lThread.join();
+			if (!new Helpers().isFlagTrue("parallel"))
+				lThread.join();
 			mThreads.add(lThread);
 			mIdvmExecutionThread.add(lIdvmRunner);
+			if (new Helpers().isFlagTrue("monitor"))
+				new ModelMonitorIdvm().runGenome(pBestOfLastGeneration);
 		}
-		ModelMonitorIdvm lMonitor = new ModelMonitorIdvm();
-		if (pBestOfLastGeneration != null)
-			lMonitor.runGenome(pBestOfLastGeneration);
 		for (Thread iThread : mThreads) {
+			if (new Helpers().isFlagTrue("monitor"))
+				new ModelMonitorIdvm().runGenome(pBestOfLastGeneration);
 			iThread.join();
 		}
 		for (IdvmExecutionThread iExecutionThread : mIdvmExecutionThread) {

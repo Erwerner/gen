@@ -1,16 +1,25 @@
 package core.soup.block;
 
+import java.io.Serializable;
+
 import core.datatypes.Pos;
 import core.genes.iGene;
 import globals.Helpers;
 import lombok.Data;
 
 @Data
-public class IdvmCell extends Block implements iGene {
+public class IdvmCell extends Block implements Serializable, iGene {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Pos mPosOnIdvm;
 	private BlockType mBlockType;
 
+	public IdvmCell() {
+		super();
+	}
 	public IdvmCell(BlockType pCellType, Pos pPos) {
 		super(BlockType.CELL);
 		mBlockType = pCellType;

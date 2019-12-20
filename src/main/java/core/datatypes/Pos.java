@@ -1,12 +1,17 @@
 package core.datatypes;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import core.exceptions.PosIsOutOfGrid;
 import core.exceptions.WrongDirection;
 import globals.Config;
 
-public class Pos {
+public class Pos implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public int x;
 	public int y;
 
