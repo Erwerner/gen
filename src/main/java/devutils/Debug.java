@@ -2,7 +2,7 @@ package devutils;
 
 public class Debug {
 	public static boolean debugOn = true;
-	public static String currentChange = "Controll";
+	public static String currentChange = "wip";
 
 	public static void printCurrentChange() {
 		if (debugOn)

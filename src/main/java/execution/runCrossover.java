@@ -11,13 +11,14 @@ import core.soup.block.BlockType;
 import core.soup.block.IdvmCell;
 import core.soup.idvm.Idvm;
 import devutils.Debug;
+import globals.Config;
 import globals.Helpers;
 import ui.console.monitor.ModelMonitorIdvm;
 
 //TODO 0 PAIRING, persist, load
 public class runCrossover {
-	private static final int cPopulation = 1024 * 6;
-	private static final int cTopFittest = 8;
+	private static final int cPopulation = 1024 * 4;
+	private static final int cTopFittest = 1;
 	static ArrayList<Thread> mThreads = new ArrayList<Thread>();
 
 	public static void main(String[] args)
@@ -77,11 +78,17 @@ public class runCrossover {
 	}
 
 	private static void checkFitness(ArrayList<Idvm> pFittestIdvm) {
-		int lCount = 0;
+		int lStepCount = 0;
 		for (Idvm iIdvm : pFittestIdvm) {
-			lCount += iIdvm.getStepCount();
+			lStepCount += iIdvm.getStepCount();
 		}
-		System.out.println("Average steps: " + lCount / pFittestIdvm.size() + " * " + pFittestIdvm.size());
+		int lPartnerCount = 0;
+		for (Idvm iIdvm : pFittestIdvm) {
+			lPartnerCount += iIdvm.getPartnerCount();
+		}
+		System.out.println("Average steps: " + lStepCount / pFittestIdvm.size() + " * " + pFittestIdvm.size());
+		System.out.println(
+				"Average partner: " + 10 * lPartnerCount / pFittestIdvm.size() + "/10 * " + pFittestIdvm.size());
 		printBlockStats(pFittestIdvm, 4);
 		printBlockStats(pFittestIdvm, 6);
 		printBlockStats(pFittestIdvm, 8);
@@ -115,25 +122,27 @@ public class runCrossover {
 	}
 
 	private static ArrayList<Idvm> evaluateFitness(ArrayList<Idvm> pPopulation) {
-		ArrayList<Integer> lFitness = new ArrayList<Integer>();
-
-		for (Idvm iIdvm : pPopulation) {
-			if (!lFitness.contains(iIdvm.getStepCount()))
-				lFitness.add(iIdvm.getStepCount());
-		}
-		Collections.sort(lFitness);
+		// ArrayList<Integer> lFitness = new ArrayList<Integer>();
+		/*
+		 * for (Idvm iIdvm : pPopulation) { if
+		 * (!lFitness.contains(iIdvm.getPartnerCount()))
+		 * lFitness.add(iIdvm.getPartnerCount()); } Collections.sort(lFitness);
+		 */
 		ArrayList<Idvm> lFittestIdvm = new ArrayList<Idvm>();
-		for (int iFitnessIdx = lFitness.size() - 1; iFitnessIdx >= 0; iFitnessIdx--) {
-			// for (int iFitnessIdx = 0; iFitnessIdx < lFitness.size() ;
-			// iFitnessIdx++) {
-			for (Idvm iIdvm : pPopulation) {
-				if (iIdvm.getStepCount() == (int) lFitness.get(iFitnessIdx))
-					lFittestIdvm.add(iIdvm);
-			}
+		// for (int iFitnessIdx = lFitness.size() - 1; iFitnessIdx >= 0; iFitnessIdx--)
+		// {
+		// for (int iFitnessIdx = 0; iFitnessIdx < lFitness.size() ;
+		// iFitnessIdx++) {
+		for (Idvm iIdvm : pPopulation) {
+			// if(iIdvm.getPartnerCount()>0 ||
+			// iIdvm.getStepCount()>Config.cFoodEnergy/(Config.cLifeEnergyCost)/5 )
+			// if (iIdvm.getPartnerCount() == (int) lFitness.get(iFitnessIdx))
+			for (int iPairings = 0; iPairings < iIdvm.getPartnerCount() + 1; iPairings++)
+				lFittestIdvm.add(iIdvm);
 		}
-		for (int iFitnessIdx = pPopulation.size() - 1; iFitnessIdx >= pPopulation.size() / cTopFittest; iFitnessIdx--) {
-			lFittestIdvm.remove(lFittestIdvm.size() - 1);
-		}
+		// }
+		while( lFittestIdvm.size() +1  > cPopulation)
+			lFittestIdvm.remove(Helpers.rndInt(lFittestIdvm.size()));
 		return lFittestIdvm;
 	}
 

@@ -121,6 +121,7 @@ public class ViewConsoleMonitorIdvm extends View {
 
 	private void printStats() {
 		System.out.print("Steps: " + mIdvm.getStepCount());
+		System.out.print(" Partner: " + mIdvm.getPartnerCount());
 		System.out.print(" Alive: " + mIdvm.isAlive());
 		System.out.print(" State: " + mIdvm.getState());
 		System.out.println();
