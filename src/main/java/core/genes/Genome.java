@@ -1,6 +1,8 @@
 package core.genes;
 
 import static org.junit.Assert.assertNotNull;
+import globals.Config;
+import globals.Helpers;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,8 +14,6 @@ import core.datatypes.Pos;
 import core.soup.block.BlockType;
 import core.soup.block.IdvmCell;
 import core.soup.idvm.IdvmState;
-import globals.Config;
-import globals.Helpers;
 
 public class Genome implements Cloneable, iPresentGenomeStats, Serializable {
 	/**
@@ -52,6 +52,7 @@ public class Genome implements Cloneable, iPresentGenomeStats, Serializable {
 		mutate(Config.cMutationRate);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void mutate(Double pMutationRate) {
 		ArrayList<iGene> lGenes;
 		lGenes = getGeneCollection();
@@ -148,32 +149,34 @@ public class Genome implements Cloneable, iPresentGenomeStats, Serializable {
 
 			MoveDecisionsProbability lMovement = moveSequencesForState.get(
 					IdvmState.ENEMY).get(iCountCellGrow);
-			if (lMovement.mPossibleDecisions
-							.contains(Decisions.TARGET)) {
+			if (lMovement.mPossibleDecisions.contains(Decisions.TARGET)) {
 				lPercentage += 0.25 / (pNumberOfCellGrow + 1);
 			}
 			lMovement = moveSequencesForState.get(IdvmState.FOOD).get(
 					iCountCellGrow);
-			if (lMovement.mPossibleDecisions.contains(Decisions.TARGET_OPPOSITE)) {
+			if (lMovement.mPossibleDecisions
+					.contains(Decisions.TARGET_OPPOSITE)) {
 				lPercentage += 0.25 / (pNumberOfCellGrow + 1);
 			}
-			lMovement = moveSequencesForState.get(
-					IdvmState.ENEMY_HUNGER).get(iCountCellGrow);
-			if (lMovement.mPossibleDecisions
-							.contains(Decisions.TARGET)) {
+			lMovement = moveSequencesForState.get(IdvmState.ENEMY_HUNGER).get(
+					iCountCellGrow);
+			if (lMovement.mPossibleDecisions.contains(Decisions.TARGET)) {
 				lPercentage += 0.25 / (pNumberOfCellGrow + 1);
 			}
 			lMovement = moveSequencesForState.get(IdvmState.FOOD_HUNGER).get(
 					iCountCellGrow);
-			if (lMovement.mPossibleDecisions.contains(Decisions.TARGET_OPPOSITE)) {
+			if (lMovement.mPossibleDecisions
+					.contains(Decisions.TARGET_OPPOSITE)) {
 				lPercentage += 0.25 / (pNumberOfCellGrow + 1);
 			}
 		}
 		return lPercentage;
 	}
+
 	@Override
 	public boolean equals(Object o) {
 		Genome other = (Genome) o;
-		return mHunger.equals(other.mHunger) && cellGrow.equals(other.cellGrow) && moveSequencesForState.equals(other.moveSequencesForState);
+		return mHunger.equals(other.mHunger) && cellGrow.equals(other.cellGrow)
+				&& moveSequencesForState.equals(other.moveSequencesForState);
 	}
 }

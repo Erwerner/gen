@@ -1,5 +1,7 @@
 package core.soup.idvm;
 
+import globals.Config;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -14,11 +16,8 @@ import core.soup.block.Block;
 import core.soup.block.BlockGrid;
 import core.soup.block.BlockType;
 import core.soup.block.Enemy;
-import core.soup.block.Food;
 import core.soup.block.IdvmCell;
-import core.soup.block.Partner;
 import core.soup.block.iBlock;
-import globals.Config;
 
 public class Idvm extends Block implements iIdvm {
 	private static final long serialVersionUID = 1L;
@@ -26,7 +25,6 @@ public class Idvm extends Block implements iIdvm {
 	Genome mGenomeUsing;
 	private IdvmCellGrid mCellGrid = new IdvmCellGrid();
 	private HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> mMovementSequences = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
-	private BlockGrid mBlockGrid;
 	private int mStepCount;
 	private int mEnergy = Config.cInitialEnergy;
 	private IdvmMoveCalculation mMoveCalculation;
@@ -128,16 +126,14 @@ public class Idvm extends Block implements iIdvm {
 		}
 	}
 
-	public void interactWithFood(Food pFood) {
+	public void interactWithFood() {
 		mEnergy = mEnergy + Config.cFoodEnergy;
 		if (mEnergy > Config.cMaxEnergy)
 			mEnergy = Config.cMaxEnergy;
 		grow();
-		pFood.setNull();
 	}
 
-	public void interactWithPartner(Partner pPartner) {
-		mBlockGrid.setRandomBlock(pPartner);
+	public void interactWithPartner() {
 		if (mEnergy - Config.cPairingCost < 0)
 			return;
 		mEnergy = mEnergy - Config.cPairingCost;
@@ -166,9 +162,8 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	public void setBlockGrid(BlockGrid pBlockGrid) {
-		mBlockGrid = pBlockGrid;
-		mMoveCalculation = new IdvmMoveCalculation(mBlockGrid);
-		mIdvmSensor = new IdvmSensor(mBlockGrid);
+		mMoveCalculation = new IdvmMoveCalculation(pBlockGrid);
+		mIdvmSensor = new IdvmSensor(pBlockGrid);
 	}
 
 	public int getStepCount() {
@@ -195,7 +190,6 @@ public class Idvm extends Block implements iIdvm {
 		return mGenomeOrigin;
 	}
 
-	// TODO 4 IMPL cell type connection
 	public ArrayList<iBlock> getUsedBlocks() {
 		return mCellGrid.getGridBlocks();
 	}
