@@ -32,6 +32,7 @@ public class Idvm extends Block implements iIdvm {
 	private IdvmMoveCalculation mMoveCalculation;
 	private IdvmSensor mIdvmSensor;
 	private int mPartnerCount = 0;
+	public BlockType[] mTargetDetectionOrder = new BlockType[] { BlockType.PARTNER, BlockType.ENEMY, BlockType.FOOD };
 
 	public Idvm(Genome pGenome) {
 		super(BlockType.IDVM);
@@ -159,7 +160,6 @@ public class Idvm extends Block implements iIdvm {
 		mCellGrid.removeCell(lKillPos);
 	}
 
-
 	public HashMap<Pos, Sensor> getDetectedPos() {
 		ArrayList<iBlock> lSensors = getUsedBlocks(BlockType.SENSOR);
 		return mIdvmSensor.getDetectedPos(lSensors);
@@ -201,6 +201,6 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	public IdvmState getState() {
-		return mIdvmSensor.getState(getUsedBlocks(BlockType.SENSOR).size() != 0, isHungry(),getDetectedPos());
+		return mIdvmSensor.getState(getUsedBlocks(BlockType.SENSOR).size() != 0, isHungry(),getDetectedPos(), mTargetDetectionOrder);
 	}
 }

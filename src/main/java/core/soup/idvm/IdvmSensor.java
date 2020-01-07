@@ -90,15 +90,14 @@ public class IdvmSensor {
 		return lDetectedPos;
 	}
 
-	// TODO 3 IMPL dynamic target order
 	// TODO 4 IMPL sensor range
 	// TODO 5 REF Parameters
-	public IdvmState getState(Boolean pHasSensor, Boolean pIsHungry, HashMap<Pos, Sensor> pDetectedPos) {
+	public IdvmState getState(Boolean pHasSensor, Boolean pIsHungry, HashMap<Pos, Sensor> pDetectedPos,
+			BlockType[] pTargetDetectionOrder) {
 		if (!pHasSensor)
 			return IdvmState.BLIND;
-		BlockType[] lBlockTypes = { BlockType.PARTNER, BlockType.ENEMY, BlockType.FOOD };
-		IdvmState lState = IdvmState.IDLE;
-		for (BlockType iBlockType : lBlockTypes) {
+		for (BlockType iBlockType : pTargetDetectionOrder) {
+			IdvmState lState = null;
 			if (detectSurroundingBlockType(iBlockType, pDetectedPos))
 				switch (iBlockType) {
 				case PARTNER:
@@ -125,9 +124,14 @@ public class IdvmSensor {
 				default:
 					throw new RuntimeException();
 				}
+			if (lState != null) {
+				return lState;
+			}
 		}
-		if (lState == IdvmState.IDLE && pIsHungry)
-			lState = IdvmState.IDLE_HUNGER;
-		return lState;
+		if (pIsHungry) {
+			return IdvmState.IDLE_HUNGER;
+		} else {
+			return IdvmState.IDLE;
+		}
 	}
 }

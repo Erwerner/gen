@@ -19,17 +19,30 @@ import core.soup.block.BlockType;
 import core.soup.block.Enemy;
 import core.soup.block.Food;
 import core.soup.block.IdvmCell;
+import core.soup.block.Partner;
 import core.soup.block.iBlock;
 
 public class IdvmSensorTest {
 	IdvmSensor cut;
 	private BlockGrid mBlockGrid;
 	private ArrayList<iBlock> mSensorBlocks;
+	private HashMap<Pos, Sensor> mDetectedPositions = new HashMap<Pos, Sensor>();
+	private Pos mPosFood = new Pos(20, 10);
+	private Pos mPosEnemy = new Pos(21, 11);
+	private Pos mPosPartner = new Pos(22, 12);
 
 	@Before
 	public void setUp() throws Exception {
 		mSensorBlocks = new ArrayList<iBlock>();
 		mBlockGrid = new BlockGrid();
+
+		mDetectedPositions.put(mPosFood, new Sensor());
+		mDetectedPositions.put(mPosEnemy, new Sensor());
+		mDetectedPositions.put(mPosPartner, new Sensor());
+		mBlockGrid.setBlock(mPosPartner, new Partner());
+		mBlockGrid.setBlock(mPosEnemy, new Enemy(mBlockGrid));
+		mBlockGrid.setBlock(mPosFood, new Food());
+
 		cut = new IdvmSensor(mBlockGrid);
 
 		IdvmCell lSensor = new IdvmCell(BlockType.SENSOR, new Pos(0, 0));
@@ -87,4 +100,39 @@ public class IdvmSensorTest {
 		assertFalse(cut.detectSurroundingBlockType(BlockType.FOOD, lSensors));
 	}
 
+	@Test
+	public void getStateWhenPartnerFirst() {
+		BlockType[] lTargetDetectionOrder = new BlockType[] { BlockType.PARTNER, BlockType.ENEMY, BlockType.FOOD };
+		IdvmState lState = cut.getState(true, false, mDetectedPositions, lTargetDetectionOrder);
+		assertEquals(IdvmState.PARTNER, lState);
+	}
+
+	@Test
+	public void getStateWhenEnemyFirst() {
+		BlockType[] lTargetDetectionOrder = new BlockType[] { BlockType.ENEMY, BlockType.FOOD, BlockType.PARTNER };
+		IdvmState lState = cut.getState(true, false, mDetectedPositions, lTargetDetectionOrder);
+		assertEquals(IdvmState.ENEMY, lState);
+	}
+
+	@Test
+	public void getStateWhenFoodSecond() throws PosIsOutOfGrid {
+		BlockType[] lTargetDetectionOrder = new BlockType[] { BlockType.ENEMY, BlockType.FOOD, BlockType.PARTNER };
+		mBlockGrid.setBlock(mPosEnemy, null);
+		IdvmState lState = cut.getState(true, false, mDetectedPositions, lTargetDetectionOrder);
+		assertEquals(IdvmState.FOOD, lState);
+	}
+
+	@Test
+	public void getStateWhenHunger() {
+		BlockType[] lTargetDetectionOrder = new BlockType[] { BlockType.ENEMY, BlockType.FOOD, BlockType.PARTNER };
+		IdvmState lState = cut.getState(true, true, mDetectedPositions, lTargetDetectionOrder);
+		assertEquals(IdvmState.ENEMY_HUNGER, lState);
+	}
+
+	@Test
+	public void getStateWhenBlind() {
+		BlockType[] lTargetDetectionOrder = new BlockType[] { BlockType.ENEMY, BlockType.FOOD, BlockType.PARTNER };
+		IdvmState lState = cut.getState(false, true, mDetectedPositions, lTargetDetectionOrder);
+		assertEquals(IdvmState.BLIND, lState);
+	}
 }

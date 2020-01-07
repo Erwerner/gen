@@ -1,10 +1,7 @@
 package core.soup;
 
-import globals.Config;
-
 import java.util.ArrayList;
 
-import ui.presenter.iPresentSoup;
 import core.datatypes.Pos;
 import core.exceptions.PosIsOutOfGrid;
 import core.soup.block.BlockGrid;
@@ -15,6 +12,8 @@ import core.soup.block.Partner;
 import core.soup.block.iBlock;
 import core.soup.idvm.Idvm;
 import core.soup.idvm.iLiving;
+import globals.Config;
+import ui.presenter.iPresentSoup;
 
 public class Soup implements iSoup {
 	private Idvm mIndividuum;
@@ -117,7 +116,7 @@ public class Soup implements iSoup {
 	public void step() {
 		for (iLiving iLiving : mAllLivings) {
 			iLiving.step();
-			refreshBlocks(); //TODO performance
+			refreshBlocks(); // TODO performance
 		}
 		refreshBlocks();
 	}
