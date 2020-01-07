@@ -36,7 +36,7 @@ public class IdvmCellTest {
 	}
 
 	private void initInvalidCut() {
-		cut = new IdvmCell(BlockType.NOTHING, new Pos(10, 10));
+		cut = new IdvmCell(BlockType.NULL, new Pos(10, 10));
 	}
 
 }

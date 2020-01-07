@@ -1,12 +1,10 @@
 package execution;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import core.genes.Crossover;
 import core.genes.Genome;
+import core.genes.GenomePersister;
 import core.soup.block.BlockType;
 import core.soup.block.IdvmCell;
 import core.soup.idvm.Idvm;
@@ -14,40 +12,54 @@ import devutils.Debug;
 import globals.Helpers;
 import ui.console.monitor.ModelMonitorIdvm;
 
-//TODO 0 PAIRING, persist, load
 public class runCrossover {
-	private static final int cPopulation = 1024 * 6;
-	private static final int cTopFittest = 8;
+	private static final int cInitialPopulationMultiplikator = 3;
+	private static final int cPopulation = 1024 * 3  * cInitialPopulationMultiplikator;
 	static ArrayList<Thread> mThreads = new ArrayList<Thread>();
+	private static GenomePersister mPersister;
 
-	public static void main(String[] args)
-			throws CloneNotSupportedException, InterruptedException, FileNotFoundException, IOException {
+	public static void main(String[] args) throws CloneNotSupportedException, InterruptedException {
 		System.out.println("Init");
 		Debug.printCurrentChange();
-		Genome lBestOfLastGeneration = new Genome().forceMutation();
-		ArrayList<Idvm> lPopulation = new ArrayList<Idvm>();
-		lPopulation = initializePopulation();
+		mPersister = new GenomePersister();
+		ArrayList<Idvm> lPopulation = initializePopulation();
+		//ArrayList<Idvm> lPopulation = loadPopulation();
 		int iGeneration = 0;
 		while (true) {
-			lPopulation = runPopulation(lPopulation, lBestOfLastGeneration);
+			lPopulation = runPopulation(lPopulation);
 			ArrayList<Idvm> lFittestIdvm = evaluateFitness(lPopulation);
 			checkFitness(lFittestIdvm);
-			lBestOfLastGeneration = (Genome) lFittestIdvm.get(lFittestIdvm.size() - 4).getGenomeOrigin().clone();
 			Debug.printCurrentChange();
 			System.out.println("Generation finished: " + iGeneration);
 			lPopulation = getOffsprings(lFittestIdvm);
 			iGeneration++;
+			if (new Helpers().isFlagTrue("persist"))
+				persistPopulation(lPopulation);
 		}
+	}
+
+	private static ArrayList<Idvm> loadPopulation() {
+		ArrayList<Idvm> lPopulation = new ArrayList<Idvm>();
+		for (Integer i = 0; i < cPopulation / 4 - 1; i++)
+			lPopulation.add(new Idvm(mPersister.load(i.toString())));
+		return lPopulation;
+	}
+
+	private static void persistPopulation(ArrayList<Idvm> pPopulation) {
+		Integer lCount = 0;
+		for (Idvm iIdvm : pPopulation) {
+			mPersister.save(iIdvm.getGenomeOrigin(), lCount.toString());
+			lCount++;
+		}
+		System.out.println("persisted");
 	}
 
 	private static ArrayList<Idvm> getOffsprings(ArrayList<Idvm> pFittestIdvm) throws CloneNotSupportedException {
 		ArrayList<Idvm> lOffsprings = new ArrayList<Idvm>();
 		ArrayList<Idvm> lParents = new ArrayList<Idvm>();
 		for (int iIdvmIdx = pFittestIdvm.size() - 1; iIdvmIdx >= 0; iIdvmIdx--) {
-			for (int iCopy = 0; iCopy < cTopFittest; iCopy++) {
-				lParents.add(pFittestIdvm.get(iIdvmIdx));
-				lParents.add(pFittestIdvm.get(iIdvmIdx));
-			}
+			lParents.add(pFittestIdvm.get(iIdvmIdx));
+			lParents.add(pFittestIdvm.get(iIdvmIdx));
 		}
 		while (!lParents.isEmpty()) {
 			Idvm lParent1 = lParents.get(0);
@@ -77,11 +89,17 @@ public class runCrossover {
 	}
 
 	private static void checkFitness(ArrayList<Idvm> pFittestIdvm) {
-		int lCount = 0;
+		int lStepCount = 0;
 		for (Idvm iIdvm : pFittestIdvm) {
-			lCount += iIdvm.getStepCount();
+			lStepCount += iIdvm.getStepCount();
 		}
-		System.out.println("Average steps: " + lCount / pFittestIdvm.size() + " * " + pFittestIdvm.size());
+		int lPartnerCount = 0;
+		for (Idvm iIdvm : pFittestIdvm) {
+			lPartnerCount += iIdvm.getPartnerCount();
+		}
+		System.out.println("Average steps: " + lStepCount / pFittestIdvm.size() + " * " + pFittestIdvm.size());
+		System.out.println(
+				"Average partner: " + 100 * lPartnerCount / pFittestIdvm.size() + "/100 * " + pFittestIdvm.size());
 		printBlockStats(pFittestIdvm, 4);
 		printBlockStats(pFittestIdvm, 6);
 		printBlockStats(pFittestIdvm, 8);
@@ -89,17 +107,9 @@ public class runCrossover {
 		printBlockStats(pFittestIdvm, 12);
 	}
 
-	private static void printTargetStats(ArrayList<Idvm> pFittestIdvm) {
-		Double lPercentageTotal = 0.0;
-		for (Idvm iIdvm : pFittestIdvm) {
-			lPercentageTotal += iIdvm.getGenomeOrigin().getPercentageOfWrongTargetDecision(14);
-		}
-		System.out.println("Wrong Target Decision: " + lPercentageTotal);
-	}
-
 	private static void printBlockStats(ArrayList<Idvm> pFittestIdvm, int pCount) {
 		System.out.print(pCount + " Cells: ");
-		BlockType[] lCellBlocks = { BlockType.DEFENCE, BlockType.MOVE, BlockType.LIFE, BlockType.SENSOR };
+		BlockType[] lCellBlocks = { BlockType.DEFENCE, BlockType.MOVE, BlockType.LIFE, BlockType.SENSOR, BlockType.NULL };
 		for (BlockType iBlockType : lCellBlocks) {
 			int lTotalBlockCount = 0;
 			for (Idvm iIdvm : pFittestIdvm) {
@@ -115,30 +125,17 @@ public class runCrossover {
 	}
 
 	private static ArrayList<Idvm> evaluateFitness(ArrayList<Idvm> pPopulation) {
-		ArrayList<Integer> lFitness = new ArrayList<Integer>();
-
-		for (Idvm iIdvm : pPopulation) {
-			if (!lFitness.contains(iIdvm.getStepCount()))
-				lFitness.add(iIdvm.getStepCount());
-		}
-		Collections.sort(lFitness);
 		ArrayList<Idvm> lFittestIdvm = new ArrayList<Idvm>();
-		for (int iFitnessIdx = lFitness.size() - 1; iFitnessIdx >= 0; iFitnessIdx--) {
-			// for (int iFitnessIdx = 0; iFitnessIdx < lFitness.size() ;
-			// iFitnessIdx++) {
-			for (Idvm iIdvm : pPopulation) {
-				if (iIdvm.getStepCount() == (int) lFitness.get(iFitnessIdx))
-					lFittestIdvm.add(iIdvm);
-			}
+		for (Idvm iIdvm : pPopulation) {
+			for (int iPairings = 0; iPairings < iIdvm.getPartnerCount() * 16; iPairings++)
+				lFittestIdvm.add(iIdvm);
 		}
-		for (int iFitnessIdx = pPopulation.size() - 1; iFitnessIdx >= pPopulation.size() / cTopFittest; iFitnessIdx--) {
-			lFittestIdvm.remove(lFittestIdvm.size() - 1);
-		}
+		while (lFittestIdvm.size() > cPopulation / cInitialPopulationMultiplikator)
+			lFittestIdvm.remove(Helpers.rndInt(lFittestIdvm.size() - 1));
 		return lFittestIdvm;
 	}
 
-	private static ArrayList<Idvm> runPopulation(ArrayList<Idvm> pPopulation, Genome pBestOfLastGeneration)
-			throws CloneNotSupportedException, InterruptedException, FileNotFoundException, IOException {
+	private static ArrayList<Idvm> runPopulation(ArrayList<Idvm> pPopulation) throws CloneNotSupportedException, InterruptedException {
 		ArrayList<Idvm> lExecutedPopulation = new ArrayList<Idvm>();
 		ArrayList<IdvmExecutionThread> mIdvmExecutionThread = new ArrayList<IdvmExecutionThread>();
 		mThreads = new ArrayList<Thread>();
@@ -152,11 +149,13 @@ public class runCrossover {
 			mThreads.add(lThread);
 			mIdvmExecutionThread.add(lIdvmRunner);
 			if (new Helpers().isFlagTrue("monitor"))
-				new ModelMonitorIdvm().runGenome(pBestOfLastGeneration);
+				new ModelMonitorIdvm().runGenome(
+						(Genome) pPopulation.get(Helpers.rndInt(pPopulation.size() - 1)).getGenomeOrigin().clone());
 		}
 		for (Thread iThread : mThreads) {
 			if (new Helpers().isFlagTrue("monitor"))
-				new ModelMonitorIdvm().runGenome(pBestOfLastGeneration);
+				new ModelMonitorIdvm().runGenome(
+						(Genome) pPopulation.get(Helpers.rndInt(pPopulation.size() - 1)).getGenomeOrigin().clone());
 			iThread.join();
 		}
 		for (IdvmExecutionThread iExecutionThread : mIdvmExecutionThread) {

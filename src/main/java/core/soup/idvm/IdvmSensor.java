@@ -39,6 +39,10 @@ public class IdvmSensor {
 		case ENEMY_HUNGER:
 			lSearchBlock = BlockType.ENEMY;
 			break;
+		case PARTNER:
+		case PARTNER_HUNGER:
+			lSearchBlock = BlockType.PARTNER;
+			break;
 		default:
 			return null;
 		}

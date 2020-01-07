@@ -69,10 +69,13 @@ public class BlockGrid {
 					switch (lGridBlock.getBlockType()) {
 					case FOOD:
 						pIdvm.interactWithFood((Food) lGridBlock);
-						lGridBlock.setNull();
+						//lGridBlock.setNull();
 						break;
 					case ENEMY:
 						pIdvm.interactWithEnemy((Enemy) lGridBlock);
+						break;
+					case PARTNER:
+						pIdvm.interactWithPartner((Partner) lGridBlock);
 						break;
 					default:
 						break;

@@ -40,7 +40,7 @@ public class Genome implements Cloneable, iPresentGenomeStats, Serializable {
 		moveSequencesForState = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
 		ArrayList<MoveDecisionsProbability> lInitialMoveProbability = new ArrayList<MoveDecisionsProbability>();
 		for (int i = 0; i <= Config.cMaxSequence; i++) {
-			cellGrow.add((new IdvmCell(BlockType.NOTHING, new Pos(0, 0))));
+			cellGrow.add((new IdvmCell(BlockType.NULL, new Pos(0, 0))));
 			lInitialMoveProbability.add(new MoveDecisionsProbability());
 		}
 		for (IdvmState iState : IdvmState.values()) {

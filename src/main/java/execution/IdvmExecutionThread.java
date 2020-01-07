@@ -18,10 +18,6 @@ public class IdvmExecutionThread implements Runnable {
 		new Soup(mIdvm).executeIdvm();
 	}
 
-	public int getCount() {
-		return mIdvm.getStepCount();
-	}
-
 	public Idvm getExecutedIdvm() {
 		return mIdvm;
 	}

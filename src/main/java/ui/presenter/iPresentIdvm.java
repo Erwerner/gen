@@ -26,5 +26,7 @@ public interface iPresentIdvm {
 
 	int getEnergyCount();
 
+	int getPartnerCount();
+
 	Decisions getCalculatedDirection();
 }

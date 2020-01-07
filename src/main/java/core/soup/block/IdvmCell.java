@@ -54,7 +54,7 @@ public class IdvmCell extends Block implements Serializable, iGene {
 	}
 
 	public void mutate() {
-		BlockType[] lCellTypes = { BlockType.LIFE, BlockType.DEFENCE, BlockType.MOVE, BlockType.SENSOR };
+		BlockType[] lCellTypes = { BlockType.LIFE, BlockType.DEFENCE, BlockType.MOVE, BlockType.SENSOR, BlockType.NULL };
 		mBlockType = (BlockType) Helpers.rndArrayEntry(lCellTypes);
 		mPosOnIdvm = new Pos(Helpers.rndIntRange(-1, 2), Helpers.rndIntRange(-1, 2));
 	}
