@@ -32,6 +32,7 @@ public class Idvm extends Block implements iIdvm {
 	private IdvmMoveCalculation mMoveCalculation;
 	private IdvmSensor mIdvmSensor;
 	private int mPartnerCount = 0;
+	// TODO 2 IMPL Target Order in Genome
 	public BlockType[] mTargetDetectionOrder = new BlockType[] { BlockType.PARTNER, BlockType.ENEMY, BlockType.FOOD };
 
 	public Idvm(Genome pGenome) {

@@ -91,47 +91,34 @@ public class IdvmSensor {
 	}
 
 	// TODO 4 IMPL sensor range
-	// TODO 5 REF Parameters
+	// TODO 5 REF move To Idvm
 	public IdvmState getState(Boolean pHasSensor, Boolean pIsHungry, HashMap<Pos, Sensor> pDetectedPos,
 			BlockType[] pTargetDetectionOrder) {
+		IdvmState lState = IdvmState.IDLE;
 		if (!pHasSensor)
 			return IdvmState.BLIND;
 		for (BlockType iBlockType : pTargetDetectionOrder) {
-			IdvmState lState = null;
 			if (detectSurroundingBlockType(iBlockType, pDetectedPos))
 				switch (iBlockType) {
 				case PARTNER:
-					if (pIsHungry) {
-						lState = IdvmState.PARTNER_HUNGER; // TODO 7 REF Hunger ENUM * -1
-					} else {
-						lState = IdvmState.PARTNER;
-					}
+					lState = IdvmState.PARTNER;
 					break;
 				case ENEMY:
-					if (pIsHungry) {
-						lState = IdvmState.ENEMY_HUNGER;
-					} else {
-						lState = IdvmState.ENEMY;
-					}
+					lState = IdvmState.ENEMY;
 					break;
 				case FOOD:
-					if (pIsHungry) {
-						lState = IdvmState.FOOD_HUNGER;
-					} else {
-						lState = IdvmState.FOOD;
-					}
+					lState = IdvmState.FOOD;
 					break;
 				default:
 					throw new RuntimeException();
 				}
-			if (lState != null) {
-				return lState;
+			if (lState != IdvmState.IDLE) {
+				break;
 			}
 		}
 		if (pIsHungry) {
-			return IdvmState.IDLE_HUNGER;
-		} else {
-			return IdvmState.IDLE;
+			lState = lState.getStateAsHunger();
 		}
+		return lState;
 	}
 }
