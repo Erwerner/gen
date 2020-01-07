@@ -115,8 +115,10 @@ public class Soup implements iSoup {
 	}
 
 	public void step() {
-		for (iLiving iLiving : mAllLivings)
+		for (iLiving iLiving : mAllLivings) {
 			iLiving.step();
+			refreshBlocks(); //TODO performance
+		}
 		refreshBlocks();
 	}
 

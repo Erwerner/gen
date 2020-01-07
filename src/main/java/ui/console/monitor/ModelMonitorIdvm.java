@@ -12,6 +12,7 @@ import core.soup.block.BlockType;
 import core.soup.block.IdvmCell;
 import core.soup.idvm.Idvm;
 import core.soup.idvm.IdvmState;
+import globals.Helpers;
 import ui.controller.iControllRunSoup;
 import ui.mvc.Model;
 import ui.presenter.WrongPresenterType;
@@ -84,9 +85,9 @@ public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 
 		System.out.println("start");
 		notifyViews();
-		while (mIdvm.isAlive()) {
+		while (mIdvm.isAlive() && new Helpers().isFlagTrue("monitor")) {
 			try {
-				Thread.sleep(140);
+				Thread.sleep(200);
 				mSoup.step();
 				notifyViews();
 			} catch (InterruptedException e) {

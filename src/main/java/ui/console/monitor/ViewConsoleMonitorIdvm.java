@@ -62,8 +62,7 @@ public class ViewConsoleMonitorIdvm extends View {
 		}
 	}
 
-	private String getCharForBlock(Pos pPos, HashMap<Pos, Sensor> pDetectedPos)
-			throws PosIsOutOfGrid {
+	private String getCharForBlock(Pos pPos, HashMap<Pos, Sensor> pDetectedPos) throws PosIsOutOfGrid {
 		String lBlockChar = " ";
 		iBlock lBlock = mSoup.getBlock(pPos);
 		if (lBlock != null) {
@@ -101,7 +100,7 @@ public class ViewConsoleMonitorIdvm extends View {
 	private String getPixel(iBlock pBlock) {
 		switch (pBlock.getBlockType()) {
 		case FOOD:
-			return "©";
+			return "¿";
 		case ENEMY:
 			return "Z";
 		case PARTNER:
@@ -114,6 +113,8 @@ public class ViewConsoleMonitorIdvm extends View {
 			return "≡";
 		case DEFENCE:
 			return "▒";
+		case NULL:
+			return " ";
 		default:
 			return "?";
 		}
@@ -125,7 +126,14 @@ public class ViewConsoleMonitorIdvm extends View {
 		System.out.print(" Alive: " + mIdvm.isAlive());
 		System.out.print(" State: " + mIdvm.getState());
 		System.out.println();
-		System.out.println("Energy: " + 100 * mIdvm.getEnergyCount() / Config.cMaxEnergy + " %");
+		for (int iPartnerCount = 0; iPartnerCount < mIdvm.getPartnerCount(); iPartnerCount++)
+			System.out.print("❤");
+		System.out.println();
+		for (int iEnergyCount = 0; iEnergyCount < 100 * mIdvm.getEnergyCount() / Config.cMaxEnergy; iEnergyCount++)
+			System.out.print("*");
+		System.out.println();
+		// System.out.println("Energy: " + 100 * mIdvm.getEnergyCount() /
+		// Config.cMaxEnergy + " %");
 	}
 
 	private void clearScreen() {

@@ -34,28 +34,39 @@ public class Helpers {
 		return pMin + (pMax - pMin) * mRandom.nextDouble();
 	}
 
-	public void waitForConfigFlag(String pFilename) throws FileNotFoundException, IOException, InterruptedException {
+	public void waitForConfigFlag(String pFilename) {
 		while (!isFlagTrue(pFilename))
-			Thread.sleep(2000);
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 	}
 
-	public Boolean isFlagTrue(String pFilename) throws FileNotFoundException, IOException {
-		Boolean lExit = false;
-		ClassLoader classLoader = getClass().getClassLoader();
+	public Boolean isFlagTrue(String pFilename) {
+		try {
+			Boolean lExit = false;
+			ClassLoader classLoader = getClass().getClassLoader();
 
-		URL resource = classLoader.getResource(pFilename);
-		File file = new File(resource.getFile());
-		FileReader reader = new FileReader(file);
-		BufferedReader br = new BufferedReader(reader);
+			URL resource = classLoader.getResource(pFilename);
+			File file = new File(resource.getFile());
+			FileReader reader;
+			reader = new FileReader(file);
+			BufferedReader br = new BufferedReader(reader);
 
-		String line;
-		while ((line = br.readLine()) != null) {
-			if (line.equals("X")) {
-				lExit = true;
+			String line;
+			while ((line = br.readLine()) != null) {
+				if (line.equals("X")) {
+					lExit = true;
+				}
 			}
+			reader.close();
+			br.close();
+			return lExit;
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
-		reader.close();
-		br.close();
-		return lExit;
 	}
 }

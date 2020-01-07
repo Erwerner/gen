@@ -20,15 +20,15 @@ import core.soup.block.Partner;
 import core.soup.block.iBlock;
 import globals.Config;
 
-//TODO 0 impl Partner Fitness
 public class Idvm extends Block implements iIdvm {
+	private static final long serialVersionUID = 1L;
 	Genome mGenomeOrigin;
 	Genome mGenomeUsing;
 	private IdvmCellGrid mCellGrid = new IdvmCellGrid();
 	private HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> mMovementSequences = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
 	private BlockGrid mBlockGrid;
 	private int mStepCount;
-	private int mEnergy = Config.cFoodEnergy;
+	private int mEnergy = Config.cInitialEnergy;
 	private IdvmMoveCalculation mMoveCalculation;
 	private IdvmSensor mIdvmSensor;
 	private int mPartnerCount = 0;
@@ -58,11 +58,16 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	private void grow() {
+		if (mEnergy - Config.cGrowCost < 0)
+			return;
 		if (mGenomeUsing.cellGrow.size() == 0)
 			return;
 		IdvmCell lCell = mGenomeUsing.cellGrow.get(0);
 		mGenomeUsing.cellGrow.remove(0);
-		mCellGrid.appendCell(lCell, mPos);
+		if (lCell.getBlockType() != BlockType.NULL) {
+			mCellGrid.appendCell(lCell, mPos);
+			mEnergy = mEnergy - Config.cGrowCost;
+		}
 		popAllSequences();
 	}
 
@@ -132,10 +137,10 @@ public class Idvm extends Block implements iIdvm {
 
 	public void interactWithPartner(Partner pPartner) {
 		mBlockGrid.setRandomBlock(pPartner);
-		//TODO Gene pairing count
-		mEnergy = mEnergy - Config.cFoodEnergy * Config.cPairingCost;
-		if (isAlive())
-			mPartnerCount++;
+		if (mEnergy - Config.cPairingCost < 0)
+			return;
+		mEnergy = mEnergy - Config.cPairingCost;
+		mPartnerCount++;
 	}
 
 	private void popAllSequences() {
@@ -154,12 +159,18 @@ public class Idvm extends Block implements iIdvm {
 		mCellGrid.removeCell(lKillPos);
 	}
 
-	// TODO 6 IMPL dynamic target order
+	// TODO 3 IMPL dynamic target order
 	// TODO 4 IMPL sensor range
 	public IdvmState getState() {
 		if (getUsedBlocks(BlockType.SENSOR).size() == 0)
 			return IdvmState.BLIND;
 		HashMap<Pos, Sensor> lDetectedPos = getDetectedPos();
+		if (mIdvmSensor.detectSurroundingBlockType(BlockType.PARTNER, lDetectedPos))
+			if (isHungry()) {
+				return IdvmState.PARTNER_HUNGER;
+			} else {
+				return IdvmState.PARTNER;
+			}
 		if (mIdvmSensor.detectSurroundingBlockType(BlockType.ENEMY, lDetectedPos))
 			if (isHungry()) {
 				return IdvmState.ENEMY_HUNGER;
@@ -171,12 +182,6 @@ public class Idvm extends Block implements iIdvm {
 				return IdvmState.FOOD_HUNGER;
 			} else {
 				return IdvmState.FOOD;
-			}
-		if (mIdvmSensor.detectSurroundingBlockType(BlockType.PARTNER, lDetectedPos))
-			if (isHungry()) {
-				return IdvmState.PARTNER_HUNGER;
-			} else {
-				return IdvmState.PARTNER;
 			}
 		if (isHungry()) {
 			return IdvmState.IDLE_HUNGER;
@@ -220,7 +225,7 @@ public class Idvm extends Block implements iIdvm {
 		return mGenomeOrigin;
 	}
 
-	// TODO 3 IMPL cell type connection
+	// TODO 4 IMPL cell type connection
 	public ArrayList<iBlock> getUsedBlocks() {
 		return mCellGrid.getGridBlocks();
 	}

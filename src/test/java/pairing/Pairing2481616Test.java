@@ -39,7 +39,7 @@ public class Pairing2481616Test {
 		cut = new Pairing2481616(lPopulation);
 	}
 
-	// TODO 1 Test Pairing
+	// TODO 1 Delete Pairing
 	@Test
 	public void test() {
 		ArrayList<Genome> lAct = cut.pair();
