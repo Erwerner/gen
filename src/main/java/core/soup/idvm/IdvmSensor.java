@@ -9,7 +9,6 @@ import core.datatypes.Pos;
 import core.exceptions.DetectionFailed;
 import core.exceptions.PosIsOutOfGrid;
 import core.exceptions.WrongBlockType;
-import core.exceptions.WrongState;
 import core.soup.block.BlockGrid;
 import core.soup.block.BlockType;
 import core.soup.block.iBlock;
@@ -89,5 +88,46 @@ public class IdvmSensor {
 			}
 		}
 		return lDetectedPos;
+	}
+
+	// TODO 3 IMPL dynamic target order
+	// TODO 4 IMPL sensor range
+	// TODO 5 REF Parameters
+	public IdvmState getState(Boolean pHasSensor, Boolean pIsHungry, HashMap<Pos, Sensor> pDetectedPos) {
+		if (!pHasSensor)
+			return IdvmState.BLIND;
+		BlockType[] lBlockTypes = { BlockType.PARTNER, BlockType.ENEMY, BlockType.FOOD };
+		IdvmState lState = IdvmState.IDLE;
+		for (BlockType iBlockType : lBlockTypes) {
+			if (detectSurroundingBlockType(iBlockType, pDetectedPos))
+				switch (iBlockType) {
+				case PARTNER:
+					if (pIsHungry) {
+						lState = IdvmState.PARTNER_HUNGER; // TODO 7 REF Hunger ENUM * -1
+					} else {
+						lState = IdvmState.PARTNER;
+					}
+					break;
+				case ENEMY:
+					if (pIsHungry) {
+						lState = IdvmState.ENEMY_HUNGER;
+					} else {
+						lState = IdvmState.ENEMY;
+					}
+					break;
+				case FOOD:
+					if (pIsHungry) {
+						lState = IdvmState.FOOD_HUNGER;
+					} else {
+						lState = IdvmState.FOOD;
+					}
+					break;
+				default:
+					throw new RuntimeException();
+				}
+		}
+		if (lState == IdvmState.IDLE && pIsHungry)
+			lState = IdvmState.IDLE_HUNGER;
+		return lState;
 	}
 }

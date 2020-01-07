@@ -159,36 +159,6 @@ public class Idvm extends Block implements iIdvm {
 		mCellGrid.removeCell(lKillPos);
 	}
 
-	// TODO 3 IMPL dynamic target order
-	// TODO 4 IMPL sensor range
-	public IdvmState getState() {
-		if (getUsedBlocks(BlockType.SENSOR).size() == 0)
-			return IdvmState.BLIND;
-		HashMap<Pos, Sensor> lDetectedPos = getDetectedPos();
-		if (mIdvmSensor.detectSurroundingBlockType(BlockType.PARTNER, lDetectedPos))
-			if (isHungry()) {
-				return IdvmState.PARTNER_HUNGER;
-			} else {
-				return IdvmState.PARTNER;
-			}
-		if (mIdvmSensor.detectSurroundingBlockType(BlockType.ENEMY, lDetectedPos))
-			if (isHungry()) {
-				return IdvmState.ENEMY_HUNGER;
-			} else {
-				return IdvmState.ENEMY;
-			}
-		if (mIdvmSensor.detectSurroundingBlockType(BlockType.FOOD, lDetectedPos))
-			if (isHungry()) {
-				return IdvmState.FOOD_HUNGER;
-			} else {
-				return IdvmState.FOOD;
-			}
-		if (isHungry()) {
-			return IdvmState.IDLE_HUNGER;
-		} else {
-			return IdvmState.IDLE;
-		}
-	}
 
 	public HashMap<Pos, Sensor> getDetectedPos() {
 		ArrayList<iBlock> lSensors = getUsedBlocks(BlockType.SENSOR);
@@ -228,5 +198,9 @@ public class Idvm extends Block implements iIdvm {
 	// TODO 4 IMPL cell type connection
 	public ArrayList<iBlock> getUsedBlocks() {
 		return mCellGrid.getGridBlocks();
+	}
+
+	public IdvmState getState() {
+		return mIdvmSensor.getState(getUsedBlocks(BlockType.SENSOR).size() != 0, isHungry(),getDetectedPos());
 	}
 }

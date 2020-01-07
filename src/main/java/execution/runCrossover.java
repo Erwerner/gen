@@ -47,6 +47,7 @@ public class runCrossover {
 
 	private static void persistPopulation(ArrayList<Idvm> pPopulation) {
 		Integer lCount = 0;
+		System.out.println("wait for persisting...");
 		for (Idvm iIdvm : pPopulation) {
 			mPersister.save(iIdvm.getGenomeOrigin(), lCount.toString());
 			lCount++;

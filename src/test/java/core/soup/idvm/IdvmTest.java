@@ -19,7 +19,6 @@ import core.datatypes.Decisions;
 import core.datatypes.Direction;
 import core.datatypes.Pos;
 import core.exceptions.PosIsOutOfGrid;
-import core.exceptions.WrongState;
 import core.genes.Genome;
 import core.genes.MoveDecisionsProbability;
 import core.soup.block.BlockGrid;
@@ -28,9 +27,6 @@ import core.soup.block.Enemy;
 import core.soup.block.Food;
 import core.soup.block.IdvmCell;
 import core.soup.block.iBlock;
-import core.soup.idvm.Idvm;
-import core.soup.idvm.IdvmState;
-import core.soup.idvm.Sensor;
 
 public class IdvmTest {
 	private static final int cStartPosX = 50;
