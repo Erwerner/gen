@@ -115,9 +115,12 @@ public class Genome implements Cloneable, iPresentGenomeStats, Serializable {
 	public Object clone() throws CloneNotSupportedException {
 		Genome lClone = new Genome();
 
-		lClone.mTargetDetectionOrder.clear();
-		for (BlockType iTarget : mTargetDetectionOrder)
-			lClone.mTargetDetectionOrder.add(iTarget);
+		// TODO 8 Remove
+		if (mTargetDetectionOrder != null) {
+			lClone.mTargetDetectionOrder.clear();
+			for (BlockType iTarget : mTargetDetectionOrder)
+				lClone.mTargetDetectionOrder.add(iTarget);
+		}
 
 		lClone.setHunger(mHunger.getValue());
 		lClone.cellGrow.clear();

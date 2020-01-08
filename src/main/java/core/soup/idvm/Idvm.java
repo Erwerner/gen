@@ -20,17 +20,16 @@ import globals.Config;
 
 public class Idvm extends Block implements iIdvm {
 	private static final long serialVersionUID = 1L;
-	Genome mGenomeOrigin;
-	Genome mGenomeUsing;
-	private IdvmCellGrid mCellGrid = new IdvmCellGrid();
-	private HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> mMovementSequences = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
 	private int mStepCount;
 	private int mEnergy = Config.cInitialEnergy;
+	private int mPartnerCount = 0;
+	Genome mGenomeOrigin;
+	Genome mGenomeUsing;
+	// TODO 3 REF use frome Genome
+	private HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> mMovementSequences = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
+	private IdvmCellGrid mCellGrid = new IdvmCellGrid();
 	private IdvmMoveCalculation mMoveCalculation;
 	private IdvmSensor mIdvmSensor;
-	private int mPartnerCount = 0;
-	// public BlockType[] mTargetDetectionOrder = new BlockType[] {
-	// BlockType.PARTNER, BlockType.ENEMY, BlockType.FOOD };
 
 	public Idvm(Genome pGenome) {
 		super(BlockType.IDVM);
@@ -44,12 +43,7 @@ public class Idvm extends Block implements iIdvm {
 			grow();
 			grow();
 
-			for (IdvmState iState : pGenome.moveSequencesForState.keySet()) {
-				@SuppressWarnings("unchecked")
-				ArrayList<MoveDecisionsProbability> lMoveProbability = (ArrayList<MoveDecisionsProbability>) pGenome.moveSequencesForState
-						.get(iState).clone();
-				mMovementSequences.put(iState, lMoveProbability);
-			}
+			mMovementSequences = mGenomeUsing.moveSequencesForState;
 
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException();
@@ -74,14 +68,7 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	public boolean isAlive() {
-		if (mEnergy <= 0)
-			return false;
-		for (iBlock iCell : getUsedBlocks()) {
-			if (iCell.getBlockType() == BlockType.LIFE) {
-				return true;
-			}
-		}
-		return false;
+		return mEnergy > 0 && !mCellGrid.getGridBlocksOfType(BlockType.LIFE).isEmpty();
 	}
 
 	public Boolean isHungry() {

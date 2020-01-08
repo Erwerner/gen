@@ -6,9 +6,9 @@ public class Config {
 	// TODO 1 test mutation rate
 	public static final Double cMutationRate = 0.025;
 
-	public static final int enemySupply = (int) (16 * cSoupFctor * cSoupFctor);
+	public static final int enemySupply = (int) (14 * cSoupFctor * cSoupFctor);
 	public static final int foodSupply = (int) (82 * cSoupFctor * cSoupFctor);
-	public static int cPartnerSupply = foodSupply / 4; // 3
+	public static int cPartnerSupply = foodSupply / 3; // 3
 
 	public static final int cMaxSequence = 4 + 30;
 	public static final int cLifeEnergyCost = 1;
