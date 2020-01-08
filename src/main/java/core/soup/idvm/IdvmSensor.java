@@ -93,7 +93,7 @@ public class IdvmSensor {
 	// TODO 4 IMPL sensor range
 	// TODO 5 REF move To Idvm
 	public IdvmState getState(Boolean pHasSensor, Boolean pIsHungry, HashMap<Pos, Sensor> pDetectedPos,
-			BlockType[] pTargetDetectionOrder) {
+			ArrayList<BlockType> pTargetDetectionOrder) {
 		IdvmState lState = IdvmState.IDLE;
 		if (!pHasSensor)
 			return IdvmState.BLIND;
