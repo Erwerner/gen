@@ -33,6 +33,7 @@ public class Genome implements Cloneable, iPresentGenomeStats, Serializable {
 	}
 
 	public Genome() {
+		// TODO 2 IMPL mutate Target order
 		mTargetDetectionOrder.add(BlockType.PARTNER);
 		mTargetDetectionOrder.add(BlockType.ENEMY);
 		mTargetDetectionOrder.add(BlockType.FOOD);
@@ -55,6 +56,7 @@ public class Genome implements Cloneable, iPresentGenomeStats, Serializable {
 		mutate(Config.cMutationRate);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void mutate(Double pMutationRate) {
 		ArrayList<iGene> lGenes;
 		lGenes = getGeneCollection();
@@ -114,9 +116,9 @@ public class Genome implements Cloneable, iPresentGenomeStats, Serializable {
 		Genome lClone = new Genome();
 
 		lClone.mTargetDetectionOrder.clear();
-		for(BlockType iTarget : mTargetDetectionOrder)
+		for (BlockType iTarget : mTargetDetectionOrder)
 			lClone.mTargetDetectionOrder.add(iTarget);
-		
+
 		lClone.setHunger(mHunger.getValue());
 		lClone.cellGrow.clear();
 		for (IdvmCell iCell : cellGrow)
@@ -172,7 +174,7 @@ public class Genome implements Cloneable, iPresentGenomeStats, Serializable {
 	public boolean equals(Object o) {
 		Genome other = (Genome) o;
 		return mHunger.equals(other.mHunger) && cellGrow.equals(other.cellGrow)
-				&& moveSequencesForState.equals(other.moveSequencesForState) &&
-				mTargetDetectionOrder.equals(other.mTargetDetectionOrder);
+				&& moveSequencesForState.equals(other.moveSequencesForState)
+				&& mTargetDetectionOrder.equals(other.mTargetDetectionOrder);
 	}
 }
