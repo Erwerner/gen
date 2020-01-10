@@ -62,9 +62,6 @@ public class Idvm extends Block implements iIdvm {
 			mEnergy = mEnergy - Config.cGrowCost;
 		}
 
-		for (Entry<IdvmState, ArrayList<MoveDecisionsProbability>> iSequence : mMovementSequences.entrySet())
-			if (iSequence.getValue().size() > 0)
-				iSequence.getValue().remove(0);
 	}
 
 	public boolean isAlive() {
@@ -118,6 +115,9 @@ public class Idvm extends Block implements iIdvm {
 		if (mEnergy > Config.cMaxEnergy)
 			mEnergy = Config.cMaxEnergy;
 		grow();
+		for (Entry<IdvmState, ArrayList<MoveDecisionsProbability>> iSequence : mMovementSequences.entrySet())
+			if (iSequence.getValue().size() > 0)
+				iSequence.getValue().remove(0);
 	}
 
 	public void interactWithPartner() {

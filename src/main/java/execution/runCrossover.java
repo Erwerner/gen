@@ -24,8 +24,8 @@ public class runCrossover {
 		System.out.println("Init");
 		Debug.printCurrentChange();
 		mPersister = new GenomePersister();
-		ArrayList<Idvm> lPopulation = initializePopulation();
-		//ArrayList<Idvm> lPopulation = loadPopulation();
+		//ArrayList<Idvm> lPopulation = initializePopulation();
+		ArrayList<Idvm> lPopulation = loadPopulation();
 		int iGeneration = 0;
 		while (true) {
 			lPopulation = runPopulation(lPopulation);
@@ -145,6 +145,7 @@ public class runCrossover {
 		return lFittestIdvm;
 	}
 
+	// TODO 3 IMPL Winter
 	private static ArrayList<Idvm> runPopulation(ArrayList<Idvm> pPopulation)
 			throws CloneNotSupportedException, InterruptedException {
 		ArrayList<Idvm> lExecutedPopulation = new ArrayList<Idvm>();

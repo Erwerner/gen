@@ -34,8 +34,8 @@ public class Genome implements Cloneable, iPresentGenomeStats, Serializable {
 
 	public Genome() {
 		// TODO 2 IMPL mutate Target order
-		mTargetDetectionOrder.add(BlockType.PARTNER);
 		mTargetDetectionOrder.add(BlockType.ENEMY);
+		mTargetDetectionOrder.add(BlockType.PARTNER);
 		mTargetDetectionOrder.add(BlockType.FOOD);
 	}
 
