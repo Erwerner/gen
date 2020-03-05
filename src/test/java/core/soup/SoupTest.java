@@ -24,7 +24,7 @@ public class SoupTest {
 	@Before
 	public void setUp() throws Exception {
 		mIdvm = TestMock.getIdvmMock();
-		cut = new Soup(mIdvm);
+		cut = new Soup(mIdvm, new EnvironmentConfig());
 	}
 
 	@Test

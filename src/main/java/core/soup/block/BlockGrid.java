@@ -10,7 +10,7 @@ public class BlockGrid {
 	private iBlock[][] mGrid;
 
 	public BlockGrid() {
-		mGrid = new iBlock[Config.soupSize][Config.soupSize];
+		mGrid = new iBlock[Config.cSoupSize][Config.cSoupSize];
 	}
 
 	public iBlock getBlock(Pos pos) throws PosIsOutOfGrid {
@@ -38,7 +38,7 @@ public class BlockGrid {
 	}
 
 	public void addInitialIdvm(iIdvm pIdvm) {
-		Pos lPos = new Pos(Config.soupSize / 2, Config.soupSize / 2);
+		Pos lPos = new Pos(Config.cSoupSize / 2, Config.cSoupSize / 2);
 		pIdvm.setPosition(lPos);
 		for (iBlock iBlock : pIdvm.getUsedBlocks()) {
 			refreshBlock(iBlock);
@@ -51,8 +51,8 @@ public class BlockGrid {
 	}
 
 	public void clearBlocks() {
-		for (int x = 0; x < Config.soupSize; x++) {
-			for (int y = 0; y < Config.soupSize; y++) {
+		for (int x = 0; x < Config.cSoupSize; x++) {
+			for (int y = 0; y < Config.cSoupSize; y++) {
 				mGrid[x][y] = null;
 			}
 		}

@@ -90,8 +90,8 @@ public class IdvmSensor {
 		return lDetectedPos;
 	}
 
-	// TODO 4 IMPL sensor range
-	// TODO 5 REF move To Idvm
+	// TODO 5 IMPL sensor range
+	// TODO 7 REF move To Idvm
 	public IdvmState getState(Boolean pHasSensor, Boolean pIsHungry, HashMap<Pos, Sensor> pDetectedPos,
 			ArrayList<BlockType> pTargetDetectionOrder) {
 		IdvmState lState = IdvmState.IDLE;

@@ -25,7 +25,7 @@ public class Idvm extends Block implements iIdvm {
 	private int mPartnerCount = 0;
 	Genome mGenomeOrigin;
 	Genome mGenomeUsing;
-	// TODO 3 REF use frome Genome
+	// TODO 5 REF use frome Genome
 	private HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> mMovementSequences = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
 	private IdvmCellGrid mCellGrid = new IdvmCellGrid();
 	private IdvmMoveCalculation mMoveCalculation;
@@ -88,7 +88,7 @@ public class Idvm extends Block implements iIdvm {
 		move();
 	}
 
-	// TODO 5 IMPL turn
+	// TODO 6 IMPL turn
 	@SuppressWarnings("unused")
 	private void move() {
 		for (iBlock iCount : mCellGrid.getGridBlocksOfType(BlockType.MOVE)) {
@@ -127,7 +127,7 @@ public class Idvm extends Block implements iIdvm {
 		mPartnerCount++;
 	}
 
-	// TODO 4 IMPL defence
+	// TODO 6 IMPL defence
 	public void interactWithEnemy(Enemy pEnemy) {
 		Pos lKillPos = new Pos(pEnemy.getPos().x - mPos.x + 1, pEnemy.getPos().y - mPos.y + 1);
 		mCellGrid.removeCell(lKillPos);

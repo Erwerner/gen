@@ -12,7 +12,6 @@ import core.soup.block.Partner;
 import core.soup.block.iBlock;
 import core.soup.idvm.Idvm;
 import core.soup.idvm.iLiving;
-import globals.Config;
 import ui.presenter.iPresentSoup;
 
 public class Soup implements iSoup {
@@ -21,21 +20,21 @@ public class Soup implements iSoup {
 	private ArrayList<iBlock> mAllBlocks = new ArrayList<iBlock>();
 	private ArrayList<iLiving> mAllLivings = new ArrayList<iLiving>();
 
-	public Soup(Idvm pIdvm) {
+	public Soup(Idvm pIdvm, EnvironmentConfig pEnvironmentConfig) {
 		mBlockGrid = new BlockGrid();
 		mIndividuum = pIdvm;
 		mIndividuum.setBlockGrid(mBlockGrid);
-		initFoodBlocks();
-		initEnemyBlocks();
-		initPartnerBlocks();
-		clearSurroundingsOfIdvm();
+		initFoodBlocks(pEnvironmentConfig);
+		initEnemyBlocks(pEnvironmentConfig);
+		initPartnerBlocks(pEnvironmentConfig);
+		clearSurroundingsOfIdvm(pEnvironmentConfig);
 		mBlockGrid.addInitialIdvm(mIndividuum);
 		mAllLivings.add(mIndividuum);
 	}
 
-	private void initPartnerBlocks() {
-		Partner[] lPartner = new Partner[Config.cPartnerSupply];
-		for (int i = 0; i < Config.cPartnerSupply; i++)
+	private void initPartnerBlocks(EnvironmentConfig pEnvironmentConfig) {
+		Partner[] lPartner = new Partner[pEnvironmentConfig.cPartnerSupply];
+		for (int i = 0; i < pEnvironmentConfig.cPartnerSupply; i++)
 			lPartner[i] = new Partner();
 		for (iBlock iPartner : lPartner) {
 			mBlockGrid.setRandomBlock(iPartner);
@@ -43,9 +42,9 @@ public class Soup implements iSoup {
 		}
 	}
 
-	private void initEnemyBlocks() {
-		Enemy[] lEnemyList = new Enemy[Config.enemySupply];
-		for (int i = 0; i < Config.enemySupply; i++)
+	private void initEnemyBlocks(EnvironmentConfig pEnvironmentConfig) {
+		Enemy[] lEnemyList = new Enemy[pEnvironmentConfig.cEnemySupply];
+		for (int i = 0; i < pEnvironmentConfig.cEnemySupply; i++)
 			lEnemyList[i] = new Enemy(mBlockGrid);
 		for (iBlock iEnemyBlock : lEnemyList) {
 			mBlockGrid.setRandomBlock(iEnemyBlock);
@@ -54,15 +53,15 @@ public class Soup implements iSoup {
 		}
 	}
 
-	private void clearSurroundingsOfIdvm() {
+	private void clearSurroundingsOfIdvm(EnvironmentConfig pEnvironmentConfig) {
 		ArrayList<Pos> lIdvmPosList = new ArrayList<Pos>();
 
 		for (iBlock iBlock : mIndividuum.getUsedBlocks()) {
 			lIdvmPosList.add(iBlock.getPos());
 		}
 
-		for (int x = Config.soupSize / 2 - 2; x <= Config.soupSize / 2 + 3; x++) {
-			for (int y = Config.soupSize / 2 - 2; y <= Config.soupSize / 2 + 3; y++) {
+		for (int x = pEnvironmentConfig.cSoupSize / 2 - 2; x <= pEnvironmentConfig.cSoupSize / 2 + 3; x++) {
+			for (int y = pEnvironmentConfig.cSoupSize / 2 - 2; y <= pEnvironmentConfig.cSoupSize / 2 + 3; y++) {
 				try {
 					mBlockGrid.setBlock(new Pos(x, y), null);
 				} catch (PosIsOutOfGrid e) {
@@ -72,9 +71,9 @@ public class Soup implements iSoup {
 		}
 	}
 
-	private void initFoodBlocks() {
-		Food[] lFoodBlocks = new Food[Config.foodSupply];
-		for (int i = 0; i < Config.foodSupply; i++)
+	private void initFoodBlocks(EnvironmentConfig pEnvironmentConfig) {
+		Food[] lFoodBlocks = new Food[pEnvironmentConfig.cFoodSupply];
+		for (int i = 0; i < pEnvironmentConfig.cFoodSupply; i++)
 			lFoodBlocks[i] = new Food();
 		for (iBlock iFoodBlock : lFoodBlocks) {
 			mBlockGrid.setRandomBlock(iFoodBlock);
