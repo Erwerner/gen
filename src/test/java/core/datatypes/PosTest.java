@@ -60,7 +60,7 @@ public class PosTest {
 
 	@Test(expected = PosIsOutOfGrid.class)
 	public void stopsAtBorderRight() throws PosIsOutOfGrid {
-		cut = new Pos(Config.soupSize - 1, cStartY);
+		cut = new Pos(Config.cSoupSize - 1, cStartY);
 		Pos lActPos = cut.getPosFromDirection(Direction.EAST);
 		assertEquals(cut.x, lActPos.x);
 		assertEquals(cut.y, lActPos.y);
@@ -76,7 +76,7 @@ public class PosTest {
 
 	@Test(expected = PosIsOutOfGrid.class)
 	public void stopsAtBorderDown() throws PosIsOutOfGrid {
-		cut = new Pos(cStartX, Config.soupSize - 1);
+		cut = new Pos(cStartX, Config.cSoupSize - 1);
 		Pos lActPos = cut.getPosFromDirection(Direction.SOUTH);
 		assertEquals(cut.x, lActPos.x);
 		assertEquals(cut.y, lActPos.y);

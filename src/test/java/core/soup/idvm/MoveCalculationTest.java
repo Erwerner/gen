@@ -43,16 +43,16 @@ public class MoveCalculationTest {
 
 	@Test
 	public void returnsMovePos() throws PosIsOutOfGrid {
-		Pos lMovePos = cut.calcPosFromDirection(Direction.NORTH, getIdvmPos(Config.soupSize / 2, Config.soupSize / 2),
+		Pos lMovePos = cut.calcPosFromDirection(Direction.NORTH, getIdvmPos(Config.cSoupSize / 2, Config.cSoupSize / 2),
 				mIdvmBlocks);
 		assertNotNull(lMovePos);
 	}
 
 	@Test
 	public void returnsPosUP() throws PosIsOutOfGrid {
-		Pos lMovePos = cut.calcPosFromDirection(Direction.NORTH, getIdvmPos(Config.soupSize / 2, Config.soupSize / 2),
+		Pos lMovePos = cut.calcPosFromDirection(Direction.NORTH, getIdvmPos(Config.cSoupSize / 2, Config.cSoupSize / 2),
 				mIdvmBlocks);
-		assertEquals(new Pos(Config.soupSize / 2, Config.soupSize / 2 - 1), lMovePos);
+		assertEquals(new Pos(Config.cSoupSize / 2, Config.cSoupSize / 2 - 1), lMovePos);
 	}
 
 	private Pos getIdvmPos(int pX, int pY) {
@@ -66,13 +66,13 @@ public class MoveCalculationTest {
 
 	@Test(expected = PosIsOutOfGrid.class)
 	public void noMovementAtTopBorder() throws PosIsOutOfGrid {
-		Pos lStartPos = getIdvmPos(Config.soupSize / 2, 0);
+		Pos lStartPos = getIdvmPos(Config.cSoupSize / 2, 0);
 		cut.calcPosFromDirection(Direction.NORTH, lStartPos, mIdvmBlocks);
 	}
 
 	@Test(expected = PosIsOutOfGrid.class)
 	public void noMovementAtBottomBorder() throws PosIsOutOfGrid {
-		Pos lStartPos = getIdvmPos(Config.soupSize / 2, Config.soupSize - 1);
+		Pos lStartPos = getIdvmPos(Config.cSoupSize / 2, Config.cSoupSize - 1);
 		cut.calcPosFromDirection(Direction.SOUTH, lStartPos, mIdvmBlocks);
 	}
 

@@ -1,16 +1,16 @@
 package core.soup.block;
 
+import globals.Config;
 import core.datatypes.Pos;
 import core.exceptions.PosIsOutOfGrid;
 import core.soup.idvm.Idvm;
 import core.soup.idvm.iIdvm;
-import globals.Config;
 
 public class BlockGrid {
 	private iBlock[][] mGrid;
 
 	public BlockGrid() {
-		mGrid = new iBlock[Config.soupSize][Config.soupSize];
+		mGrid = new iBlock[Config.cSoupSize][Config.cSoupSize];
 	}
 
 	public iBlock getBlock(Pos pos) throws PosIsOutOfGrid {
@@ -38,7 +38,7 @@ public class BlockGrid {
 	}
 
 	public void addInitialIdvm(iIdvm pIdvm) {
-		Pos lPos = new Pos(Config.soupSize / 2, Config.soupSize / 2);
+		Pos lPos = new Pos(Config.cSoupSize / 2, Config.cSoupSize / 2);
 		pIdvm.setPosition(lPos);
 		for (iBlock iBlock : pIdvm.getUsedBlocks()) {
 			refreshBlock(iBlock);
@@ -51,14 +51,14 @@ public class BlockGrid {
 	}
 
 	public void clearBlocks() {
-		for (int x = 0; x < Config.soupSize; x++) {
-			for (int y = 0; y < Config.soupSize; y++) {
+		for (int x = 0; x < Config.cSoupSize; x++) {
+			for (int y = 0; y < Config.cSoupSize; y++) {
 				mGrid[x][y] = null;
 			}
 		}
 	}
 
-	//TOTO TEST with Mock
+	// TOTO TEST with Mock
 	public void detectCollisions(Idvm pIdvm) {
 		for (iBlock iBlock : pIdvm.getUsedBlocks()) {
 			Pos iPos = iBlock.getPos();
@@ -68,14 +68,15 @@ public class BlockGrid {
 				if (lGridBlock != null) {
 					switch (lGridBlock.getBlockType()) {
 					case FOOD:
-						pIdvm.interactWithFood((Food) lGridBlock);
-						//lGridBlock.setNull();
+						pIdvm.interactWithFood();
+						lGridBlock.setNull();
 						break;
 					case ENEMY:
 						pIdvm.interactWithEnemy((Enemy) lGridBlock);
 						break;
 					case PARTNER:
-						pIdvm.interactWithPartner((Partner) lGridBlock);
+						pIdvm.interactWithPartner();
+						setRandomBlock(lGridBlock);
 						break;
 					default:
 						break;

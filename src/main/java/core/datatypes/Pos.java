@@ -21,8 +21,8 @@ public class Pos implements Serializable{
 	}
 
 	public static Pos getRandomSoupPosition() {
-		int x = (int) (Math.random() * Config.soupSize);
-		int y = (int) (Math.random() * Config.soupSize);
+		int x = (int) (Math.random() * Config.cSoupSize);
+		int y = (int) (Math.random() * Config.cSoupSize);
 		return new Pos(x, y);
 	}
 
@@ -71,8 +71,8 @@ public class Pos implements Serializable{
 
 	public static ArrayList<Pos> getAllGridPos() {
 		ArrayList<Pos> lAllPos = new ArrayList<Pos>();
-		for (int x = 0; x < Config.soupSize; x++) {
-			for (int y = 0; y < Config.soupSize; y++) {
+		for (int x = 0; x < Config.cSoupSize; x++) {
+			for (int y = 0; y < Config.cSoupSize; y++) {
 				lAllPos.add(new Pos(x, y));
 			}
 		}
@@ -85,7 +85,7 @@ public class Pos implements Serializable{
 	}
 
 	public void isInGrid() throws PosIsOutOfGrid {
-		if (!(x >= 0 && y >= 0 && x < Config.soupSize && y < Config.soupSize))
+		if (!(x >= 0 && y >= 0 && x < Config.cSoupSize && y < Config.cSoupSize))
 			throw new PosIsOutOfGrid();
 	}
 }

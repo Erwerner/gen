@@ -9,7 +9,6 @@ import core.datatypes.Pos;
 import core.exceptions.DetectionFailed;
 import core.exceptions.PosIsOutOfGrid;
 import core.exceptions.WrongBlockType;
-import core.exceptions.WrongState;
 import core.soup.block.BlockGrid;
 import core.soup.block.BlockType;
 import core.soup.block.iBlock;
@@ -89,5 +88,37 @@ public class IdvmSensor {
 			}
 		}
 		return lDetectedPos;
+	}
+
+	// TODO 5 IMPL sensor range
+	// TODO 7 REF move To Idvm
+	public IdvmState getState(Boolean pHasSensor, Boolean pIsHungry, HashMap<Pos, Sensor> pDetectedPos,
+			ArrayList<BlockType> pTargetDetectionOrder) {
+		IdvmState lState = IdvmState.IDLE;
+		if (!pHasSensor)
+			return IdvmState.BLIND;
+		for (BlockType iBlockType : pTargetDetectionOrder) {
+			if (detectSurroundingBlockType(iBlockType, pDetectedPos))
+				switch (iBlockType) {
+				case PARTNER:
+					lState = IdvmState.PARTNER;
+					break;
+				case ENEMY:
+					lState = IdvmState.ENEMY;
+					break;
+				case FOOD:
+					lState = IdvmState.FOOD;
+					break;
+				default:
+					throw new RuntimeException();
+				}
+			if (lState != IdvmState.IDLE) {
+				break;
+			}
+		}
+		if (pIsHungry) {
+			lState = lState.getStateAsHunger();
+		}
+		return lState;
 	}
 }

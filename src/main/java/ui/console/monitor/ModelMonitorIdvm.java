@@ -6,6 +6,7 @@ import core.datatypes.Decisions;
 import core.datatypes.Pos;
 import core.genes.Genome;
 import core.genes.MoveDecisionsProbability;
+import core.soup.EnvironmentConfig;
 import core.soup.Soup;
 import core.soup.iSoup;
 import core.soup.block.BlockType;
@@ -80,7 +81,7 @@ public class ModelMonitorIdvm extends Model implements iControllRunSoup {
 
 	public void runGenome(Genome mGenome) {
 		mIdvm = new Idvm(mGenome);
-		mSoup = new Soup(mIdvm);
+		mSoup = new Soup(mIdvm, new EnvironmentConfig());
 		new ViewConsoleMonitorIdvm(this);
 
 		System.out.println("start");

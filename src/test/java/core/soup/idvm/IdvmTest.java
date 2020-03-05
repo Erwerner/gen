@@ -19,7 +19,6 @@ import core.datatypes.Decisions;
 import core.datatypes.Direction;
 import core.datatypes.Pos;
 import core.exceptions.PosIsOutOfGrid;
-import core.exceptions.WrongState;
 import core.genes.Genome;
 import core.genes.MoveDecisionsProbability;
 import core.soup.block.BlockGrid;
@@ -28,9 +27,6 @@ import core.soup.block.Enemy;
 import core.soup.block.Food;
 import core.soup.block.IdvmCell;
 import core.soup.block.iBlock;
-import core.soup.idvm.Idvm;
-import core.soup.idvm.IdvmState;
-import core.soup.idvm.Sensor;
 
 public class IdvmTest {
 	private static final int cStartPosX = 50;
@@ -44,6 +40,7 @@ public class IdvmTest {
 	public static void setUpBeforeClass() throws Exception {
 	}
 
+	@SuppressWarnings("unchecked")
 	@Before
 	public void setUp() throws Exception {
 		mBlockGrid = new BlockGrid();
@@ -97,7 +94,7 @@ public class IdvmTest {
 		assertHasGrowCellOnPosDiff(false, 4, 0, 0);
 		Food lFood = new Food();
 		lFood.setPosition(new Pos(20, 20));
-		cut.interactWithFood(lFood);
+		cut.interactWithFood();
 
 		ArrayList<iBlock> lUsedBlocks = cut.getUsedBlocks();
 		assertEquals(5, lUsedBlocks.size());
@@ -112,8 +109,8 @@ public class IdvmTest {
 
 		Food lFood = new Food();
 		lFood.setPosition(new Pos(20, 20));
-		cut.interactWithFood(lFood);
-		cut.interactWithFood(lFood);
+		cut.interactWithFood();
+		cut.interactWithFood();
 
 		lUsedBlocks = cut.getUsedBlocks();
 		assertEquals(5, lUsedBlocks.size());
@@ -289,7 +286,7 @@ public class IdvmTest {
 		assertPosition(cStartPosX, cStartPosY, cut.getPos());
 		cut.step();
 		assertPosition(cStartPosX - 1, cStartPosY, cut.getPos());
-		cut.interactWithFood(new Food());
+		cut.interactWithFood();
 		cut.step();
 		assertPosition(cStartPosX - 1, cStartPosY + 1, cut.getPos());
 	}
@@ -299,7 +296,7 @@ public class IdvmTest {
 		assertPosition(cStartPosX, cStartPosY, cut.getPos());
 		cut.step();
 		assertPosition(cStartPosX - 1, cStartPosY, cut.getPos());
-		cut.interactWithFood(new Food());
+		cut.interactWithFood();
 		cut.step();
 		assertPosition(cStartPosX - 1, cStartPosY + 1, cut.getPos());
 		assertEquals(2, mGenome.moveSequencesForState.get(IdvmState.IDLE).size());
@@ -349,7 +346,7 @@ public class IdvmTest {
 	@Test
 	public void eatNeverThrows() {
 		for (int i = 0; i < 100; i++)
-			cut.interactWithFood(new Food());
+			cut.interactWithFood();
 	}
 
 	@Test

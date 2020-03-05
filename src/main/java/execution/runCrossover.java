@@ -1,20 +1,22 @@
 package execution;
 
+import globals.Helpers;
+
 import java.util.ArrayList;
 
+import ui.console.monitor.ModelMonitorIdvm;
 import core.genes.Crossover;
 import core.genes.Genome;
 import core.genes.GenomePersister;
+import core.soup.EnvironmentConfig;
 import core.soup.block.BlockType;
 import core.soup.block.IdvmCell;
 import core.soup.idvm.Idvm;
 import devutils.Debug;
-import globals.Helpers;
-import ui.console.monitor.ModelMonitorIdvm;
 
 public class runCrossover {
-	private static final int cInitialPopulationMultiplikator = 3;
-	private static final int cPopulation = 1024 * 3  * cInitialPopulationMultiplikator;
+	private static final int cInitialPopulationMultiplikator = 1;
+	private static final int cPopulation = 1024 * 10 * cInitialPopulationMultiplikator;
 	static ArrayList<Thread> mThreads = new ArrayList<Thread>();
 	private static GenomePersister mPersister;
 
@@ -22,15 +24,19 @@ public class runCrossover {
 		System.out.println("Init");
 		Debug.printCurrentChange();
 		mPersister = new GenomePersister();
-		ArrayList<Idvm> lPopulation = initializePopulation();
-		//ArrayList<Idvm> lPopulation = loadPopulation();
-		int iGeneration = 0;
+		//ArrayList<Idvm> lPopulation = initializePopulation();
+		ArrayList<Idvm> lPopulation = loadPopulation();
+		int iGeneration = 1;
 		while (true) {
-			lPopulation = runPopulation(lPopulation);
+			EnvironmentConfig lEnvironmentConfig = new EnvironmentConfig();
+			lEnvironmentConfig.cEnemySupply = lEnvironmentConfig.cEnemySupply + (iGeneration % 25) * 1;
+			lEnvironmentConfig.cFoodSupply = lEnvironmentConfig.cFoodSupply - (iGeneration % 41) * 1;
+			lPopulation = runPopulation(lPopulation, lEnvironmentConfig);
 			ArrayList<Idvm> lFittestIdvm = evaluateFitness(lPopulation);
 			checkFitness(lFittestIdvm);
 			Debug.printCurrentChange();
-			System.out.println("Generation finished: " + iGeneration);
+			System.out.println("Generation finished: " + iGeneration + ", Food: " + lEnvironmentConfig.cFoodSupply
+					+ ", Enemy: " + lEnvironmentConfig.cEnemySupply);
 			lPopulation = getOffsprings(lFittestIdvm);
 			iGeneration++;
 			if (new Helpers().isFlagTrue("persist"))
@@ -40,13 +46,15 @@ public class runCrossover {
 
 	private static ArrayList<Idvm> loadPopulation() {
 		ArrayList<Idvm> lPopulation = new ArrayList<Idvm>();
-		for (Integer i = 0; i < cPopulation / 4 - 1; i++)
+		for (Integer i = 0; i < cPopulation / 4 - 1; i++) {
 			lPopulation.add(new Idvm(mPersister.load(i.toString())));
+		}
 		return lPopulation;
 	}
 
 	private static void persistPopulation(ArrayList<Idvm> pPopulation) {
 		Integer lCount = 0;
+		System.out.println("wait for persisting...");
 		for (Idvm iIdvm : pPopulation) {
 			mPersister.save(iIdvm.getGenomeOrigin(), lCount.toString());
 			lCount++;
@@ -109,7 +117,8 @@ public class runCrossover {
 
 	private static void printBlockStats(ArrayList<Idvm> pFittestIdvm, int pCount) {
 		System.out.print(pCount + " Cells: ");
-		BlockType[] lCellBlocks = { BlockType.DEFENCE, BlockType.MOVE, BlockType.LIFE, BlockType.SENSOR, BlockType.NULL };
+		BlockType[] lCellBlocks = { BlockType.DEFENCE, BlockType.MOVE, BlockType.LIFE, BlockType.SENSOR,
+				BlockType.NULL };
 		for (BlockType iBlockType : lCellBlocks) {
 			int lTotalBlockCount = 0;
 			for (Idvm iIdvm : pFittestIdvm) {
@@ -127,21 +136,23 @@ public class runCrossover {
 	private static ArrayList<Idvm> evaluateFitness(ArrayList<Idvm> pPopulation) {
 		ArrayList<Idvm> lFittestIdvm = new ArrayList<Idvm>();
 		for (Idvm iIdvm : pPopulation) {
-			for (int iPairings = 0; iPairings < iIdvm.getPartnerCount() * 16; iPairings++)
-				lFittestIdvm.add(iIdvm);
+				for (int iPairings = 0; iPairings < iIdvm.getPartnerCount() * 16; iPairings++)
+					lFittestIdvm.add(iIdvm);
 		}
 		while (lFittestIdvm.size() > cPopulation / cInitialPopulationMultiplikator)
 			lFittestIdvm.remove(Helpers.rndInt(lFittestIdvm.size() - 1));
 		return lFittestIdvm;
 	}
 
-	private static ArrayList<Idvm> runPopulation(ArrayList<Idvm> pPopulation) throws CloneNotSupportedException, InterruptedException {
+	private static ArrayList<Idvm> runPopulation(ArrayList<Idvm> pPopulation, EnvironmentConfig pEnvironmentConfig)
+			throws CloneNotSupportedException, InterruptedException {
 		ArrayList<Idvm> lExecutedPopulation = new ArrayList<Idvm>();
 		ArrayList<IdvmExecutionThread> mIdvmExecutionThread = new ArrayList<IdvmExecutionThread>();
 		mThreads = new ArrayList<Thread>();
 		for (Idvm iIdvm : pPopulation) {
 			new Helpers().waitForConfigFlag("run");
-			IdvmExecutionThread lIdvmRunner = new IdvmExecutionThread((Genome) iIdvm.getGenomeOrigin().clone());
+			IdvmExecutionThread lIdvmRunner = new IdvmExecutionThread((Genome) iIdvm.getGenomeOrigin().clone(),
+					pEnvironmentConfig);
 			Thread lThread = new Thread(lIdvmRunner);
 			lThread.start();
 			if (!new Helpers().isFlagTrue("parallel"))
