@@ -4,16 +4,23 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import core.datatypes.Decisions;
+import core.soup.block.IdvmCell;
+import core.soup.idvm.IdvmState;
 import globals.Config;
 import globals.Helpers;
 
 public class MoveDecisionsProbability implements Serializable, iGene {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	// TODO 9 REF make private
 	public ArrayList<Decisions> mPossibleDecisions = new ArrayList<Decisions>();
+	private int mSequenceindex;
+	private IdvmState mForState; 
+	
+	public MoveDecisionsProbability(IdvmState pForState) {
+		super();
+		mForState = pForState;
+	}
 
 	public MoveDecisionsProbability appendDecision(Decisions pDecision, int pProbability) {
 		for (int i = 0; i < pProbability; i++)
@@ -51,13 +58,33 @@ public class MoveDecisionsProbability implements Serializable, iGene {
 
 	@Override
 	public iGene clone() throws CloneNotSupportedException {
-		MoveDecisionsProbability lNewMoveProbability = new MoveDecisionsProbability();
+		MoveDecisionsProbability lNewMoveProbability = new MoveDecisionsProbability(mForState);
 		lNewMoveProbability.mPossibleDecisions.addAll((ArrayList<Decisions>) mPossibleDecisions.clone());
 		return lNewMoveProbability;
 	}
 	@Override
 	public boolean equals(Object o) {
+		if (o == null || !this.getClass().isAssignableFrom(o.getClass()))
+			return false;
+		
 		MoveDecisionsProbability other = (MoveDecisionsProbability) o;
-		return mPossibleDecisions.equals(other.mPossibleDecisions);
+		return mPossibleDecisions.equals(other.mPossibleDecisions) && mForState.equals(other.mForState);
+	}
+
+	public void setSequendeIndex(int pSequenceIndex) {
+		mSequenceindex = pSequenceIndex;
+	}
+
+	public int getSequendeIndex() {
+		return mSequenceindex;
+	}
+
+	public IdvmState getForState() {
+		return mForState;
+	}
+	
+	@Override
+	public String toString() {
+		return mForState + " -> " + mPossibleDecisions;
 	}
 }

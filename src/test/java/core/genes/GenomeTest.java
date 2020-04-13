@@ -110,6 +110,7 @@ public class GenomeTest {
 		assertNotEquals(lAlteredCopyMovement, lActMovement);
 	}
 
+	/*
 	@Test
 	public void percentageOfTargetIsZeroWithNoSensor() {
 		cut.forceMutation();
@@ -160,7 +161,7 @@ public class GenomeTest {
 		Double lPercentage = cut.getPercentageOfWrongTargetDecision(2);
 		Double lExp = 0.0;
 		assertEquals(lExp, lPercentage);
-	}
+	}*/
 
 	@Test
 	public void cloneedObjectIsEqual() throws CloneNotSupportedException {

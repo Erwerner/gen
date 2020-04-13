@@ -56,13 +56,13 @@ public class IdvmTest {
 		for (IdvmCell iCell : mCellGrow) {
 			mGenome.cellGrow.add(new IdvmCell(iCell.getBlockType(), iCell.getPosOnIdvm()));
 		}
-		ArrayList<MoveDecisionsProbability> lIdlelMoveProbability = new ArrayList<MoveDecisionsProbability>();
-		lIdlelMoveProbability.add(new MoveDecisionsProbability().appendDecision(Decisions.LEFT, 1));
-		lIdlelMoveProbability.add(new MoveDecisionsProbability().appendDecision(Decisions.DOWN, 1));
 		mGenome.moveSequencesForState = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
-		for (IdvmState iState : IdvmState.values())
-			mGenome.moveSequencesForState.put(iState,
-					(ArrayList<MoveDecisionsProbability>) lIdlelMoveProbability.clone());
+		for (IdvmState iState : IdvmState.values()) {
+			ArrayList<MoveDecisionsProbability> lMoveProbability = new ArrayList<MoveDecisionsProbability>();
+			lMoveProbability.add(new MoveDecisionsProbability(iState).appendDecision(Decisions.LEFT, 1));
+			lMoveProbability.add(new MoveDecisionsProbability(iState).appendDecision(Decisions.DOWN, 1));
+			mGenome.moveSequencesForState.put(iState, (ArrayList<MoveDecisionsProbability>) lMoveProbability.clone());
+		}
 
 		mGenome.setHunger(50);
 

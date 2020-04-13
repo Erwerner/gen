@@ -1,5 +1,8 @@
 package core.soup.idvm;
 
+import static core.soup.idvm.IdvmState.ENEMY;
+import static core.soup.idvm.IdvmState.FOOD;
+import static core.soup.idvm.IdvmState.IDLE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -21,7 +24,6 @@ import core.soup.block.Food;
 import core.soup.block.IdvmCell;
 import core.soup.block.iBlock;
 import core.soup.idvm.IdvmMoveCalculation;
-import core.soup.idvm.IdvmState;
 import core.soup.idvm.iIdvm;
 import globals.Config;
 import utils.TestMock;
@@ -80,9 +82,9 @@ public class MoveCalculationTest {
 	public void calculateDirectionCurrent() {
 		HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> lMovementSequences = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
 		ArrayList<MoveDecisionsProbability> lMovementList = new ArrayList<MoveDecisionsProbability>();
-		lMovementList.add(new MoveDecisionsProbability().appendDecision(Decisions.CURRENT, 1));
-		lMovementSequences.put(IdvmState.IDLE, lMovementList);
-		Direction lAct = cut.calcMovingDirection(lMovementSequences, IdvmState.IDLE, Direction.EAST);
+		lMovementList.add(new MoveDecisionsProbability(IDLE).appendDecision(Decisions.CURRENT, 1));
+		lMovementSequences.put(IDLE, lMovementList);
+		Direction lAct = cut.calcMovingDirection(lMovementSequences, IDLE, Direction.EAST);
 		assertEquals(Direction.NORTH, lAct);
 	}
 
@@ -90,9 +92,9 @@ public class MoveCalculationTest {
 	public void calculateDirectionTarget() {
 		HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> lMovementSequences = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
 		ArrayList<MoveDecisionsProbability> lMovementList = new ArrayList<MoveDecisionsProbability>();
-		lMovementList.add(new MoveDecisionsProbability().appendDecision(Decisions.TARGET, 1));
-		lMovementSequences.put(IdvmState.IDLE, lMovementList);
-		Direction lAct = cut.calcMovingDirection(lMovementSequences, IdvmState.IDLE, Direction.EAST);
+		lMovementList.add(new MoveDecisionsProbability(IDLE).appendDecision(Decisions.TARGET, 1));
+		lMovementSequences.put(IDLE, lMovementList);
+		Direction lAct = cut.calcMovingDirection(lMovementSequences, IDLE, Direction.EAST);
 		assertEquals(Direction.EAST, lAct);
 	}
 
@@ -100,9 +102,9 @@ public class MoveCalculationTest {
 	public void calculateDirectionTargetOpposite() {
 		HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> lMovementSequences = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
 		ArrayList<MoveDecisionsProbability> lMovementList = new ArrayList<MoveDecisionsProbability>();
-		lMovementList.add(new MoveDecisionsProbability().appendDecision(Decisions.TARGET_OPPOSITE, 1));
-		lMovementSequences.put(IdvmState.IDLE, lMovementList);
-		Direction lAct = cut.calcMovingDirection(lMovementSequences, IdvmState.IDLE, Direction.EAST);
+		lMovementList.add(new MoveDecisionsProbability(IDLE).appendDecision(Decisions.TARGET_OPPOSITE, 1));
+		lMovementSequences.put(IDLE, lMovementList);
+		Direction lAct = cut.calcMovingDirection(lMovementSequences, IDLE, Direction.EAST);
 		assertEquals(Direction.WEST, lAct);
 	}
 
@@ -110,9 +112,9 @@ public class MoveCalculationTest {
 	public void calculateDirectionTargetSite2() {
 		HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> lMovementSequences = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
 		ArrayList<MoveDecisionsProbability> lMovementList = new ArrayList<MoveDecisionsProbability>();
-		lMovementList.add(new MoveDecisionsProbability().appendDecision(Decisions.TARGET_SITE2, 1));
-		lMovementSequences.put(IdvmState.IDLE, lMovementList);
-		Direction lAct = cut.calcMovingDirection(lMovementSequences, IdvmState.IDLE, Direction.EAST);
+		lMovementList.add(new MoveDecisionsProbability(IDLE).appendDecision(Decisions.TARGET_SITE2, 1));
+		lMovementSequences.put(IDLE, lMovementList);
+		Direction lAct = cut.calcMovingDirection(lMovementSequences, IDLE, Direction.EAST);
 		assertEquals(Direction.SOUTH, lAct);
 	}
 
@@ -120,9 +122,9 @@ public class MoveCalculationTest {
 	public void calculateDirectionCurrentSite1() {
 		HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> lMovementSequences = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
 		ArrayList<MoveDecisionsProbability> lMovementList = new ArrayList<MoveDecisionsProbability>();
-		lMovementList.add(new MoveDecisionsProbability().appendDecision(Decisions.CURRENT_SITE1, 1));
-		lMovementSequences.put(IdvmState.IDLE, lMovementList);
-		Direction lAct = cut.calcMovingDirection(lMovementSequences, IdvmState.IDLE, Direction.EAST);
+		lMovementList.add(new MoveDecisionsProbability(IDLE).appendDecision(Decisions.CURRENT_SITE1, 1));
+		lMovementSequences.put(IDLE, lMovementList);
+		Direction lAct = cut.calcMovingDirection(lMovementSequences, IDLE, Direction.EAST);
 		assertEquals(Direction.WEST, lAct);
 	}
 
@@ -133,8 +135,8 @@ public class MoveCalculationTest {
 
 		HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> lMovementSequences = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
 		ArrayList<MoveDecisionsProbability> lMoveList = new ArrayList<MoveDecisionsProbability>();
-		lMoveList.add(new MoveDecisionsProbability().appendDecision(Decisions.TARGET, 1));
-		lMovementSequences.put(IdvmState.FOOD, lMoveList);
+		lMoveList.add(new MoveDecisionsProbability(FOOD).appendDecision(Decisions.TARGET, 1));
+		lMovementSequences.put(FOOD, lMoveList);
 		iIdvm lIdvm = TestMock.getIdvmMock();
 
 		lIdvm.setBlockGrid(mBlockGrid);
@@ -153,8 +155,8 @@ public class MoveCalculationTest {
 
 		HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> lMovementSequences = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
 		ArrayList<MoveDecisionsProbability> lMoveList = new ArrayList<MoveDecisionsProbability>();
-		lMoveList.add(new MoveDecisionsProbability().appendDecision(Decisions.TARGET_OPPOSITE, 1));
-		lMovementSequences.put(IdvmState.ENEMY, lMoveList);
+		lMoveList.add(new MoveDecisionsProbability(ENEMY).appendDecision(Decisions.TARGET_OPPOSITE, 1));
+		lMovementSequences.put(ENEMY, lMoveList);
 		iIdvm lIdvm = TestMock.getIdvmMock();
 
 		lIdvm.setBlockGrid(mBlockGrid);
@@ -170,9 +172,9 @@ public class MoveCalculationTest {
 	public void returnsLastCalculatedDecision() {
 		HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> lMovementSequences = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
 		ArrayList<MoveDecisionsProbability> lMoveList = new ArrayList<MoveDecisionsProbability>();
-		lMoveList.add(new MoveDecisionsProbability().appendDecision(Decisions.TARGET, 1));
-		lMovementSequences.put(IdvmState.FOOD, lMoveList);
-		cut.calcMovingDirection(lMovementSequences, IdvmState.FOOD, Direction.WEST);
+		lMoveList.add(new MoveDecisionsProbability(FOOD).appendDecision(Decisions.TARGET, 1));
+		lMovementSequences.put(FOOD, lMoveList);
+		cut.calcMovingDirection(lMovementSequences, FOOD, Direction.WEST);
 		Decisions lAct = cut.getCalculatedDecision();
 		assertEquals(Decisions.TARGET, lAct);
 	}

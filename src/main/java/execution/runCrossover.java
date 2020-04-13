@@ -3,20 +3,25 @@ package execution;
 import globals.Helpers;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ui.console.monitor.ModelMonitorIdvm;
 import core.genes.Crossover;
 import core.genes.Genome;
 import core.genes.GenomePersister;
 import core.soup.EnvironmentConfig;
+import core.soup.GenomePool;
+import core.soup.Population;
+import core.soup.PopulationGene;
 import core.soup.block.BlockType;
 import core.soup.block.IdvmCell;
+import core.soup.exception.PopulationEmpty;
 import core.soup.idvm.Idvm;
 import devutils.Debug;
 
 public class runCrossover {
 	private static final int cInitialPopulationMultiplikator = 1;
-	private static final int cPopulation = 1024 * 10 * cInitialPopulationMultiplikator;
+	private static final int cPopulation = 1024 * 2 * cInitialPopulationMultiplikator;
 	static ArrayList<Thread> mThreads = new ArrayList<Thread>();
 	private static GenomePersister mPersister;
 
@@ -24,8 +29,8 @@ public class runCrossover {
 		System.out.println("Init");
 		Debug.printCurrentChange();
 		mPersister = new GenomePersister();
-		//ArrayList<Idvm> lPopulation = initializePopulation();
-		ArrayList<Idvm> lPopulation = loadPopulation();
+		ArrayList<Idvm> lPopulation = initializePopulation();
+		// ArrayList<Idvm> lPopulation = loadPopulation();
 		int iGeneration = 1;
 		while (true) {
 			EnvironmentConfig lEnvironmentConfig = new EnvironmentConfig();
@@ -113,6 +118,35 @@ public class runCrossover {
 		printBlockStats(pFittestIdvm, 8);
 		printBlockStats(pFittestIdvm, 10);
 		printBlockStats(pFittestIdvm, 12);
+
+		printPopulationStats(pFittestIdvm);
+
+	}
+
+	public static void printPopulationStats(ArrayList<Idvm> pFittestIdvm) {
+		Population lPopulation = new Population();
+		for (Idvm iIdvm : pFittestIdvm)
+			lPopulation.appendIdvm(iIdvm);
+
+		try {
+			List<PopulationGene> lSortedGenes = lPopulation.getGenomePool().getGenesSortedByRank();
+			
+			//initialCellGrow
+			for(PopulationGene iGene: lSortedGenes) {
+				if(iGene.getOriginGene().getClass() == IdvmCell.class && iGene.mSequenceIndex == 0)
+					System.out.println(iGene);
+			}
+			
+			for (int i = 0; i < 40; i++) {
+				PopulationGene lCurrentGene = lSortedGenes.get(i);
+				if (lCurrentGene.mSequenceIndex > 0)
+					System.out.println(lCurrentGene);
+			}
+
+		} catch (PopulationEmpty e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private static void printBlockStats(ArrayList<Idvm> pFittestIdvm, int pCount) {
@@ -136,8 +170,8 @@ public class runCrossover {
 	private static ArrayList<Idvm> evaluateFitness(ArrayList<Idvm> pPopulation) {
 		ArrayList<Idvm> lFittestIdvm = new ArrayList<Idvm>();
 		for (Idvm iIdvm : pPopulation) {
-				for (int iPairings = 0; iPairings < iIdvm.getPartnerCount() * 16; iPairings++)
-					lFittestIdvm.add(iIdvm);
+			for (int iPairings = 0; iPairings < iIdvm.getPartnerCount() * 16; iPairings++)
+				lFittestIdvm.add(iIdvm);
 		}
 		while (lFittestIdvm.size() > cPopulation / cInitialPopulationMultiplikator)
 			lFittestIdvm.remove(Helpers.rndInt(lFittestIdvm.size() - 1));
