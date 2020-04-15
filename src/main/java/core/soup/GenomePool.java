@@ -19,6 +19,9 @@ public class GenomePool {
 	}
 
 	public void addOrIncrease(PopulationGene lNewPopulationGene) {
+		//TODO 0 Fix
+		if(lNewPopulationGene.mSequenceIndex > 10)
+			return;
 		for (PopulationGene iPopGene : mGenomeList) {
 			if (iPopGene.equals(lNewPopulationGene)) {
 				iPopGene.increaseHostCounter();

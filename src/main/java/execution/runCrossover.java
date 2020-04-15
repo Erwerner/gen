@@ -130,17 +130,20 @@ public class runCrossover {
 
 		try {
 			List<PopulationGene> lSortedGenes = lPopulation.getGenomePool().getGenesSortedByRank();
-			
-			//initialCellGrow
-			for(PopulationGene iGene: lSortedGenes) {
-				if(iGene.getOriginGene().getClass() == IdvmCell.class && iGene.mSequenceIndex == 0)
-					System.out.println(iGene);
+
+			// initialCellGrow
+			for (PopulationGene iGene : lSortedGenes) {
+				if (iGene.getOriginGene().getClass() == IdvmCell.class && iGene.mSequenceIndex < 4)
+					if (iGene.getHostCounter() > pFittestIdvm.size() / 3)
+						System.out.println("\t" + iGene);
 			}
-			
-			for (int i = 0; i < 40; i++) {
+			System.out.println("- - - - - - - - - - - - - - -");
+
+			for (int i = 0; i < 100; i++) {
 				PopulationGene lCurrentGene = lSortedGenes.get(i);
-				if (lCurrentGene.mSequenceIndex > 0)
-					System.out.println(lCurrentGene);
+				if (lCurrentGene.mSequenceIndex > 3)
+					if (lCurrentGene.getHostCounter() > pFittestIdvm.size() / 3)
+						System.out.println("\t" + lCurrentGene);
 			}
 
 		} catch (PopulationEmpty e) {
@@ -170,7 +173,7 @@ public class runCrossover {
 	private static ArrayList<Idvm> evaluateFitness(ArrayList<Idvm> pPopulation) {
 		ArrayList<Idvm> lFittestIdvm = new ArrayList<Idvm>();
 		for (Idvm iIdvm : pPopulation) {
-			for (int iPairings = 0; iPairings < iIdvm.getPartnerCount() * 16; iPairings++)
+			for (int iPairings = 0; iPairings < (iIdvm.getPartnerCount() + 0.25 ) * 4; iPairings++)
 				lFittestIdvm.add(iIdvm);
 		}
 		while (lFittestIdvm.size() > cPopulation / cInitialPopulationMultiplikator)

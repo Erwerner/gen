@@ -68,7 +68,9 @@ public class Idvm extends Block implements iIdvm {
 		return mEnergy > 0 && !mCellGrid.getGridBlocksOfType(BlockType.LIFE).isEmpty();
 	}
 
+	//TODO 0 isHungry
 	public Boolean isHungry() {
+		//return false;
 		return mEnergy < mGenomeUsing.getHunger().getValue();
 	}
 
@@ -121,9 +123,9 @@ public class Idvm extends Block implements iIdvm {
 	}
 
 	public void interactWithPartner() {
+		mEnergy -= Config.cPairingCost;
 		if (mEnergy - Config.cPairingCost < 0)
 			return;
-		mEnergy -= Config.cPairingCost;
 		mPartnerCount++;
 	}
 

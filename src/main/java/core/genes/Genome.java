@@ -15,12 +15,9 @@ import core.soup.idvm.IdvmState;
 import globals.Config;
 import globals.Helpers;
 
-public class Genome implements Cloneable, iPresentGenomeStats, Serializable {
-	/**
-	 * 
-	 */
+public class Genome implements Cloneable, iPresentGenomeStats, Serializable { 
 	private static final long serialVersionUID = 1L;
-	private GeneInt mHunger = new GeneInt(0, Config.cMaxEnergy, Config.cMaxEnergy / 2);
+	private GeneInt mHunger = new GeneInt(0, Config.cMaxHunger, Config.cMaxEnergy / 2);
 	// TODO 9 REF make this private
 	public ArrayList<IdvmCell> cellGrow = new ArrayList<IdvmCell>();
 	public HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> moveSequencesForState = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();

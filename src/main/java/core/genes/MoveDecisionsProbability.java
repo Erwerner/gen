@@ -68,7 +68,25 @@ public class MoveDecisionsProbability implements Serializable, iGene {
 			return false;
 		
 		MoveDecisionsProbability other = (MoveDecisionsProbability) o;
-		return mPossibleDecisions.equals(other.mPossibleDecisions) && mForState.equals(other.mForState);
+
+		if(!(mForState.equals(other.mForState)))
+			return false;
+		
+		ArrayList<Decisions> thisPossibleDecisions = (ArrayList<Decisions>) mPossibleDecisions.clone();		
+		
+		for(Decisions others : other.mPossibleDecisions) {
+			if(!others.equals(other.mPossibleDecisions.get(0))) {
+				return mPossibleDecisions.equals(other.mPossibleDecisions);
+			}
+			for(Decisions thisDecision : thisPossibleDecisions) {
+				if(!(thisDecision.equals(thisPossibleDecisions.get(0)))){
+					return mPossibleDecisions.equals(other.mPossibleDecisions);
+				}
+			}
+			return other.mPossibleDecisions.get(0).equals(thisPossibleDecisions.get(0));
+		}
+		throw new RuntimeException();
+		//return mPossibleDecisions.equals(other.mPossibleDecisions) && mForState.equals(other.mForState);
 	}
 
 	public void setSequendeIndex(int pSequenceIndex) {
