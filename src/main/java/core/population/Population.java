@@ -1,4 +1,4 @@
-package core.soup;
+package core.population;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +10,8 @@ import ui.presenter.iPresentPopulation;
 public class Population implements iPresentPopulation{
 	private List<Idvm> mIdvmList = new ArrayList<Idvm>();
 
-	public Population(ArrayList<Idvm> pPopulation) {
-		for(Idvm iIdvm : pPopulation)
-			appendIdvm(iIdvm);
+	public Population(List<Idvm> pPopulationList) {
+		setIdvmList(pPopulationList);
 	}
 
 	public Population() {
@@ -39,5 +38,9 @@ public class Population implements iPresentPopulation{
 	public List<Idvm> getIdvmList() {
 		return mIdvmList;
 	}
+
+	public void setIdvmList(List<Idvm> pIdvmList) {
+		mIdvmList = pIdvmList;
+	} 
 
 }

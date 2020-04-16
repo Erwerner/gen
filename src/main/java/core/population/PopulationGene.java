@@ -1,4 +1,4 @@
-package core.soup;
+package core.population;
 
 import core.genes.iGene;
 

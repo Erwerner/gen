@@ -1,6 +1,6 @@
 package ui.console.populationprinter;
 
-import core.soup.Population;
+import core.population.Population;
 import ui.controller.iControllPrintPopulation;
 import ui.mvc.Model;
 import ui.presenter.WrongPresenterType;

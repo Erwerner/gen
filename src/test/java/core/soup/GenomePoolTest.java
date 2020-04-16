@@ -13,6 +13,8 @@ import org.junit.Test;
 
 import core.genes.Genome;
 import core.genes.iGene;
+import core.population.GenomePool;
+import core.population.PopulationGene;
 import core.soup.block.IdvmCell;
 import core.soup.idvm.IdvmState;
 

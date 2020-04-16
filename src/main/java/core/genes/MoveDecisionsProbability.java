@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import core.datatypes.Decisions;
-import core.soup.block.IdvmCell;
 import core.soup.idvm.IdvmState;
 import globals.Config;
 import globals.Helpers;
@@ -15,8 +14,8 @@ public class MoveDecisionsProbability implements Serializable, iGene {
 	// TODO 9 REF make private
 	public ArrayList<Decisions> mPossibleDecisions = new ArrayList<Decisions>();
 	private int mSequenceindex;
-	private IdvmState mForState; 
-	
+	private IdvmState mForState;
+
 	public MoveDecisionsProbability(IdvmState pForState) {
 		super();
 		mForState = pForState;
@@ -62,31 +61,33 @@ public class MoveDecisionsProbability implements Serializable, iGene {
 		lNewMoveProbability.mPossibleDecisions.addAll((ArrayList<Decisions>) mPossibleDecisions.clone());
 		return lNewMoveProbability;
 	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (o == null || !this.getClass().isAssignableFrom(o.getClass()))
 			return false;
-		
+
 		MoveDecisionsProbability other = (MoveDecisionsProbability) o;
 
-		if(!(mForState.equals(other.mForState)))
+		if (!(mForState.equals(other.mForState)))
 			return false;
-		
-		ArrayList<Decisions> thisPossibleDecisions = (ArrayList<Decisions>) mPossibleDecisions.clone();		
-		
-		for(Decisions others : other.mPossibleDecisions) {
-			if(!others.equals(other.mPossibleDecisions.get(0))) {
+
+		ArrayList<Decisions> thisPossibleDecisions = (ArrayList<Decisions>) mPossibleDecisions.clone();
+
+		for (Decisions others : other.mPossibleDecisions) {
+			if (!others.equals(other.mPossibleDecisions.get(0))) {
 				return mPossibleDecisions.equals(other.mPossibleDecisions);
 			}
-			for(Decisions thisDecision : thisPossibleDecisions) {
-				if(!(thisDecision.equals(thisPossibleDecisions.get(0)))){
+			for (Decisions thisDecision : thisPossibleDecisions) {
+				if (!(thisDecision.equals(thisPossibleDecisions.get(0)))) {
 					return mPossibleDecisions.equals(other.mPossibleDecisions);
 				}
 			}
 			return other.mPossibleDecisions.get(0).equals(thisPossibleDecisions.get(0));
 		}
 		throw new RuntimeException();
-		//return mPossibleDecisions.equals(other.mPossibleDecisions) && mForState.equals(other.mForState);
+		// return mPossibleDecisions.equals(other.mPossibleDecisions) &&
+		// mForState.equals(other.mForState);
 	}
 
 	public void setSequendeIndex(int pSequenceIndex) {
@@ -100,7 +101,7 @@ public class MoveDecisionsProbability implements Serializable, iGene {
 	public IdvmState getForState() {
 		return mForState;
 	}
-	
+
 	@Override
 	public String toString() {
 		return mForState + " -> " + mPossibleDecisions;

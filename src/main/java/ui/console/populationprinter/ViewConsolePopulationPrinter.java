@@ -2,7 +2,8 @@ package ui.console.populationprinter;
 
 import java.util.List;
 
-import core.soup.PopulationGene;
+import core.population.PopulationGene;
+import core.soup.block.BlockType;
 import core.soup.block.IdvmCell;
 import core.soup.exception.PopulationEmpty;
 import core.soup.idvm.Idvm;
@@ -30,7 +31,7 @@ public class ViewConsolePopulationPrinter extends View {
 //		System.out.println("Average steps: " + lStepCount / pFittestIdvm.size() + " * " + pFittestIdvm.size());
 		System.out.println("Average partner: " + 100 * lPartnerCount / mPopulation.getIdvmList().size() + "/100 * "
 				+ mPopulation.getIdvmList().size());
-//		printBlockStats(pFittestIdvm, 4);
+		printBlockStats(mPopulation.getIdvmList(), 4);
 //		printBlockStats(pFittestIdvm, 6);
 //		printBlockStats(pFittestIdvm, 8);
 //		printBlockStats(pFittestIdvm, 10);
@@ -62,6 +63,24 @@ public class ViewConsolePopulationPrinter extends View {
 		} catch (PopulationEmpty e) {
 			e.printStackTrace();
 		}
+	}
+
+	private static void printBlockStats(List<Idvm> pList, int pCount) {
+		System.out.print(pCount + " Cells: ");
+		BlockType[] lCellBlocks = { BlockType.DEFENCE, BlockType.MOVE, BlockType.LIFE, BlockType.SENSOR,
+				BlockType.NULL };
+		for (BlockType iBlockType : lCellBlocks) {
+			int lTotalBlockCount = 0;
+			for (Idvm iIdvm : pList) {
+				for (int idx = 0; idx < (pCount); idx++) {
+					IdvmCell lCellGrow = iIdvm.getGenomeOrigin().cellGrow.get(idx);
+					if (lCellGrow.getBlockType() == iBlockType)
+						lTotalBlockCount++;
+				}
+			}
+			System.out.print(100 * lTotalBlockCount / pList.size() / (pCount) + "% " + iBlockType + "; ");
+		}
+		System.out.println("");
 	}
 
 }

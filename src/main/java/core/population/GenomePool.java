@@ -1,4 +1,4 @@
-package core.soup;
+package core.population;
 
 import java.util.ArrayList;
 import java.util.Comparator;
