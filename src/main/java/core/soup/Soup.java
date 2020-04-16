@@ -24,6 +24,7 @@ public class Soup implements iSoup {
 		mBlockGrid = new BlockGrid();
 		mIndividuum = pIdvm;
 		mIndividuum.setBlockGrid(mBlockGrid);
+		//TODO 0 Impl static soup
 		initFoodBlocks(pEnvironmentConfig);
 		initEnemyBlocks(pEnvironmentConfig);
 		initPartnerBlocks(pEnvironmentConfig);
