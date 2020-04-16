@@ -1,24 +1,20 @@
 package execution;
 
-import globals.Config;
-import globals.Helpers;
-
 import java.util.ArrayList;
-import java.util.List;
 
-import ui.console.monitor.ModelMonitorIdvm;
 import core.genes.Crossover;
 import core.genes.Genome;
 import core.genes.GenomePersister;
 import core.soup.EnvironmentConfig;
-import core.soup.GenomePool;
 import core.soup.Population;
-import core.soup.PopulationGene;
 import core.soup.block.BlockType;
 import core.soup.block.IdvmCell;
-import core.soup.exception.PopulationEmpty;
 import core.soup.idvm.Idvm;
 import devutils.Debug;
+import globals.Config;
+import globals.Helpers;
+import ui.console.monitor.ModelMonitorIdvm;
+import ui.console.populationprinter.ModelPopulationPrinter;
 
 public class runCrossover {
 	static ArrayList<Thread> mThreads = new ArrayList<Thread>();
@@ -27,23 +23,27 @@ public class runCrossover {
 	public static void main(String[] args) throws CloneNotSupportedException, InterruptedException {
 		int iGeneration = 0;
 
-		Debug.printCurrentChange(); 
+		Debug.printCurrentChange();
 		mPersister = new GenomePersister();
-		//TODO 3 Population Loader
+		// TODO 3 REF Population Loader
 		ArrayList<Idvm> lPopulation = initializePopulation();
 		// ArrayList<Idvm> lPopulation = loadPopulation();
 		while (true) {
 			iGeneration++;
 			EnvironmentConfig lEnvironmentConfig = setUpEnvironment(iGeneration);
-			//TODO 3 REF Population Runner
+			// TODO 3 REF Population Runner
 			lPopulation = runPopulationInEnvironment(lPopulation, lEnvironmentConfig);
-			//TODO 3 REF Population Fittnes
+			// TODO 3 REF Population Fittnes
 			ArrayList<Idvm> lFittestIdvm = returnFittest(lPopulation);
-			//TODO 3 REF Population Printer
-			printResults(iGeneration, lEnvironmentConfig, lFittestIdvm);
-			//TODO 3 Population Crossover
+			// TODO 3 REF Population Printer
+			// printResults(iGeneration, lFittestIdvm);
+			Debug.printCurrentChange();
+			System.out.println("Generation finished: " + iGeneration + ", Food: " + lEnvironmentConfig.cFoodSupply
+					+ ", Enemy: " + lEnvironmentConfig.cEnemySupply);
+			new ModelPopulationPrinter().print(new Population(lFittestIdvm));
+			// TODO 3 REF Population Crossover
 			lPopulation = getOffsprings(lFittestIdvm);
-			//TODO 3 REF Population Persister
+			// TODO 3 REF Population Persister
 			if (new Helpers().isFlagTrue("persist"))
 				persistPopulation(lPopulation);
 		}
@@ -55,14 +55,46 @@ public class runCrossover {
 		lEnvironmentConfig.cFoodSupply = lEnvironmentConfig.cFoodSupply - (iGeneration % 41) * 1;
 		return lEnvironmentConfig;
 	}
-
-	public static void printResults(int iGeneration, EnvironmentConfig lEnvironmentConfig,
-			ArrayList<Idvm> lFittestIdvm) {
-		checkFitness(lFittestIdvm);
-		Debug.printCurrentChange();
-		System.out.println("Generation finished: " + iGeneration + ", Food: " + lEnvironmentConfig.cFoodSupply
-				+ ", Enemy: " + lEnvironmentConfig.cEnemySupply);
-	}
+	/*
+	 * public static void printResults(int iGeneration, ArrayList<Idvm>
+	 * lFittestIdvm) { checkFitness(lFittestIdvm); Debug.printCurrentChange(); }
+	 * 
+	 * 
+	 * private static void checkFitness(ArrayList<Idvm> pFittestIdvm) { int
+	 * lStepCount = 0; for (Idvm iIdvm : pFittestIdvm) { lStepCount +=
+	 * iIdvm.getStepCount(); } int lPartnerCount = 0; for (Idvm iIdvm :
+	 * pFittestIdvm) { lPartnerCount += iIdvm.getPartnerCount(); } //
+	 * System.out.println("Average steps: " + lStepCount / pFittestIdvm.size() +
+	 * " * " + pFittestIdvm.size()); System.out.println( "Average partner: " + 100 *
+	 * lPartnerCount / pFittestIdvm.size() + "/100 * " + pFittestIdvm.size()); //
+	 * printBlockStats(pFittestIdvm, 4); // printBlockStats(pFittestIdvm, 6); //
+	 * printBlockStats(pFittestIdvm, 8); // printBlockStats(pFittestIdvm, 10); //
+	 * printBlockStats(pFittestIdvm, 12);
+	 * 
+	 * printPopulationStats(pFittestIdvm);
+	 * 
+	 * }
+	 * 
+	 * public static void printPopulationStats(ArrayList<Idvm> pFittestIdvm) {
+	 * Population lPopulation = new Population(pFittestIdvm); for (Idvm iIdvm :
+	 * pFittestIdvm) lPopulation.appendIdvm(iIdvm);
+	 * 
+	 * try { List<PopulationGene> lSortedGenes =
+	 * lPopulation.getGenomePool().getGenesSortedByRank();
+	 * 
+	 * // initialCellGrow for (PopulationGene iGene : lSortedGenes) { if
+	 * (iGene.getOriginGene().getClass() == IdvmCell.class && iGene.mSequenceIndex <
+	 * 4) if (iGene.getHostCounter() > pFittestIdvm.size() / 3)
+	 * System.out.println("\t" + iGene); }
+	 * System.out.println("- - - - - - - - - - - - - - -");
+	 * 
+	 * for (int i = 0; i < 100; i++) { PopulationGene lCurrentGene =
+	 * lSortedGenes.get(i); if (lCurrentGene.mSequenceIndex > 3) if
+	 * (lCurrentGene.getHostCounter() > pFittestIdvm.size() / 3)
+	 * System.out.println("\t" + lCurrentGene); }
+	 * 
+	 * } catch (PopulationEmpty e) { e.printStackTrace(); } }
+	 */
 
 	private static ArrayList<Idvm> loadPopulation() {
 		ArrayList<Idvm> lPopulation = new ArrayList<Idvm>();
@@ -116,57 +148,6 @@ public class runCrossover {
 		return lOffsprings;
 	}
 
-	private static void checkFitness(ArrayList<Idvm> pFittestIdvm) {
-		int lStepCount = 0;
-		for (Idvm iIdvm : pFittestIdvm) {
-			lStepCount += iIdvm.getStepCount();
-		}
-		int lPartnerCount = 0;
-		for (Idvm iIdvm : pFittestIdvm) {
-			lPartnerCount += iIdvm.getPartnerCount();
-		}
-//		System.out.println("Average steps: " + lStepCount / pFittestIdvm.size() + " * " + pFittestIdvm.size());
-		System.out.println(
-				"Average partner: " + 100 * lPartnerCount / pFittestIdvm.size() + "/100 * " + pFittestIdvm.size());
-//		printBlockStats(pFittestIdvm, 4);
-//		printBlockStats(pFittestIdvm, 6);
-//		printBlockStats(pFittestIdvm, 8);
-//		printBlockStats(pFittestIdvm, 10);
-//		printBlockStats(pFittestIdvm, 12);
-
-		printPopulationStats(pFittestIdvm);
-
-	}
-
-	public static void printPopulationStats(ArrayList<Idvm> pFittestIdvm) {
-		Population lPopulation = new Population();
-		for (Idvm iIdvm : pFittestIdvm)
-			lPopulation.appendIdvm(iIdvm);
-
-		try {
-			List<PopulationGene> lSortedGenes = lPopulation.getGenomePool().getGenesSortedByRank();
-
-			// initialCellGrow
-			for (PopulationGene iGene : lSortedGenes) {
-				if (iGene.getOriginGene().getClass() == IdvmCell.class && iGene.mSequenceIndex < 4)
-					if (iGene.getHostCounter() > pFittestIdvm.size() / 3)
-						System.out.println("\t" + iGene);
-			}
-			System.out.println("- - - - - - - - - - - - - - -");
-
-			for (int i = 0; i < 100; i++) {
-				PopulationGene lCurrentGene = lSortedGenes.get(i);
-				if (lCurrentGene.mSequenceIndex > 3)
-					if (lCurrentGene.getHostCounter() > pFittestIdvm.size() / 3)
-						System.out.println("\t" + lCurrentGene);
-			}
-
-		} catch (PopulationEmpty e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 	private static void printBlockStats(ArrayList<Idvm> pFittestIdvm, int pCount) {
 		System.out.print(pCount + " Cells: ");
 		BlockType[] lCellBlocks = { BlockType.DEFENCE, BlockType.MOVE, BlockType.LIFE, BlockType.SENSOR,
@@ -188,7 +169,7 @@ public class runCrossover {
 	private static ArrayList<Idvm> returnFittest(ArrayList<Idvm> pPopulation) {
 		ArrayList<Idvm> lFittestIdvm = new ArrayList<Idvm>();
 		for (Idvm iIdvm : pPopulation) {
-			for (int iPairings = 0; iPairings < (iIdvm.getPartnerCount() + 0.25 ) * 4; iPairings++)
+			for (int iPairings = 0; iPairings < (iIdvm.getPartnerCount() + 0.25) * 4; iPairings++)
 				lFittestIdvm.add(iIdvm);
 		}
 		while (lFittestIdvm.size() > Config.cPopulation / Config.cInitialPopulationMultiplikator)
@@ -196,8 +177,8 @@ public class runCrossover {
 		return lFittestIdvm;
 	}
 
-	private static ArrayList<Idvm> runPopulationInEnvironment(ArrayList<Idvm> pPopulation, EnvironmentConfig pEnvironmentConfig)
-			throws CloneNotSupportedException, InterruptedException {
+	private static ArrayList<Idvm> runPopulationInEnvironment(ArrayList<Idvm> pPopulation,
+			EnvironmentConfig pEnvironmentConfig) throws CloneNotSupportedException, InterruptedException {
 		ArrayList<Idvm> lExecutedPopulation = new ArrayList<Idvm>();
 		ArrayList<IdvmExecutionThread> mIdvmExecutionThread = new ArrayList<IdvmExecutionThread>();
 		mThreads = new ArrayList<Thread>();

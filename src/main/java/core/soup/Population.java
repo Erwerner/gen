@@ -5,16 +5,25 @@ import java.util.List;
 
 import core.soup.exception.PopulationEmpty;
 import core.soup.idvm.Idvm;
+import ui.presenter.iPresentPopulation;
 
-public class Population {
-	public List<Idvm> mIdvmList = new ArrayList<Idvm>();
+public class Population implements iPresentPopulation{
+	private List<Idvm> mIdvmList = new ArrayList<Idvm>();
+
+	public Population(ArrayList<Idvm> pPopulation) {
+		for(Idvm iIdvm : pPopulation)
+			appendIdvm(iIdvm);
+	}
+
+	public Population() {
+	}
 
 	public int getIdvmCount() {
-		return mIdvmList.size();
+		return getIdvmList().size();
 	}
 
 	public void appendIdvm(Idvm pIdvm) {
-		mIdvmList.add(pIdvm);
+		getIdvmList().add(pIdvm);
 	}
 
 	public GenomePool getGenomePool() throws PopulationEmpty {
@@ -22,9 +31,13 @@ public class Population {
 			throw new PopulationEmpty();
 
 		GenomePool lGenomePool = new GenomePool();
-		for (Idvm iIdvm : mIdvmList)
+		for (Idvm iIdvm : getIdvmList())
 			lGenomePool.appenGenome(iIdvm.getGenomeOrigin());
 		return lGenomePool;
+	}
+
+	public List<Idvm> getIdvmList() {
+		return mIdvmList;
 	}
 
 }
