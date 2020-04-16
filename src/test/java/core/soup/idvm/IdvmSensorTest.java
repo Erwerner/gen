@@ -146,7 +146,7 @@ public class IdvmSensorTest {
 		lTargetDetectionOrder.add(BlockType.ENEMY);
 		lTargetDetectionOrder.add(BlockType.PARTNER);
 		lTargetDetectionOrder.add(BlockType.FOOD);
-		IdvmState lState = cut.getState(true, true, mDetectedPositions, lTargetDetectionOrder);
+		IdvmState lState = cut.getState(true, true, mDetectedPositions, lTargetDetectionOrder); 
 		assertEquals(IdvmState.ENEMY_HUNGER, lState);
 	}
 

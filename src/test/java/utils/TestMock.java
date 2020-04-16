@@ -23,16 +23,13 @@ public class TestMock {
 		lGenome.cellGrow.add(4, new IdvmCell(BlockType.MOVE, new Pos(0, 2)));
 		lGenome.cellGrow.add(5, new IdvmCell(BlockType.SENSOR, new Pos(1, 1)));
 
-		ArrayList<MoveDecisionsProbability> lIdlelMoveProbability = new ArrayList<MoveDecisionsProbability>();
-		lIdlelMoveProbability.add(new MoveDecisionsProbability()
-				.appendDecision(Decisions.LEFT, 1));
-		lIdlelMoveProbability.add(new MoveDecisionsProbability()
-				.appendDecision(Decisions.DOWN, 1));
 		lGenome.moveSequencesForState.clear();
 		for (IdvmState iState : IdvmState.values()) {
+			ArrayList<MoveDecisionsProbability> lIdlelMoveProbability = new ArrayList<MoveDecisionsProbability>();
+			lIdlelMoveProbability.add(new MoveDecisionsProbability(iState).appendDecision(Decisions.LEFT, 1));
+			lIdlelMoveProbability.add(new MoveDecisionsProbability(iState).appendDecision(Decisions.DOWN, 1));
 			lGenome.moveSequencesForState.put(iState,
-					(ArrayList<MoveDecisionsProbability>) lIdlelMoveProbability
-							.clone());
+					(ArrayList<MoveDecisionsProbability>) lIdlelMoveProbability.clone());
 		}
 
 		lGenome.setHunger(50);

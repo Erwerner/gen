@@ -27,8 +27,7 @@ public class IdvmSensor {
 		BlockType lSearchBlock;
 		HashMap<Pos, Sensor> lDetectedPos = getDetectedPos(pSensors);
 		if (lDetectedPos == null)
-			throw new DetectionFailed();
-
+			throw new DetectionFailed(); 
 		switch (pState) {
 		case FOOD:
 		case FOOD_HUNGER:
@@ -116,7 +115,7 @@ public class IdvmSensor {
 				break;
 			}
 		}
-		if (pIsHungry) {
+		if (pIsHungry) { 
 			lState = lState.getStateAsHunger();
 		}
 		return lState;

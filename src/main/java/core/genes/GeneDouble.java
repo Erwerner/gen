@@ -29,4 +29,11 @@ public class GeneDouble implements iGene {
 		mValue = pValue;
 	}
 
+	public void setSequendeIndex(int pSequenceIndex) { 
+	}
+
+	public int getSequendeIndex() { 
+		return 0;
+	}
+
 }

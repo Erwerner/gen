@@ -16,10 +16,12 @@ public class IdvmCell extends Block implements Serializable, iGene {
 	private static final long serialVersionUID = 1L;
 	private Pos mPosOnIdvm;
 	private BlockType mBlockType;
+	private int mSequenceindex;
 
 	public IdvmCell() {
 		super();
 	}
+
 	public IdvmCell(BlockType pCellType, Pos pPos) {
 		super(BlockType.CELL);
 		mBlockType = pCellType;
@@ -45,6 +47,9 @@ public class IdvmCell extends Block implements Serializable, iGene {
 
 	@Override
 	public boolean equals(Object o) {
+		if (o == null || !this.getClass().isAssignableFrom(o.getClass()))
+			return false;
+
 		IdvmCell other = (IdvmCell) o;
 		return this.mBlockType == other.mBlockType && this.mPos.equals(other.mPos)
 				&& this.mPosOnIdvm.equals(other.mPosOnIdvm);
@@ -54,7 +59,8 @@ public class IdvmCell extends Block implements Serializable, iGene {
 	}
 
 	public void mutate() {
-		BlockType[] lCellTypes = { BlockType.LIFE, BlockType.DEFENCE, BlockType.MOVE, BlockType.SENSOR, BlockType.NULL };
+		BlockType[] lCellTypes = { BlockType.LIFE, BlockType.DEFENCE, BlockType.MOVE, BlockType.SENSOR,
+				BlockType.NULL };
 		mBlockType = (BlockType) Helpers.rndArrayEntry(lCellTypes);
 		mPosOnIdvm = new Pos(Helpers.rndIntRange(-1, 2), Helpers.rndIntRange(-1, 2));
 	}
@@ -62,5 +68,13 @@ public class IdvmCell extends Block implements Serializable, iGene {
 	@Override
 	public iGene clone() throws CloneNotSupportedException {
 		return new IdvmCell(mBlockType, new Pos(mPosOnIdvm.x, mPosOnIdvm.y));
+	}
+
+	public void setSequendeIndex(int pSequenceIndex) {
+		mSequenceindex = pSequenceIndex;
+	}
+
+	public int getSequendeIndex() {
+		return mSequenceindex;
 	}
 }

@@ -1,8 +1,9 @@
 package core.soup.idvm;
 
-public enum IdvmState {
-	IDLE, FOOD, ENEMY, BLIND, IDLE_HUNGER, FOOD_HUNGER, ENEMY_HUNGER, PARTNER, PARTNER_HUNGER;
-	public IdvmState getStateAsHunger() {
+public enum IdvmState { 
+	IDLE, FOOD, ENEMY, BLIND, PARTNER, IDLE_HUNGER, FOOD_HUNGER, ENEMY_HUNGER, PARTNER_HUNGER;
+	
+	 public IdvmState getStateAsHunger() {
 		switch (this) {
 		case IDLE:
 			return IDLE_HUNGER;
@@ -18,4 +19,5 @@ public enum IdvmState {
 			throw new RuntimeException();
 		}
 	}
+	 
 }

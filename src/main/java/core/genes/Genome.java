@@ -15,15 +15,13 @@ import core.soup.idvm.IdvmState;
 import globals.Config;
 import globals.Helpers;
 
-public class Genome implements Cloneable, iPresentGenomeStats, Serializable {
-	/**
-	 * 
-	 */
+public class Genome implements Cloneable, iPresentGenomeStats, Serializable { 
 	private static final long serialVersionUID = 1L;
-	private GeneInt mHunger = new GeneInt(0, Config.cMaxEnergy, Config.cMaxEnergy / 2);
+	private GeneInt mHunger = new GeneInt(0, Config.cMaxHunger, Config.cMaxEnergy / 2);
 	// TODO 9 REF make this private
 	public ArrayList<IdvmCell> cellGrow = new ArrayList<IdvmCell>();
 	public HashMap<IdvmState, ArrayList<MoveDecisionsProbability>> moveSequencesForState = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
+	// TODO 3 must be iGene and returned in collection
 	public ArrayList<BlockType> mTargetDetectionOrder = new ArrayList<BlockType>();
 
 	public Genome forceMutation() {
@@ -42,12 +40,15 @@ public class Genome implements Cloneable, iPresentGenomeStats, Serializable {
 	private void initSequences() {
 		cellGrow = new ArrayList<IdvmCell>();
 		moveSequencesForState = new HashMap<IdvmState, ArrayList<MoveDecisionsProbability>>();
-		ArrayList<MoveDecisionsProbability> lInitialMoveProbability = new ArrayList<MoveDecisionsProbability>();
-		for (int i = 0; i <= Config.cMaxSequence; i++) {
+
+		for (int i = 0; i <= Config.cMaxSequence; i++)
 			cellGrow.add((new IdvmCell(BlockType.NULL, new Pos(0, 0))));
-			lInitialMoveProbability.add(new MoveDecisionsProbability());
-		}
+
 		for (IdvmState iState : IdvmState.values()) {
+			ArrayList<MoveDecisionsProbability> lInitialMoveProbability = new ArrayList<MoveDecisionsProbability>();
+			for (int i = 0; i <= Config.cMaxSequence; i++) {
+				lInitialMoveProbability.add(new MoveDecisionsProbability(iState));
+			}
 			moveSequencesForState.put(iState, lInitialMoveProbability);
 		}
 	}
@@ -88,18 +89,27 @@ public class Genome implements Cloneable, iPresentGenomeStats, Serializable {
 		cellGrow.set(pIdx, new IdvmCell(lCellType, new Pos(pX, pY)));
 	}
 
-	private ArrayList<iGene> getGeneCollection() {
+	public ArrayList<iGene> getGeneCollection() {
 		ArrayList<iGene> lGenes = new ArrayList<iGene>();
 		lGenes.add(mHunger);
 
+		int lCountIndex = 0;
 		for (iGene iGene : cellGrow) {
+			iGene.setSequendeIndex(lCountIndex);
+			lCountIndex++;
 			lGenes.add(iGene);
 		}
 		for (ArrayList<MoveDecisionsProbability> iMoveProbability : moveSequencesForState.values()) {
+			lCountIndex = 0;
 			for (iGene iGene : iMoveProbability) {
+				iGene.setSequendeIndex(lCountIndex);
+				lCountIndex++;
 				lGenes.add(iGene);
 			}
 		}
+
+		// for( BlockType iTargetDetectionOrder : mTargetDetectionOrder)
+		// lGenes.add(iTargetDetectionOrder);
 		return lGenes;
 	}
 
@@ -140,44 +150,39 @@ public class Genome implements Cloneable, iPresentGenomeStats, Serializable {
 		return lClone;
 	}
 
-	public Double getPercentageOfWrongTargetDecision(int pNumberOfCellGrow) {
-		Double lPercentage = 0.0;
-		ArrayList<IdvmCell> lSensors = new ArrayList<IdvmCell>();
-		for (int iCountCellGrow = 0; iCountCellGrow <= pNumberOfCellGrow + 3; iCountCellGrow++) {
-			IdvmCell lCell = cellGrow.get(iCountCellGrow);
-			if (lCell.getBlockType() == BlockType.SENSOR) {
-				lSensors.add(lCell);
-			} else {
-				lSensors.remove(new IdvmCell(BlockType.SENSOR, lCell.getPos()));
-			}
-			if (lSensors.isEmpty())
-				continue;
-
-			MoveDecisionsProbability lMovement = moveSequencesForState.get(IdvmState.ENEMY).get(iCountCellGrow);
-			if (lMovement.mPossibleDecisions.contains(Decisions.TARGET)) {
-				lPercentage += 0.25 / (pNumberOfCellGrow + 1);
-			}
-			lMovement = moveSequencesForState.get(IdvmState.FOOD).get(iCountCellGrow);
-			if (lMovement.mPossibleDecisions.contains(Decisions.TARGET_OPPOSITE)) {
-				lPercentage += 0.25 / (pNumberOfCellGrow + 1);
-			}
-			lMovement = moveSequencesForState.get(IdvmState.ENEMY_HUNGER).get(iCountCellGrow);
-			if (lMovement.mPossibleDecisions.contains(Decisions.TARGET)) {
-				lPercentage += 0.25 / (pNumberOfCellGrow + 1);
-			}
-			lMovement = moveSequencesForState.get(IdvmState.FOOD_HUNGER).get(iCountCellGrow);
-			if (lMovement.mPossibleDecisions.contains(Decisions.TARGET_OPPOSITE)) {
-				lPercentage += 0.25 / (pNumberOfCellGrow + 1);
-			}
-		}
-		return lPercentage;
-	}
+	/*
+	 * public Double getPercentageOfWrongTargetDecision(int pNumberOfCellGrow) {
+	 * Double lPercentage = 0.0; ArrayList<IdvmCell> lSensors = new
+	 * ArrayList<IdvmCell>(); for (int iCountCellGrow = 0; iCountCellGrow <=
+	 * pNumberOfCellGrow + 3; iCountCellGrow++) { IdvmCell lCell =
+	 * cellGrow.get(iCountCellGrow); if (lCell.getBlockType() == BlockType.SENSOR) {
+	 * lSensors.add(lCell); } else { lSensors.remove(new IdvmCell(BlockType.SENSOR,
+	 * lCell.getPos())); } if (lSensors.isEmpty()) continue;
+	 * 
+	 * MoveDecisionsProbability lMovement =
+	 * moveSequencesForState.get(IdvmState.ENEMY).get(iCountCellGrow); if
+	 * (lMovement.mPossibleDecisions.contains(Decisions.TARGET)) { lPercentage +=
+	 * 0.25 / (pNumberOfCellGrow + 1); } lMovement =
+	 * moveSequencesForState.get(IdvmState.FOOD).get(iCountCellGrow); if
+	 * (lMovement.mPossibleDecisions.contains(Decisions.TARGET_OPPOSITE)) {
+	 * lPercentage += 0.25 / (pNumberOfCellGrow + 1); } lMovement =
+	 * moveSequencesForState.get(IdvmState.ENEMY_HUNGER).get(iCountCellGrow); if
+	 * (lMovement.mPossibleDecisions.contains(Decisions.TARGET)) { lPercentage +=
+	 * 0.25 / (pNumberOfCellGrow + 1); } lMovement =
+	 * moveSequencesForState.get(IdvmState.FOOD_HUNGER).get(iCountCellGrow); if
+	 * (lMovement.mPossibleDecisions.contains(Decisions.TARGET_OPPOSITE)) {
+	 * lPercentage += 0.25 / (pNumberOfCellGrow + 1); } } return lPercentage; }
+	 */
 
 	@Override
 	public boolean equals(Object o) {
+		if (o == null || !this.getClass().isAssignableFrom(o.getClass()))
+			return false;
+
 		Genome other = (Genome) o;
 		return mHunger.equals(other.mHunger) && cellGrow.equals(other.cellGrow)
 				&& moveSequencesForState.equals(other.moveSequencesForState)
 				&& mTargetDetectionOrder.equals(other.mTargetDetectionOrder);
 	}
+
 }

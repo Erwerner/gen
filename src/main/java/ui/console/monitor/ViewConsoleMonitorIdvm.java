@@ -4,16 +4,16 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import ui.mvc.Model;
-import ui.mvc.View;
-import ui.presenter.iPresentIdvm;
-import ui.presenter.iPresentSoup;
 import core.datatypes.Pos;
 import core.exceptions.PosIsOutOfGrid;
 import core.soup.block.iBlock;
 import core.soup.idvm.IdvmState;
 import core.soup.idvm.Sensor;
 import globals.Config;
+import ui.mvc.Model;
+import ui.mvc.View;
+import ui.presenter.iPresentIdvm;
+import ui.presenter.iPresentSoup;
 
 public class ViewConsoleMonitorIdvm extends View {
 	public static final String ANSI_RESET = "\u001B[0m";
