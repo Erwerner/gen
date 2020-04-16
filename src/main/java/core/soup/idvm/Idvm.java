@@ -67,10 +67,8 @@ public class Idvm extends Block implements iIdvm {
 	public boolean isAlive() {
 		return mEnergy > 0 && !mCellGrid.getGridBlocksOfType(BlockType.LIFE).isEmpty();
 	}
-
-	//TODO 0 isHungry
-	public Boolean isHungry() {
-		//return false;
+ 
+	public Boolean isHungry() { 
 		return mEnergy < mGenomeUsing.getHunger().getValue();
 	}
 

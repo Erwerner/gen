@@ -34,7 +34,7 @@ public class MoveDecisionsProbability implements Serializable, iGene {
 	}
 
 	public void mutate() {
-		if (!Helpers.checkChance(Config.cChanceCopyDirections)) {
+		if (!Helpers.checkChance(Config.cChanceCopyPreviousDirections)) {
 			mPossibleDecisions = null;
 			return;
 		}

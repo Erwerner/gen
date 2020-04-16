@@ -1,14 +1,16 @@
 package globals;
 
 public class Config {
-	private static final Double cSoupFctor = 1.0;
+	public static final int cInitialPopulationMultiplikator = 1;
+	public static final int cPopulation = 1024 * 5 * cInitialPopulationMultiplikator;
+	public static final Double cSoupFctor = 1.0;
 	public static final int cSoupSize = (int) (100 * cSoupFctor);
 	// TODO 0 test mutation rate
 	public static final Double cMutationRate = 0.025;
 
 	public static final int cEnemySupply = (int) (10 * cSoupFctor * cSoupFctor);
-	public static final int cFoodSupply = (int) (100 * cSoupFctor * cSoupFctor);
-	public static int cPartnerSupply = cFoodSupply / 2; // 6; // 3
+	public static final int cFoodSupply = (int) (150 * cSoupFctor * cSoupFctor);
+	public static int cPartnerSupply = cFoodSupply / 4; // 6; // 3
 
 	public static final int cMaxSequence = 4 + 30;
 	public static final int cLifeEnergyCost = 2;
@@ -23,6 +25,6 @@ public class Config {
 
 	public static final int cSensorRange = 4;
 
-	public static final Double cChanceCopyDirections = 0.5;
-	public static final Double cChanceResetDirections = 0.7;
+	public static final Double cChanceCopyPreviousDirections = 0.5;
+	public static final Double cChanceResetDirections = 0.1;
 }

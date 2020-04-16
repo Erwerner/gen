@@ -1,7 +1,6 @@
 package core.soup.idvm;
 
-public enum IdvmState {
-	//TODO 1 Hunger
+public enum IdvmState { 
 	IDLE, FOOD, ENEMY, BLIND, PARTNER, IDLE_HUNGER, FOOD_HUNGER, ENEMY_HUNGER, PARTNER_HUNGER;
 	
 	 public IdvmState getStateAsHunger() {

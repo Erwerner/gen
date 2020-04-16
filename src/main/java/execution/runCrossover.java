@@ -1,5 +1,6 @@
 package execution;
 
+import globals.Config;
 import globals.Helpers;
 
 import java.util.ArrayList;
@@ -20,38 +21,52 @@ import core.soup.idvm.Idvm;
 import devutils.Debug;
 
 public class runCrossover {
-	private static final int cInitialPopulationMultiplikator = 1;
-	private static final int cPopulation = 1024 * 2 * cInitialPopulationMultiplikator;
 	static ArrayList<Thread> mThreads = new ArrayList<Thread>();
 	private static GenomePersister mPersister;
 
 	public static void main(String[] args) throws CloneNotSupportedException, InterruptedException {
-		System.out.println("Init");
-		Debug.printCurrentChange();
+		int iGeneration = 0;
+
+		Debug.printCurrentChange(); 
 		mPersister = new GenomePersister();
+		//TODO 3 Population Loader
 		ArrayList<Idvm> lPopulation = initializePopulation();
 		// ArrayList<Idvm> lPopulation = loadPopulation();
-		int iGeneration = 1;
 		while (true) {
-			EnvironmentConfig lEnvironmentConfig = new EnvironmentConfig();
-			lEnvironmentConfig.cEnemySupply = lEnvironmentConfig.cEnemySupply + (iGeneration % 25) * 1;
-			lEnvironmentConfig.cFoodSupply = lEnvironmentConfig.cFoodSupply - (iGeneration % 41) * 1;
-			lPopulation = runPopulation(lPopulation, lEnvironmentConfig);
-			ArrayList<Idvm> lFittestIdvm = evaluateFitness(lPopulation);
-			checkFitness(lFittestIdvm);
-			Debug.printCurrentChange();
-			System.out.println("Generation finished: " + iGeneration + ", Food: " + lEnvironmentConfig.cFoodSupply
-					+ ", Enemy: " + lEnvironmentConfig.cEnemySupply);
-			lPopulation = getOffsprings(lFittestIdvm);
 			iGeneration++;
+			EnvironmentConfig lEnvironmentConfig = setUpEnvironment(iGeneration);
+			//TODO 3 REF Population Runner
+			lPopulation = runPopulationInEnvironment(lPopulation, lEnvironmentConfig);
+			//TODO 3 REF Population Fittnes
+			ArrayList<Idvm> lFittestIdvm = returnFittest(lPopulation);
+			//TODO 3 REF Population Printer
+			printResults(iGeneration, lEnvironmentConfig, lFittestIdvm);
+			//TODO 3 Population Crossover
+			lPopulation = getOffsprings(lFittestIdvm);
+			//TODO 3 REF Population Persister
 			if (new Helpers().isFlagTrue("persist"))
 				persistPopulation(lPopulation);
 		}
 	}
 
+	public static EnvironmentConfig setUpEnvironment(int iGeneration) {
+		EnvironmentConfig lEnvironmentConfig = new EnvironmentConfig();
+		lEnvironmentConfig.cEnemySupply = lEnvironmentConfig.cEnemySupply + (iGeneration % 25) * 1;
+		lEnvironmentConfig.cFoodSupply = lEnvironmentConfig.cFoodSupply - (iGeneration % 41) * 1;
+		return lEnvironmentConfig;
+	}
+
+	public static void printResults(int iGeneration, EnvironmentConfig lEnvironmentConfig,
+			ArrayList<Idvm> lFittestIdvm) {
+		checkFitness(lFittestIdvm);
+		Debug.printCurrentChange();
+		System.out.println("Generation finished: " + iGeneration + ", Food: " + lEnvironmentConfig.cFoodSupply
+				+ ", Enemy: " + lEnvironmentConfig.cEnemySupply);
+	}
+
 	private static ArrayList<Idvm> loadPopulation() {
 		ArrayList<Idvm> lPopulation = new ArrayList<Idvm>();
-		for (Integer i = 0; i < cPopulation / 4 - 1; i++) {
+		for (Integer i = 0; i < Config.cPopulation / 4 - 1; i++) {
 			lPopulation.add(new Idvm(mPersister.load(i.toString())));
 		}
 		return lPopulation;
@@ -110,14 +125,14 @@ public class runCrossover {
 		for (Idvm iIdvm : pFittestIdvm) {
 			lPartnerCount += iIdvm.getPartnerCount();
 		}
-		System.out.println("Average steps: " + lStepCount / pFittestIdvm.size() + " * " + pFittestIdvm.size());
+//		System.out.println("Average steps: " + lStepCount / pFittestIdvm.size() + " * " + pFittestIdvm.size());
 		System.out.println(
 				"Average partner: " + 100 * lPartnerCount / pFittestIdvm.size() + "/100 * " + pFittestIdvm.size());
-		printBlockStats(pFittestIdvm, 4);
-		printBlockStats(pFittestIdvm, 6);
-		printBlockStats(pFittestIdvm, 8);
-		printBlockStats(pFittestIdvm, 10);
-		printBlockStats(pFittestIdvm, 12);
+//		printBlockStats(pFittestIdvm, 4);
+//		printBlockStats(pFittestIdvm, 6);
+//		printBlockStats(pFittestIdvm, 8);
+//		printBlockStats(pFittestIdvm, 10);
+//		printBlockStats(pFittestIdvm, 12);
 
 		printPopulationStats(pFittestIdvm);
 
@@ -170,18 +185,18 @@ public class runCrossover {
 		System.out.println("");
 	}
 
-	private static ArrayList<Idvm> evaluateFitness(ArrayList<Idvm> pPopulation) {
+	private static ArrayList<Idvm> returnFittest(ArrayList<Idvm> pPopulation) {
 		ArrayList<Idvm> lFittestIdvm = new ArrayList<Idvm>();
 		for (Idvm iIdvm : pPopulation) {
 			for (int iPairings = 0; iPairings < (iIdvm.getPartnerCount() + 0.25 ) * 4; iPairings++)
 				lFittestIdvm.add(iIdvm);
 		}
-		while (lFittestIdvm.size() > cPopulation / cInitialPopulationMultiplikator)
+		while (lFittestIdvm.size() > Config.cPopulation / Config.cInitialPopulationMultiplikator)
 			lFittestIdvm.remove(Helpers.rndInt(lFittestIdvm.size() - 1));
 		return lFittestIdvm;
 	}
 
-	private static ArrayList<Idvm> runPopulation(ArrayList<Idvm> pPopulation, EnvironmentConfig pEnvironmentConfig)
+	private static ArrayList<Idvm> runPopulationInEnvironment(ArrayList<Idvm> pPopulation, EnvironmentConfig pEnvironmentConfig)
 			throws CloneNotSupportedException, InterruptedException {
 		ArrayList<Idvm> lExecutedPopulation = new ArrayList<Idvm>();
 		ArrayList<IdvmExecutionThread> mIdvmExecutionThread = new ArrayList<IdvmExecutionThread>();
@@ -214,7 +229,7 @@ public class runCrossover {
 
 	private static ArrayList<Idvm> initializePopulation() {
 		ArrayList<Idvm> lPopulation = new ArrayList<Idvm>();
-		for (int iIdvmCount = 0; iIdvmCount < cPopulation; iIdvmCount++) {
+		for (int iIdvmCount = 0; iIdvmCount < Config.cPopulation; iIdvmCount++) {
 			lPopulation.add(new Idvm(new Genome().forceMutation()));
 		}
 		return lPopulation;

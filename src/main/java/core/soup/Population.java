@@ -7,7 +7,7 @@ import core.soup.exception.PopulationEmpty;
 import core.soup.idvm.Idvm;
 
 public class Population {
-	List<Idvm> mIdvmList = new ArrayList<Idvm>();
+	public List<Idvm> mIdvmList = new ArrayList<Idvm>();
 
 	public int getIdvmCount() {
 		return mIdvmList.size();
