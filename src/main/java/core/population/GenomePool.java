@@ -8,7 +8,6 @@ import java.util.List;
 import core.genes.GeneInt;
 import core.genes.Genome;
 import core.genes.iGene;
-import core.soup.block.IdvmCell;
 
 public class GenomePool {
 
@@ -47,16 +46,16 @@ public class GenomePool {
 		return mGenomeList;
 	}
 
+	// TODO 2 Test HungerList
 	public HashMap<Integer, Integer> getHungerValueList() {
 		HashMap<Integer, Integer> lHungerValueList = new HashMap<Integer, Integer>();
 		for (PopulationGene iGene : mGenomeList) {
 			if (iGene.getOriginGene().getClass() == GeneInt.class) {
 				GeneInt iHungerGene = (GeneInt) iGene.getOriginGene();
-				if(lHungerValueList.containsKey(iHungerGene.getValue())) {
+				if (lHungerValueList.containsKey(iHungerGene.getValue())) {
 					Integer lCounter = lHungerValueList.get(iHungerGene.getValue());
 					lCounter++;
-				}
-				else {
+				} else {
 					lHungerValueList.put(iHungerGene.getValue(), 1);
 				}
 			}

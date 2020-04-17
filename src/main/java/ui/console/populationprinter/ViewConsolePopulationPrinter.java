@@ -3,9 +3,7 @@ package ui.console.populationprinter;
 import java.util.HashMap;
 import java.util.List;
 
-import core.genes.GeneInt;
 import core.population.PopulationGene;
-import core.soup.block.BlockType;
 import core.soup.block.IdvmCell;
 import core.soup.exception.PopulationEmpty;
 import core.soup.idvm.Idvm;
@@ -31,21 +29,21 @@ public class ViewConsolePopulationPrinter extends View {
 			lPartnerCount += iIdvm.getPartnerCount();
 		}
 
-		System.out.println("Average partner: " + 100 * lPartnerCount / mPopulation.getIdvmList().size() + "/100 * "
-				+ mPopulation.getIdvmList().size());
+		System.out.println("Average partner: " + 100 * lPartnerCount / mPopulation.getPopulationSize() + "/100 * "
+				+ mPopulation.getPopulationSize());
 //		printBlockStats(mPopulation.getIdvmList(), 4);
-		printPopulationStats(mPopulation);
+		printPopulationStats();
 	}
 
-	private void printPopulationStats(iPresentPopulation pPopulation) {
+	private void printPopulationStats() {
 
 		try {
-			List<PopulationGene> lSortedGenes = pPopulation.getGenomePool().getGenesSortedByRank();
+			List<PopulationGene> lSortedGenes = mPopulation.getGenesSortedByRank();
 
 			// initialCellGrow
 			for (PopulationGene iGene : lSortedGenes) {
 				if (iGene.getOriginGene().getClass() == IdvmCell.class && iGene.mSequenceIndex < 4)
-					if (iGene.getHostCounter() > pPopulation.getIdvmList().size() / 3)
+					if (iGene.getHostCounter() > mPopulation.getPopulationSize() / 3)
 						System.out.println("\t" + iGene);
 			}
 			System.out.println("- - - - - - - - - - - - - - -");
@@ -53,14 +51,14 @@ public class ViewConsolePopulationPrinter extends View {
 			for (int i = 0; i < 100; i++) {
 				PopulationGene lCurrentGene = lSortedGenes.get(i);
 				if (lCurrentGene.mSequenceIndex > 3)
-					if (lCurrentGene.getHostCounter() > pPopulation.getIdvmList().size() / 3)
+					if (lCurrentGene.getHostCounter() > mPopulation.getPopulationSize() / 3)
 						System.out.println("\t" + lCurrentGene);
 			}
 			System.out.println("- - - - - - - Hunger - - - - - - - -");
-			HashMap<Integer, Integer> lHungerValueList = pPopulation.getGenomePool().getHungerValueList();
+			HashMap<Integer, Integer> lHungerValueList = mPopulation.getHungerValueList();
 			for (int iHungerValue = 0; iHungerValue <= Config.cMaxHunger; iHungerValue++) {
 				if (lHungerValueList.containsKey(iHungerValue))
-					if (lHungerValueList.get(iHungerValue) > pPopulation.getIdvmList().size() / 4)
+					if (lHungerValueList.get(iHungerValue) > mPopulation.getPopulationSize() / 4)
 						System.out.println("Hunger #" + lHungerValueList.get(iHungerValue) + ": " + iHungerValue);
 			}
 

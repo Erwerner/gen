@@ -1,6 +1,7 @@
 package core.population;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import core.genes.Crossover;
@@ -78,6 +79,18 @@ public class Population implements iPresentPopulation {
 			lParents.remove(0);
 		}
 		mIdvmList = lOffsprings;
+	}
+
+	public int getPopulationSize() {
+		return mIdvmList.size();
+	}
+
+	public List<PopulationGene> getGenesSortedByRank() throws PopulationEmpty {
+		return getGenomePool().getGenesSortedByRank();
+	}
+
+	public HashMap<Integer, Integer> getHungerValueList() throws PopulationEmpty {
+		return getGenomePool().getHungerValueList();
 	}
 
 }
