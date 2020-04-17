@@ -2,15 +2,15 @@ package globals;
 
 public class Config {
 	public static final int cInitialPopulationMultiplikator = 1;
-	public static final int cPopulation = 1024 * 2 * cInitialPopulationMultiplikator;
+	public static final int cPopulation = 1024 * 3 * cInitialPopulationMultiplikator;
 	public static final Double cSoupFctor = 1.0;
-	public static final int cSoupSize = (int) (160 * cSoupFctor);
+	public static final int cSoupSize = (int) (150 * cSoupFctor);
 	// TODO 0 test mutation rate
 	public static final Double cMutationRate = 0.025;
 
 	public static final int cEnemySupply = (int) (30 * cSoupFctor * cSoupFctor);
-	public static final int cFoodSupply = (int) (160 * cSoupFctor * cSoupFctor);
-	public static int cPartnerSupply = cFoodSupply / 2; // 6; // 3
+	public static final int cFoodSupply = (int) (150 * cSoupFctor * cSoupFctor);
+	public static int cPartnerSupply = cFoodSupply / 3; // 6; // 3
 
 	public static final int cMaxSequence = 4 + 25;
 	public static final int cLifeEnergyCost = 2;

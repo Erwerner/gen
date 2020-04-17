@@ -25,10 +25,9 @@ public class runCrossover {
 		// TODO 3 REF Population Loader
 		List<Idvm> lPopulationList = initializePopulation();
 		// ArrayList<Idvm> lPopulation = loadPopulation();
-		while (true) {
+		while (true) { 
 			iGeneration++;
 			Population lPopulation = new Population(lPopulationList);
-			new ModelPopulationPrinter().print(lPopulation);
 			EnvironmentConfig lEnvironmentConfig = setUpEnvironment(iGeneration);
 			new PopulationRunner(lPopulation).run(lEnvironmentConfig);
 			lPopulationList = lPopulation.getIdvmList();
@@ -36,10 +35,10 @@ public class runCrossover {
 			Population lFittestPopulation = new Population( returnFittest(lPopulationList) );
 			//TODO REF PopulationRunnerPrinter
 			System.out.println("Generation finished: " + iGeneration + ", Food: " + lEnvironmentConfig.cFoodSupply
-					+ ", Enemy: " + lEnvironmentConfig.cEnemySupply);
+					+ ", Enemy: " + lEnvironmentConfig.cEnemySupply + "\n");
 			lFittestPopulation.makeNextGeneration();
 			lPopulationList = lFittestPopulation.getIdvmList();
-			//lPopulationList = getOffsprings(lFittestIdvm);
+			new ModelPopulationPrinter().print(lPopulation); 
 			// TODO 3 REF Population Persister
 			if (new Helpers().isFlagTrue("persist"))
 				persistPopulation(lPopulationList);

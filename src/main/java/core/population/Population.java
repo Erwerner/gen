@@ -47,6 +47,7 @@ public class Population implements iPresentPopulation {
 		mIdvmList = pIdvmList;
 	}
 
+	//TODO 5 REF Crossover Class
 	public void makeNextGeneration() throws CloneNotSupportedException {
 		ArrayList<Idvm> lOffsprings = new ArrayList<Idvm>();
 		ArrayList<Idvm> lParents = new ArrayList<Idvm>();

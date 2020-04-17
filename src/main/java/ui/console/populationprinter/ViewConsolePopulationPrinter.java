@@ -50,7 +50,7 @@ public class ViewConsolePopulationPrinter extends View {
 
 			for (int i = 0; i < 100; i++) {
 				PopulationGene lCurrentGene = lSortedGenes.get(i);
-				if (lCurrentGene.mSequenceIndex > 3)
+				if (lCurrentGene.mSequenceIndex > 2)
 					if (lCurrentGene.getHostCounter() > mPopulation.getPopulationSize() / 3)
 						System.out.println("\t" + lCurrentGene);
 			}

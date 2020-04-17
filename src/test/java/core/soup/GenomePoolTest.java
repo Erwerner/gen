@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.junit.Before;
@@ -75,11 +76,6 @@ public class GenomePoolTest {
 
 		List<PopulationGene> populationGenes = cut.getGenesSortedByRank();
 		
-		PopulationGene lTopGene = populationGenes.get(0);
-		System.out.println(lTopGene.getOriginGene() + " at #" + lTopGene.mSequenceIndex + " and #" + lTopGene.getOriginGene().getSequendeIndex());
-		PopulationGene lSecondGene = populationGenes.get(1);
-		System.out.println(lSecondGene.getOriginGene() + " at #" + lSecondGene.mSequenceIndex + " and #" + lSecondGene.getOriginGene().getSequendeIndex());
-
 		for(PopulationGene iGene : populationGenes) {
 			if(iGene.getOriginGene().equals(lCopiedGene)) {
 				assertEquals(3, iGene.getHostCounter());
@@ -153,5 +149,20 @@ public class GenomePoolTest {
 		List<PopulationGene> actPopulationGenes = cut.getGenesSortedByRank();
 
 		assertEquals(lExp, actPopulationGenes.get(0));
+	}
+	
+	@Test
+	public void hungerListWorks() throws CloneNotSupportedException {
+		Genome lGenome = new Genome().forceMutation();
+		lGenome.setHunger(3);
+
+		cut.appenGenome(lGenome);
+		cut.appenGenome((Genome) lGenome.clone());
+		cut.appenGenome((Genome) lGenome.clone());
+		cut.appenGenome((Genome) lGenome.clone());
+		
+		HashMap<Integer, Integer> act = cut.getHungerValueList();
+		assertTrue(act.containsKey(3));
+		assertEquals(new Integer(4), act.get(3));
 	}
 }

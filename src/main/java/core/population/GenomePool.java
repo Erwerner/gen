@@ -12,12 +12,14 @@ import core.genes.iGene;
 public class GenomePool {
 
 	private List<PopulationGene> mGenomeList = new ArrayList<PopulationGene>();
+	private HashMap<Integer, Integer> mHungerValueList = new HashMap<Integer, Integer>();;
 
 	public void appenGenome(Genome pGenome) {
 		for (iGene iGene : pGenome.getGeneCollection()) {
 			PopulationGene lNewPopulationGene = new PopulationGene(iGene);
 			addOrIncrease(lNewPopulationGene);
 		}
+		addHungerValueList(pGenome.getHunger());
 	}
 
 	public void addOrIncrease(PopulationGene lNewPopulationGene) {
@@ -47,20 +49,17 @@ public class GenomePool {
 	}
 
 	// TODO 2 Test HungerList
-	public HashMap<Integer, Integer> getHungerValueList() {
-		HashMap<Integer, Integer> lHungerValueList = new HashMap<Integer, Integer>();
-		for (PopulationGene iGene : mGenomeList) {
-			if (iGene.getOriginGene().getClass() == GeneInt.class) {
-				GeneInt iHungerGene = (GeneInt) iGene.getOriginGene();
-				if (lHungerValueList.containsKey(iHungerGene.getValue())) {
-					Integer lCounter = lHungerValueList.get(iHungerGene.getValue());
-					lCounter++;
-				} else {
-					lHungerValueList.put(iHungerGene.getValue(), 1);
-				}
-			}
+	public void addHungerValueList(GeneInt pHungerGene) { 
+		int lHungerValue = pHungerGene.getValue();
+		if (mHungerValueList.containsKey(lHungerValue)) {
+			mHungerValueList.replace(lHungerValue, getHungerValueList().get(lHungerValue) + 1);
+		} else {
+			mHungerValueList.put(lHungerValue, 1);
 		}
-		return lHungerValueList;
+	}
+
+	public HashMap<Integer, Integer> getHungerValueList() {
+		return mHungerValueList;
 	}
 
 }
