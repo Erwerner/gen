@@ -2,10 +2,13 @@ package core.population;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
+import core.genes.GeneInt;
 import core.genes.Genome;
 import core.genes.iGene;
+import core.soup.block.IdvmCell;
 
 public class GenomePool {
 
@@ -19,8 +22,8 @@ public class GenomePool {
 	}
 
 	public void addOrIncrease(PopulationGene lNewPopulationGene) {
-		//TODO 0 Fix
-		if(lNewPopulationGene.mSequenceIndex > 10)
+		// TODO 0 Fix
+		if (lNewPopulationGene.mSequenceIndex > 16)
 			return;
 		for (PopulationGene iPopGene : mGenomeList) {
 			if (iPopGene.equals(lNewPopulationGene)) {
@@ -42,6 +45,23 @@ public class GenomePool {
 			}
 		});
 		return mGenomeList;
+	}
+
+	public HashMap<Integer, Integer> getHungerValueList() {
+		HashMap<Integer, Integer> lHungerValueList = new HashMap<Integer, Integer>();
+		for (PopulationGene iGene : mGenomeList) {
+			if (iGene.getOriginGene().getClass() == GeneInt.class) {
+				GeneInt iHungerGene = (GeneInt) iGene.getOriginGene();
+				if(lHungerValueList.containsKey(iHungerGene.getValue())) {
+					Integer lCounter = lHungerValueList.get(iHungerGene.getValue());
+					lCounter++;
+				}
+				else {
+					lHungerValueList.put(iHungerGene.getValue(), 1);
+				}
+			}
+		}
+		return lHungerValueList;
 	}
 
 }

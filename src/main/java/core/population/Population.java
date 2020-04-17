@@ -3,11 +3,14 @@ package core.population;
 import java.util.ArrayList;
 import java.util.List;
 
+import core.genes.Crossover;
+import core.genes.Genome;
 import core.soup.exception.PopulationEmpty;
 import core.soup.idvm.Idvm;
+import globals.Helpers;
 import ui.presenter.iPresentPopulation;
 
-public class Population implements iPresentPopulation{
+public class Population implements iPresentPopulation {
 	private List<Idvm> mIdvmList = new ArrayList<Idvm>();
 
 	public Population(List<Idvm> pPopulationList) {
@@ -41,6 +44,40 @@ public class Population implements iPresentPopulation{
 
 	public void setIdvmList(List<Idvm> pIdvmList) {
 		mIdvmList = pIdvmList;
-	} 
+	}
+
+	public void makeNextGeneration() throws CloneNotSupportedException {
+		ArrayList<Idvm> lOffsprings = new ArrayList<Idvm>();
+		ArrayList<Idvm> lParents = new ArrayList<Idvm>();
+		for (int iIdvmIdx = mIdvmList.size() - 1; iIdvmIdx >= 0; iIdvmIdx--) {
+			lParents.add(mIdvmList.get(iIdvmIdx));
+			lParents.add(mIdvmList.get(iIdvmIdx));
+		}
+		while (!lParents.isEmpty()) {
+			Idvm lParent1 = lParents.get(0);
+			boolean lDifferentParents = false;
+			for (Idvm iIdvm : lParents) {
+				if (iIdvm != lParent1)
+					lDifferentParents = true;
+				;
+			}
+			int lParent2Idx = Helpers.rndIntRange(1, lParents.size() - 1);
+			Idvm lParent2 = lParents.get(lParent2Idx);
+			if (lDifferentParents == true)
+				if (lParent1 == lParent2)
+					continue;
+			Genome[] lGenomes = new Genome[2];
+			lGenomes[0] = (Genome) lParent1.getGenomeOrigin().clone();
+			lGenomes[1] = (Genome) lParent2.getGenomeOrigin().clone();
+			Crossover lCrossover = new Crossover(lGenomes);
+			Genome lOffspringGenome = lCrossover.crossover();
+			lOffspringGenome.naturalMutation();
+			lOffsprings.add(new Idvm(lOffspringGenome));
+
+			lParents.remove(lParent2Idx);
+			lParents.remove(0);
+		}
+		mIdvmList = lOffsprings;
+	}
 
 }

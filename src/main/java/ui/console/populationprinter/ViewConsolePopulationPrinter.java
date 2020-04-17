@@ -1,12 +1,16 @@
 package ui.console.populationprinter;
 
+import java.util.HashMap;
 import java.util.List;
 
+import core.genes.GeneInt;
 import core.population.PopulationGene;
 import core.soup.block.BlockType;
 import core.soup.block.IdvmCell;
 import core.soup.exception.PopulationEmpty;
 import core.soup.idvm.Idvm;
+import devutils.Debug;
+import globals.Config;
 import ui.mvc.Model;
 import ui.mvc.View;
 import ui.presenter.iPresentPopulation;
@@ -20,23 +24,16 @@ public class ViewConsolePopulationPrinter extends View {
 	}
 
 	public void update() {
-		int lStepCount = 0;
-		for (Idvm iIdvm : mPopulation.getIdvmList()) {
-			lStepCount += iIdvm.getStepCount();
-		}
+		Debug.printCurrentChange();
+
 		int lPartnerCount = 0;
 		for (Idvm iIdvm : mPopulation.getIdvmList()) {
 			lPartnerCount += iIdvm.getPartnerCount();
 		}
-//		System.out.println("Average steps: " + lStepCount / pFittestIdvm.size() + " * " + pFittestIdvm.size());
+
 		System.out.println("Average partner: " + 100 * lPartnerCount / mPopulation.getIdvmList().size() + "/100 * "
 				+ mPopulation.getIdvmList().size());
-		printBlockStats(mPopulation.getIdvmList(), 4);
-//		printBlockStats(pFittestIdvm, 6);
-//		printBlockStats(pFittestIdvm, 8);
-//		printBlockStats(pFittestIdvm, 10);
-//		printBlockStats(pFittestIdvm, 12);
-
+//		printBlockStats(mPopulation.getIdvmList(), 4);
 		printPopulationStats(mPopulation);
 	}
 
@@ -59,28 +56,35 @@ public class ViewConsolePopulationPrinter extends View {
 					if (lCurrentGene.getHostCounter() > pPopulation.getIdvmList().size() / 3)
 						System.out.println("\t" + lCurrentGene);
 			}
+			System.out.println("- - - - - - - Hunger - - - - - - - -");
+			HashMap<Integer, Integer> lHungerValueList = pPopulation.getGenomePool().getHungerValueList();
+			for (int iHungerValue = 0; iHungerValue <= Config.cMaxHunger; iHungerValue++) {
+				if (lHungerValueList.containsKey(iHungerValue))
+					if (lHungerValueList.get(iHungerValue) > pPopulation.getIdvmList().size() / 4)
+						System.out.println("Hunger #" + lHungerValueList.get(iHungerValue) + ": " + iHungerValue);
+			}
 
 		} catch (PopulationEmpty e) {
 			e.printStackTrace();
 		}
 	}
 
-	private static void printBlockStats(List<Idvm> pList, int pCount) {
-		System.out.print(pCount + " Cells: ");
-		BlockType[] lCellBlocks = { BlockType.DEFENCE, BlockType.MOVE, BlockType.LIFE, BlockType.SENSOR,
-				BlockType.NULL };
-		for (BlockType iBlockType : lCellBlocks) {
-			int lTotalBlockCount = 0;
-			for (Idvm iIdvm : pList) {
-				for (int idx = 0; idx < (pCount); idx++) {
-					IdvmCell lCellGrow = iIdvm.getGenomeOrigin().cellGrow.get(idx);
-					if (lCellGrow.getBlockType() == iBlockType)
-						lTotalBlockCount++;
-				}
-			}
-			System.out.print(100 * lTotalBlockCount / pList.size() / (pCount) + "% " + iBlockType + "; ");
-		}
-		System.out.println("");
-	}
+//	private static void printBlockStats(List<Idvm> pList, int pCount) {
+//		System.out.print(pCount + " Cells: ");
+//		BlockType[] lCellBlocks = { BlockType.DEFENCE, BlockType.MOVE, BlockType.LIFE, BlockType.SENSOR,
+//				BlockType.NULL };
+//		for (BlockType iBlockType : lCellBlocks) {
+//			int lTotalBlockCount = 0;
+//			for (Idvm iIdvm : pList) {
+//				for (int idx = 0; idx < (pCount); idx++) {
+//					IdvmCell lCellGrow = iIdvm.getGenomeOrigin().cellGrow.get(idx);
+//					if (lCellGrow.getBlockType() == iBlockType)
+//						lTotalBlockCount++;
+//				}
+//			}
+//			System.out.print(100 * lTotalBlockCount / pList.size() / (pCount) + "% " + iBlockType + "; ");
+//		}
+//		System.out.println("");
+//	}
 
 }

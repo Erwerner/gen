@@ -16,13 +16,12 @@ import service.PopulationRunner;
 import ui.console.populationprinter.ModelPopulationPrinter;
 
 public class runCrossover {
-	private static GenomePersister mPersister;
+	private static final GenomePersister mPersister = new GenomePersister();
 
 	public static void main(String[] args) throws CloneNotSupportedException, InterruptedException {
 		int iGeneration = 0;
 
 		Debug.printCurrentChange();
-		mPersister = new GenomePersister();
 		// TODO 3 REF Population Loader
 		List<Idvm> lPopulationList = initializePopulation();
 		// ArrayList<Idvm> lPopulation = loadPopulation();
@@ -34,12 +33,13 @@ public class runCrossover {
 			new PopulationRunner(lPopulation).run(lEnvironmentConfig);
 			lPopulationList = lPopulation.getIdvmList();
 			// TODO 3 REF Population Fittnes
-			ArrayList<Idvm> lFittestIdvm = returnFittest(lPopulationList);
-			Debug.printCurrentChange();
+			Population lFittestPopulation = new Population( returnFittest(lPopulationList) );
+			//TODO REF PopulationRunnerPrinter
 			System.out.println("Generation finished: " + iGeneration + ", Food: " + lEnvironmentConfig.cFoodSupply
 					+ ", Enemy: " + lEnvironmentConfig.cEnemySupply);
-			// TODO 3 REF Population Crossover
-			lPopulationList = getOffsprings(lFittestIdvm);
+			lFittestPopulation.makeNextGeneration();
+			lPopulationList = lFittestPopulation.getIdvmList();
+			//lPopulationList = getOffsprings(lFittestIdvm);
 			// TODO 3 REF Population Persister
 			if (new Helpers().isFlagTrue("persist"))
 				persistPopulation(lPopulationList);
@@ -111,39 +111,39 @@ public class runCrossover {
 		System.out.println("persisted");
 	}
 
-	private static ArrayList<Idvm> getOffsprings(ArrayList<Idvm> pFittestIdvm) throws CloneNotSupportedException {
-		ArrayList<Idvm> lOffsprings = new ArrayList<Idvm>();
-		ArrayList<Idvm> lParents = new ArrayList<Idvm>();
-		for (int iIdvmIdx = pFittestIdvm.size() - 1; iIdvmIdx >= 0; iIdvmIdx--) {
-			lParents.add(pFittestIdvm.get(iIdvmIdx));
-			lParents.add(pFittestIdvm.get(iIdvmIdx));
-		}
-		while (!lParents.isEmpty()) {
-			Idvm lParent1 = lParents.get(0);
-			boolean lDifferentParents = false;
-			for (Idvm iIdvm : lParents) {
-				if (iIdvm != lParent1)
-					lDifferentParents = true;
-				;
-			}
-			int lParent2Idx = Helpers.rndIntRange(1, lParents.size() - 1);
-			Idvm lParent2 = lParents.get(lParent2Idx);
-			if (lDifferentParents == true)
-				if (lParent1 == lParent2)
-					continue;
-			Genome[] lGenomes = new Genome[2];
-			lGenomes[0] = (Genome) lParent1.getGenomeOrigin().clone();
-			lGenomes[1] = (Genome) lParent2.getGenomeOrigin().clone();
-			Crossover lCrossover = new Crossover(lGenomes);
-			Genome lOffspringGenome = lCrossover.crossover();
-			lOffspringGenome.naturalMutation();
-			lOffsprings.add(new Idvm(lOffspringGenome));
-
-			lParents.remove(lParent2Idx);
-			lParents.remove(0);
-		}
-		return lOffsprings;
-	}
+//	private static ArrayList<Idvm> getOffsprings(ArrayList<Idvm> pFittestIdvm) throws CloneNotSupportedException {
+//		ArrayList<Idvm> lOffsprings = new ArrayList<Idvm>();
+//		ArrayList<Idvm> lParents = new ArrayList<Idvm>();
+//		for (int iIdvmIdx = pFittestIdvm.size() - 1; iIdvmIdx >= 0; iIdvmIdx--) {
+//			lParents.add(pFittestIdvm.get(iIdvmIdx));
+//			lParents.add(pFittestIdvm.get(iIdvmIdx));
+//		}
+//		while (!lParents.isEmpty()) {
+//			Idvm lParent1 = lParents.get(0);
+//			boolean lDifferentParents = false;
+//			for (Idvm iIdvm : lParents) {
+//				if (iIdvm != lParent1)
+//					lDifferentParents = true;
+//				;
+//			}
+//			int lParent2Idx = Helpers.rndIntRange(1, lParents.size() - 1);
+//			Idvm lParent2 = lParents.get(lParent2Idx);
+//			if (lDifferentParents == true)
+//				if (lParent1 == lParent2)
+//					continue;
+//			Genome[] lGenomes = new Genome[2];
+//			lGenomes[0] = (Genome) lParent1.getGenomeOrigin().clone();
+//			lGenomes[1] = (Genome) lParent2.getGenomeOrigin().clone();
+//			Crossover lCrossover = new Crossover(lGenomes);
+//			Genome lOffspringGenome = lCrossover.crossover();
+//			lOffspringGenome.naturalMutation();
+//			lOffsprings.add(new Idvm(lOffspringGenome));
+//
+//			lParents.remove(lParent2Idx);
+//			lParents.remove(0);
+//		}
+//		return lOffsprings;
+//	}
 //
 //	private static void printBlockStats(ArrayList<Idvm> pFittestIdvm, int pCount) {
 //		System.out.print(pCount + " Cells: ");
